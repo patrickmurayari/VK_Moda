@@ -8,7 +8,7 @@ import facebook from "../../img/facebook.png"
 const products = [
     {
         id: 1,
-        image: `${vestido1}`,
+        image: `${vestido2}`,
         name: "VESTIDOS",
         // description: "$3519",
     },
@@ -20,7 +20,7 @@ const products = [
     },
     {
         id: 3,
-        image: `${vestido1}`,
+        image: `${vestido2}`,
         name: "VESTIDOS",
         // description: "$3519",
     },
@@ -32,7 +32,7 @@ const products = [
     },
     {
         id: 5,
-        image: `${vestido1}`,
+        image: `${vestido2}`,
         name: "VESTIDOS",
         // description: "$3519",
     },
@@ -50,7 +50,7 @@ const products = [
     },
     {
         id: 8,
-        image: `${vestido1}`,
+        image: `${vestido2}`,
         name: "VESTIDOS",
         // description: "$3519",
     },

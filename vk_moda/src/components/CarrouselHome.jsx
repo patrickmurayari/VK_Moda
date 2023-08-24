@@ -185,8 +185,8 @@ function Home() {
                     </div>
                     <CardProducts products={ProductsCategoria} />
                 </div>
-                <div className=" md:mt-20">
-                    <h1 className="text-black font-extralight font-montserrat_alternates   text-2xl mt-10 md:text-4xl">La nueva coleccion 2023</h1>
+                <div className=" mt-24 md:mt-28">
+                    <h1 className="text-black font-extralight font-montserrat_alternates   text-2xl mt-10 md:text-4xl">Nueva coleccion 2023</h1>
                     <CarrouselSwip />
                 </div>
                 <div className=" mt-20 md:mt-20">
