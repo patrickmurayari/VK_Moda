@@ -56,7 +56,7 @@ const Indumentaria = () => {
     return (
         <div>
             <div className="bg-red-500 mt-52">
-                <h1 >INDUMENTARIA</h1>
+                <h1 >INDUMENTARIAaaaa</h1>
             </div>
             <div className="mt-20">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-4">
@@ -75,6 +75,7 @@ const Indumentaria = () => {
                                     <h6 className="text-lg md:text-2xl font-extralight font-montserrat_alternates text-center">
                                         {elem.name}
                                     </h6>
+
                                 </div>
                             </div>
                         ))}

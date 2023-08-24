@@ -56,7 +56,7 @@ const Joyeria = () => {
     return (
         <div>
             <div className="bg-red-500 mt-52">
-                <h1 >JOYERIA</h1>
+                <h1 >JOYERIAsaaa</h1>
             </div>
             <div className="mt-20">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-4">
