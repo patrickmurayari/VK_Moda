@@ -19,11 +19,11 @@ function App() {
           <img src={wplogo} alt="WhatsApp" className="h-12  md:h-16 md:w-16 fixed bottom-4 z-50  right-2" />
         </a>
       </div>
-      <Navbar />
+      {/* <Navbar /> */}
       <BrowserRouter>
         <Routes>
           {/* <Route path="/" element={<Navbar />}></Route> */}
-          <Route path="/" element={<Carrouselhome />}></Route>
+          <Route path="/" element={<div><Navbar /><Carrouselhome /></div>}></Route>
           <Route path="/bolsos" element={<Bolsos />}></Route>
           <Route path="/indumentaria" element={<Indumentaria />}></Route>
           <Route path="/joyeria" element={<Joyeria />}></Route>
