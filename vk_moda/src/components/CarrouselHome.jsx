@@ -1,25 +1,65 @@
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import { RxDot } from "react-icons/rx";
 
 
 import foto1 from "../img/foto1.jpg";
 import foto2 from "../img/foto2.jpg";
-import foto3 from "../img/foto3.jpg";
+import foto3 from "../img/fotoPortada.jpg";
+import foto4 from "../img/fotoPortada1.jpg";
+
+
+import carteras from "../img/bolsofoto.jpg";
+import joya1 from "../img/fotojoyas.jpg";
+import vestidos from "../img/joya2.jpg";
+import CardProducts from "./CardCategoria";
+import ropapersonalizada from   "../img/ropapersonalizada1.jpg";
+
+
+const ProductsCategoria = [
+    {
+        id: 1,
+        image: `${vestidos}`,
+        name: "VESTIDOS",
+        // description: "$3519",
+    },
+    {
+        id: 2,
+        image: `${carteras}`,
+        name: "BOLSOS/CARTERAS",
+        // description: "$3519",
+    },
+    {
+        id: 3,
+        image: `${ropapersonalizada}`,
+        name: "INDUMENTARIA PERSONALIZADA",
+        // description: "$3519",
+    },
+    {
+        id: 4,
+        image: `${joya1}`,
+        name: "JOYERIA",
+        // description: "$3519",
+    },
+
+]
 
 function Home() {
     const slides = [
-       
+
         {
             url: `${foto1}`,
+        },
+        {
+            url: `${foto3}`,
         },
         {
             url: `${foto2}`,
         },
         {
-            url: `${foto3}`,
+            url: `${foto4}`,
         },
-        
+
     ];
 
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -60,7 +100,7 @@ function Home() {
                     />
                 ))}
             </div>
-           
+
             <div className="flex top-4 justify-center py-2">
                 {slides.map((slide, slideIndex) => (
                     <div
@@ -74,7 +114,8 @@ function Home() {
                 ))}
             </div>
             <div className=" md:mt-20">
-            <h1 className="text-black font-extralight font-montserrat_alternates  text-2xl mt-10 md:text-4xl">Categorias Destacadas</h1>
+                <h1  className="text-black font-extralight font-montserrat_alternates  text-2xl mt-10 md:text-4xl">Categorias Destacadas</h1>
+                <CardProducts products={ProductsCategoria} />
             </div>
         </div>
     );

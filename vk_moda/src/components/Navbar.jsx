@@ -15,7 +15,7 @@ function Navbar() {
     };
 
     return (
-        <nav className={`bg-white py-4 px-8 fixed top-0 left-0 w-full z-50 ${menuOpen ? 'shadow-md' : 'md:shadow-none'}`}>
+        <nav className={`bg-black md:h-32  py-4 px-8 fixed top-0 left-0 w-full z-50 ${menuOpen ? 'shadow-md' : 'md:shadow-none'}`}>
             <div className="flex items-center justify-between">
                 <div className="flex items-center">
                     <Link to="carrousel" spy={true} smooth={true} offset={-100} duration={500}>
@@ -34,18 +34,18 @@ function Navbar() {
                         </svg>
                     </button>
                 </div>
-                <ul className={`md:flex ${menuOpen ? 'flex flex-col' : 'hidden'} md:space-x-6 mt-4  md:mt-0`}>
+                <ul className={`md:flex md:mt-20 ${menuOpen ? 'flex flex-col' : 'hidden'} md:space-x-6 mt-4  md:gap-10 md:mt-0`}>
                     <li data-aos="zoom-im" data-aos-duration="3000" >
-                        <Link to="carrousel" spy={true} smooth={true} offset={-100} duration={500} className="text-black md:text-base text-xl cursor-pointer hover:text-orange-600">Inicio</Link>
+                        <Link to="carrousel" spy={true} smooth={true} offset={-100} duration={500} className="text-white md:text-base text-xl cursor-pointer hover:text-orange-600">Inicio</Link>
                     </li>
                     <li data-aos="zoom-im" data-aos-duration="3000">
-                        <Link to="about" spy={true} smooth={true} offset={-100} duration={500} className="text-black  md:text-base text-xl  cursor-pointer hover:text-orange-600" >Catalogo</Link>
+                        <Link to="about" spy={true} smooth={true} offset={-100} duration={500} className="text-white  md:text-base text-xl  cursor-pointer hover:text-orange-600" >Catalogo</Link>
                     </li>
                     <li data-aos="zoom-im" data-aos-duration="3000" >
-                        <Link to="productos" spy={true} smooth={true} offset={-350} duration={500} className="text-black md:text-base text-xl cursor-pointer hover:text-orange-600">Quienes somos</Link>
+                        <Link to="productos" spy={true} smooth={true} offset={-350} duration={500} className="text-white md:text-base text-xl cursor-pointer hover:text-orange-600">Quienes somos</Link>
                     </li>
                     <li data-aos="zoom-im" data-aos-duration="3000">
-                        <Link to="contactos" spy={true} smooth={true} offset={-150} duration={500} className="text-black md:text-base text-xl  cursor-pointer hover:text-orange-600">Contáctanos</Link>
+                        <Link to="contactos" spy={true} smooth={true} offset={-150} duration={500} className="text-white md:text-base text-xl  cursor-pointer hover:text-orange-600">Contáctanos</Link>
                     </li>
                 </ul>
                 <div> 
