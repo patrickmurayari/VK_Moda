@@ -1,8 +1,13 @@
-import './App.css'
-import Navbar from './components/Navbar'
-import Carrouselhome from './components/CarrouselHome'
 import wplogo from "./img/wplogo.png"
 import { Routes, Route, BrowserRouter, } from "react-router-dom"
+import './App.css'
+
+import Navbar from './components/Navbar'
+import Carrouselhome from './components/CarrouselHome'
+import Bolsos from "./components/Categorias/Bolsos"
+import Indumentaria from "./components/Categorias/Indumentaria"
+import Joyeria from "./components/Categorias/Joyeria"
+import Vestidos from "./components/Categorias/Vestidos"
 
 
 function App() {
@@ -17,7 +22,12 @@ function App() {
       <Navbar />
       <BrowserRouter>
         <Routes>
+          {/* <Route path="/" element={<Navbar />}></Route> */}
           <Route path="/" element={<Carrouselhome />}></Route>
+          <Route path="/bolsos" element={<Bolsos />}></Route>
+          <Route path="/indumentaria" element={<Indumentaria />}></Route>
+          <Route path="/joyeria" element={<Joyeria />}></Route>
+          <Route path="/vestidos" element={<Vestidos />}></Route>
         </Routes>
       </BrowserRouter>
     </div>
@@ -26,8 +36,3 @@ function App() {
 }
 
 export default App
-
-{/* 
-<Navbar/>
-<Carrouselhome/>
-<CarrouselSwip /> */}

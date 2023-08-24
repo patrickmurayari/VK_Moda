@@ -7,37 +7,41 @@ import foto1 from "../img/foto1.jpg";
 import foto2 from "../img/foto2.jpg";
 import foto3 from "../img/fotoPortada.jpg";
 import foto4 from "../img/fotoPortada1.jpg";
+import ofertas from "../img/ofertafoto.jpg";
 
+import carteras from "../img/Categoria/bolsofoto.jpg";
+import joya1 from "../img/Categoria/fotojoyas.jpg";
+import vestidos from "../img/Categoria/joya2.jpg";
+import ropapersonalizada from   "../img/Categoria/ropapersonalizada1.jpg";
 
-import carteras from "../img/bolsofoto.jpg";
-import joya1 from "../img/fotojoyas.jpg";
-import vestidos from "../img/joya2.jpg";
+import CardOfertas from "./CardOfertas";
 import CardProducts from "./CardCategoria";
-import ropapersonalizada from   "../img/ropapersonalizada1.jpg";
-import CarrouselSwip from "./CarrouselSwip";
-
 
 const ProductsCategoria = [
     {
         id: 1,
+        id_name: "vestidos",
         image: `${vestidos}`,
         name: "VESTIDOS",
         // description: "$3519",
     },
     {
         id: 2,
+        id_name: "bolsos",
         image: `${carteras}`,
-        name: "BOLSOS/CARTERAS",
+        name: "BOLSOS",
         // description: "$3519",
     },
     {
         id: 3,
+        id_name: "indumentaria",
         image: `${ropapersonalizada}`,
-        name: "INDUMENTARIA PERSONALIZADA",
+        name: "INDUMENTARIA",
         // description: "$3519",
     },
     {
         id: 4,
+        id_name: "joyeria",
         image: `${joya1}`,
         name: "JOYERIA",
         // description: "$3519",
@@ -90,7 +94,7 @@ function Home() {
 
     return (
         <div className="  w-full m-auto py-8 md:py-16 px-4 relative group" id="carrousel">
-            <div className="w-full h-[200px] md:h-[700px] rounded-2xl overflow-hidden relative">
+            <div className="w-full h-[200px] md:h-[700px]  overflow-hidden relative">
                 {slides.map((slide, slideIndex) => (
                     <img
                         key={slideIndex}
@@ -105,26 +109,33 @@ function Home() {
             <div className="flex top-4 justify-center py-2">
                 {slides.map((slide, slideIndex) => (
                     <div
+                    id="productos"
                         key={slideIndex}
                         onClick={() => goToSlide(slideIndex)}
                         className={`text-1xl cursor-pointer ${slideIndex === currentIndex ? "text-black" : "text-gray-400"
                             }`}
                     >
+                        
                         <RxDot />
                     </div>
                 ))}
             </div>
             <div className=" md:mt-20">
-                <h1   data-aos="zoom-in-right" data-aos-duration="1500"  className="text-black font-extralight font-montserrat_alternates   text-2xl mt-10 md:text-4xl">Categorias Destacadas</h1>
+                <div className="">
+                    <h1   data-aos="zoom-in-right" data-aos-duration="1500"  className="text-black font-extralight font-montserrat_alternates   text-2xl mt-10 md:text-4xl">Categorias Destacadas</h1>
+                </div>
                 <CardProducts products={ProductsCategoria} />
             </div>
             <div className=" md:mt-20">
-                <h1 data-aos="zoom-in-right" data-aos-duration="1500"  className="text-black font-extralight font-montserrat_alternates   text-2xl mt-10 md:text-4xl">Lo Nuevo 2023</h1>
+                <h1 data-aos="zoom-in-right" data-aos-duration="1500"  className="text-black font-extralight font-montserrat_alternates   text-2xl mt-10 md:text-4xl">La nueva coleccion 2023</h1>
                 <CardProducts products={ProductsCategoria} />
             </div>
-            <div className=" md:mt-20">
-                <h1 data-aos="zoom-in-right" data-aos-duration="1500"  className="text-black font-extralight font-montserrat_alternates   text-2xl mt-10 md:text-4xl">Ofertas</h1>
-                <CarrouselSwip />
+            <div className=" mt-20 md:mt-20">
+                
+                <div className="flex w-full  mr-44">
+                    <img className="h-full w-full" src={ofertas} alt="" />
+                </div>
+                <CardOfertas products={ProductsCategoria} />
             </div>
         </div>
     );
