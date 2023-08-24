@@ -14,6 +14,7 @@ import joya1 from "../img/fotojoyas.jpg";
 import vestidos from "../img/joya2.jpg";
 import CardProducts from "./CardCategoria";
 import ropapersonalizada from   "../img/ropapersonalizada1.jpg";
+import CarrouselSwip from "./CarrouselSwip";
 
 
 const ProductsCategoria = [
@@ -114,8 +115,16 @@ function Home() {
                 ))}
             </div>
             <div className=" md:mt-20">
-                <h1  className="text-black font-extralight font-montserrat_alternates  text-2xl mt-10 md:text-4xl">Categorias Destacadas</h1>
+                <h1   data-aos="zoom-in-right" data-aos-duration="1500"  className="text-black font-extralight font-montserrat_alternates   text-2xl mt-10 md:text-4xl">Categorias Destacadas</h1>
                 <CardProducts products={ProductsCategoria} />
+            </div>
+            <div className=" md:mt-20">
+                <h1 data-aos="zoom-in-right" data-aos-duration="1500"  className="text-black font-extralight font-montserrat_alternates   text-2xl mt-10 md:text-4xl">Lo Nuevo 2023</h1>
+                <CardProducts products={ProductsCategoria} />
+            </div>
+            <div className=" md:mt-20">
+                <h1 data-aos="zoom-in-right" data-aos-duration="1500"  className="text-black font-extralight font-montserrat_alternates   text-2xl mt-10 md:text-4xl">Ofertas</h1>
+                <CarrouselSwip />
             </div>
         </div>
     );

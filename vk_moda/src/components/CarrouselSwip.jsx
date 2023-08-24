@@ -2,25 +2,33 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import foto1 from "../img/foto1.jpg"
 import foto2 from "../img/foto2.jpg"
+
 function CarrouselSwip() {
   return (
-    <div >
-        <Swiper
-         
-      spaceBetween={40}
-      slidesPerView={1}
-     
-      onSlideChange={() => console.log('slide change')}
-      onSwiper={(swiper) => console.log(swiper)}
-    >
-      <SwiperSlide><img className='w-screen' src={foto1} alt="" /></SwiperSlide>
-      <SwiperSlide><img src={foto2} alt="" /></SwiperSlide>
-      <SwiperSlide>Slide 3</SwiperSlide>
-      <SwiperSlide>Slide 4</SwiperSlide>
-      ...
-    </Swiper>
+    <div className="container"> {/* Agrega una clase contenedora para centrar */}
+      <div className="row">
+        <div className="col-lg-8 mx-auto"> {/* Utiliza una columna centrada */}
+          <Swiper
+            spaceBetween={20}
+            slidesPerView={1}
+            breakpoints={{
+              640: { slidesPerView: 2 },
+              768: { slidesPerView: 3 },
+              1024: { slidesPerView: 4 },
+            }}
+            onSlideChange={() => console.log('slide change')}
+            onSwiper={(swiper) => console.log(swiper)}
+          >
+            <SwiperSlide><img className='w-100' src={foto1} alt="" /></SwiperSlide>
+            <SwiperSlide><img className='w-100' src={foto2} alt="" /></SwiperSlide>
+            <SwiperSlide>Slide 3</SwiperSlide>
+            <SwiperSlide>Slide 4</SwiperSlide>
+            {/* ... Agrega más diapositivas según sea necesario */}
+          </Swiper>
+        </div>
+      </div>
     </div>
   )
 }
 
-export default CarrouselSwip
+export default CarrouselSwip;
