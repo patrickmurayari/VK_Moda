@@ -8,7 +8,7 @@ const CardProducts = ({ products }) => {
                     products.map((elem, index) => (
                         <div
                             key={index}
-                            className="flex flex-col items-center justify-center w-full h-96 p-4 md:p-8 bg-red-200 transition-transform transform-gpu hover:scale-105 hover:transition-transform duration-300"
+                            className="flex flex-col items-center justify-center w-full h-96 p-4 md:p-8  transition-transform transform-gpu hover:scale-105 hover:transition-transform duration-300"
                         >
                             <img
                                 className="hover:brightness-50 mt-1 object-cover h-auto  md:h-60 md:w-screen"

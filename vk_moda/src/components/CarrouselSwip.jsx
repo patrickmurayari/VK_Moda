@@ -1,7 +1,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
-import foto1 from "../img/foto1.jpg"
-import foto2 from "../img/foto2.jpg"
+import foto1 from "../img/Categoria/bolsofoto.jpg"
+import foto2 from "../img/Categoria/fotojoyas.jpg"
 
 function CarrouselSwip() {
   return (
@@ -10,7 +10,7 @@ function CarrouselSwip() {
         <div className="col-lg-8 mx-auto"> {/* Utiliza una columna centrada */}
           <Swiper
             spaceBetween={20}
-            slidesPerView={1}
+            slidesPerView={2}
             breakpoints={{
               640: { slidesPerView: 2 },
               768: { slidesPerView: 3 },

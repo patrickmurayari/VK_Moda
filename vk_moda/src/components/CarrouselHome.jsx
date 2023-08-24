@@ -17,6 +17,7 @@ import ropapersonalizada from   "../img/Categoria/ropapersonalizada1.jpg";
 import CardOfertas from "./CardOfertas";
 import CardProducts from "./CardCategoria";
 import CardNuevaColeccion from "./CardNuevaColeccion";
+import CarrouselSwip from "./CarrouselSwip";
 
 const ProductsCategoria = [
     {
@@ -181,7 +182,7 @@ function Home() {
             </div>
             <div className=" md:mt-20">
                 <h1 data-aos="zoom-in-right" data-aos-duration="1500"  className="text-black font-extralight font-montserrat_alternates   text-2xl mt-10 md:text-4xl">La nueva coleccion 2023</h1>
-                <CardNuevaColeccion products={NuevaColeccion} />
+                <CarrouselSwip  />
             </div>
             <div className=" mt-20 md:mt-20">
                 
