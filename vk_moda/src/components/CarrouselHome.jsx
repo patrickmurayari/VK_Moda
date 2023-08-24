@@ -192,14 +192,14 @@ function Home() {
             </div>
             <div className="container mx-auto mt-20">
             <div className="flex flex-col md:flex-row items-center justify-center md:justify-between">
-                <div className="md:w-1/2 mb-4 md:mb-0">
+                <div  data-aos="zoom-in" data-aos-duration="1500" className="md:w-1/2 mb-4 md:mb-0">
                     <img
                         className="w-full  h-auto"
                         src={foto1}
                         alt="Nuestra empresa"
                     />
                 </div>
-                <div id="Quienes-somos" className="md:w-1/2 md:ml-8">
+                <div data-aos="fade-up" data-aos-duration="1500"  id="Quienes-somos" className="md:w-1/2 md:ml-8">
                     <h2  className="text-black font-extralight font-montserrat_alternates   text-2xl  md:text-4xl ">Quiénes Somos</h2>
                     <p className="text-gray-600 mt-10 ">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ut ante vel dui volutpat
@@ -215,7 +215,7 @@ function Home() {
             <div className="container mx-auto mt-20">
     <div className="flex flex-col md:flex-row items-center justify-center md:justify-between">
         <div className="md:w-1/2 mb-4 md:mb-0">
-            <div className="md:w-3/4">
+            <div data-aos="fade-down" data-aos-duration="1500"  className="md:w-3/4">
                 <h2 className="text-black font-extralight font-montserrat_alternates text-2xl md:text-4xl">Por que elegirnos</h2>
                 <p className="text-gray-600 mt-10">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ut ante vel dui volutpat
@@ -228,7 +228,7 @@ function Home() {
                 </p>
             </div>
         </div>
-        <div className="md:w-1/2 md:ml-8">
+        <div data-aos="zoom-in" data-aos-duration="1500" className="md:w-1/2 md:ml-8">
             <img
                 className="w-full h-auto"
                 src={foto2}
