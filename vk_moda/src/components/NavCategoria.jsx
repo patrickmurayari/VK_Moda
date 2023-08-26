@@ -16,13 +16,12 @@ function Navbar() {
             <div className="flex items-center justify-between">
                 <div className="flex items-center">
                     <Link to="/" spy={true} smooth={true} offset={-100} duration={500}>
-                        <img data-aos="fade-right" data-aos-duration="3000" src={logo} alt="Logo" className="h-14 w-14 mr-2 rounded-full" />
+                        <img data-aos="fade-right" data-aos-duration="3000" src={logo} alt="Logo" className=" md:h-14 w-14 mr-2 rounded-full" />
                     </Link>
-                    <span  data-aos="zoom-im" data-aos-duration="3000" className="text-white font-semibold">Diseño y Moda</span>
                 </div>
                 <ul className={'md:flex md:mt-10'}>
                     <li data-aos="zoom-im" data-aos-duration="3000" >
-                        <Link to="/" className="text-white md:text-base text-xl cursor-pointer hover:text-gray-400">Volver al inicio</Link>
+                        <Link to="/" className="text-white md:text-base text-xl cursor-pointer hover:text-gray-400">Volver</Link>
                     </li>
                 </ul>
                 <div> 

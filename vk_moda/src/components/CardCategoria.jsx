@@ -1,3 +1,5 @@
+import {Link} from "react-router-dom"
+
 const CardProducts = ({ products }) => {
     return (
         <div className="mt-20">
@@ -17,9 +19,9 @@ const CardProducts = ({ products }) => {
                                 <h6 data-aos="fade-in" data-aos-duration="1500" className="text-lg md:text-2xl font-extralight font-montserrat_alternates text-center">
                                     {elem.name}
                                 </h6>
-                                <a href={elem.id_name}>
+                                <Link to={elem.id_name}>
                                     <button className="text-white bg-black h-15px w-44 md:mt-6">Ver Productos</button>
-                                </a>
+                                </Link>
                             </div>
                         </div>
                     ))}
