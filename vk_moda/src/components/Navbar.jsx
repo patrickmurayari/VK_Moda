@@ -4,7 +4,7 @@ import { Link } from "react-scroll"
 
 import insta from "../img/insta.png"
 import facebook from "../img/facebook.png"
-import whatsapp from "../img/whatsapp.png"
+
 
 
 function Navbar() {
@@ -15,7 +15,7 @@ function Navbar() {
     };
 
     return (
-        <nav className={`bg-black md: h-24  py-4 px-8 fixed top-0 left-0 w-full z-50 ${menuOpen ? 'shadow-md' : 'md:shadow-none'}`}>
+        <nav className={`bg-white md: h-24  py-4 px-8 fixed top-0 left-0 w-full z-50 ${menuOpen ? 'shadow-md' : 'md:shadow-none'}`}>
             <div className="flex items-center justify-between">
                 <div className="flex items-center">
                     <Link to="carrousel" spy={true} smooth={true} offset={-100} duration={500}>
@@ -36,19 +36,19 @@ function Navbar() {
                 </div>
                 <ul className={`md:flex md:mt-10 ${menuOpen ? 'flex flex-col' : 'hidden'} md:space-x-6 mt-4  md:gap-10 md:mt-0`}>
                     <li data-aos="zoom-im" data-aos-duration="3000" >
-                        <Link to="carrousel" spy={true} smooth={true} offset={-100} duration={500} className="text-white md:text-base text-xl cursor-pointer hover:text-gray-400">Inicio</Link>
+                        <Link to="carrousel" spy={true} smooth={true} offset={-100} duration={500} className="text-black md:text-base text-xl cursor-pointer hover:text-gray-400">Inicio</Link>
                     </li>
                     <li data-aos="zoom-im" data-aos-duration="3000">
-                        <Link to="productos" spy={true} smooth={true} offset={-100} duration={500} className="text-white  md:text-base text-xl  cursor-pointer  hover:text-gray-400" >Productos</Link>
+                        <Link to="productos" spy={true} smooth={true} offset={-100} duration={500} className="text-black md:text-base text-xl  cursor-pointer  hover:text-gray-400" >Productos</Link>
                     </li>
                     <li data-aos="zoom-im" data-aos-duration="3000" >
-                        <Link to="coleccion" spy={true} smooth={true} offset={-100} duration={500} className="text-white md:text-base text-xl cursor-pointer  hover:text-gray-400">Colección</Link>
+                        <Link to="coleccion" spy={true} smooth={true} offset={-100} duration={500} className="text-black md:text-base text-xl cursor-pointer  hover:text-gray-400">Colección</Link>
                     </li>
                     <li data-aos="zoom-im" data-aos-duration="3000" >
-                        <Link to="Quienes-somos" spy={true} smooth={true} offset={-350} duration={500} className="text-white md:text-base text-xl cursor-pointer  hover:text-gray-400">Quienes somos</Link>
+                        <Link to="Quienes-somos" spy={true} smooth={true} offset={-350} duration={500} className="text-black md:text-base text-xl cursor-pointer  hover:text-gray-400">Quienes somos</Link>
                     </li>
                     <li data-aos="zoom-im" data-aos-duration="3000">
-                        <Link to="contactos" spy={true} smooth={true} offset={-150} duration={500} className="text-white md:text-base text-xl  cursor-pointer  hover:text-gray-400">Contáctanos</Link>
+                        <Link to="contactos" spy={true} smooth={true} offset={-150} duration={500} className="text-black md:text-base text-xl  cursor-pointer  hover:text-gray-400">Contáctanos</Link>
                     </li>
                 </ul>
                 <div> 
