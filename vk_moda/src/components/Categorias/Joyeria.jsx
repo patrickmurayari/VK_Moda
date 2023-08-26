@@ -92,7 +92,7 @@ const Joyeria = () => {
                 </div>
                
             </div>
-            <div className="flex justify-center gap-2 md:mt-6">
+            <div className="flex  mt-10 justify-center gap-2 md:mt-6">
                     <img className="w-10 h-10" src={insta} alt="" />
                     <img className ="w-10 h-10" src={facebook} alt="" />
                 </div>
