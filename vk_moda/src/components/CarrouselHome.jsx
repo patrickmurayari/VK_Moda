@@ -30,28 +30,28 @@ const ProductsCategoria = [
         id_name: "vestidos",
         image: `${vestidos}`,
         name: "VESTIDOS",
-        // description: "$3519",
+        precio: "$3519",
     },
     {
         id: 2,
         id_name: "bolsos",
         image: `${carteras}`,
         name: "BOLSOS",
-        // description: "$3519",
+        precio : "$3519",
     },
     {
         id: 3,
         id_name: "indumentaria",
         image: `${ropapersonalizada}`,
         name: "INDUMENTARIA",
-        // description: "$3519",
+        precio : "$3519",
     },
     {
         id: 4,
         id_name: "joyeria",
         image: `${joya1}`,
         name: "JOYERIA",
-        // description: "$3519",
+       precio : "$3519",
     },
 
 ]
@@ -199,9 +199,9 @@ function Home() {
                         </div>
                         <div className=' p-4 md:p-8  ' id="contactos">
                             <div className='max-w-screen-md mx-auto'>
-                                <h1  className='text-center text-3xl md:text-6xl font-extralight text-black mt-12 mb-6 font-serif'>Contactanos</h1>
+                                <h1 data-aos="fade-down" data-aos-duration="1500" className='text-center text-3xl md:text-6xl font-extralight text-black mt-12 mb-6 font-serif'>Contactanos</h1>
                                 <div className="flex flex-col justify-center mt-4 md:mt-6">
-                                    <div  className='text-black text-xl md:text-2xl'>
+                                    <div data-aos="fade-right" data-aos-duration="1500"  className='text-black text-xl md:text-2xl'>
                                         <p className='mb-10'>
                                             Visítanos en: <span className='font-bold text-black'>Isla Jorge 299</span>
                                         </p>
@@ -215,7 +215,7 @@ function Home() {
                                 </div>
                             </div>
                         </div>
-                        <div className="flex justify-center gap-2 md:mt-3">
+                        <div data-aos="zoom-in-left" data-aos-duration="1500"  className="flex justify-center gap-2 md:mt-3">
                             <a href="https://www.instagram.com/vk_design_moda/" target="_blank" rel="noopener noreferrer" >
                                 <img className="w-10 h-10" src={insta} alt="" />
                             </a>

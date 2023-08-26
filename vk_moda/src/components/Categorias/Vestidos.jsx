@@ -9,49 +9,49 @@ const products = [
         id: 1,
         image: `${vestido2}`,
         name: "VESTIDOS",
-        // description: "$3519",
+        precio: "$3519",
     },
     {
         id: 2,
         image: `${vestido2}`,
         name: "VESTIDOS",
-        // description: "$3519",
+        precio: "$3519",
     },
     {
         id: 3,
         image: `${vestido2}`,
         name: "VESTIDOS",
-        // description: "$3519",
+        precio: "$3519",
     },
     {
         id: 4,
         image: `${vestido2}`,
         name: "VESTIDOS",
-        // description: "$3519",
+        precio: "$3519",
     },
     {
         id: 5,
         image: `${vestido2}`,
         name: "VESTIDOS",
-        // description: "$3519",
+        precio: "$3519",
     },
     {
         id: 6,
         image: `${vestido2}`,
         name: "VESTIDOS",
-        // description: "$3519",
+        precio: "$3519",
     },
     {
         id: 7,
         image: `${vestido2}`,
         name: "VESTIDOS",
-        // description: "$3519",
+        precio: "$3519",
     },
     {
         id: 8,
         image: `${vestido2}`,
         name: "VESTIDOS",
-        // description: "$3519",
+        precio: "$3519",
     },
 
 ]
@@ -62,10 +62,10 @@ const Vestidos = () => {
 
             <NavCategoria />
             <div className="flex justify-center mt-20 md:mt-20">
-                <h1 className="text-black font-extralight  font-montserrat_alternates text-2xl mt-10 md:text-4xl">VESTIDOS</h1>
+                <h1 data-aos="zoom-in-right" data-aos-duration="1500" className="text-black font-extralight  font-montserrat_alternates text-2xl mt-10 md:text-4xl">VESTIDOS</h1>
             </div>
             <div className="mt-20">
-                <div className="grid grid-cols-1  md:grid-cols-4 gap-10 md:gap-10">
+                <div className="grid grid-cols-1  md:grid-cols-4 gap-16 md:gap-10">
                     {products &&
                         products.map((elem, index) => (
                             <div
@@ -78,9 +78,12 @@ const Vestidos = () => {
                                     alt="producto"
                                 />
                                 <div className="flex flex-col gap-2 items-center justify-start w-full">
-                                    <h6 className="text-2xl text-black md:text-2xl font-extralight font-montserrat_alternates text-center">
-                                        {elem.name}
-                                    </h6>
+                                    <h6 className=" text-lg md:text-lg  font-extralight  text-center">{elem.name}</h6>
+                                    <div>
+                                        <span className="font-bold items-center flex justify-center ">
+                                            {elem.precio}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         ))}
