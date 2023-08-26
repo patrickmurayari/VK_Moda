@@ -2,13 +2,13 @@ import {Link} from "react-router-dom"
 
 const CardProducts = ({ products }) => {
     return (
-        <div className="mt-20">
+        <div className="md:mt-20 mt-16">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-4">
                 {products &&
                     products.map((elem, index) => (
                         <div
                             key={index}
-                            className="flex flex-col items-center justify-center w-full h-96 p-4 md:p-8  transition-transform transform-gpu hover:scale-105 hover:transition-transform duration-300"
+                            className="flex flex-col items-center justify-center w-full h-74 md:h-96 p-4 md:p-8  transition-transform transform-gpu hover:scale-105 hover:transition-transform duration-300"
                         >
                             <img
                                 className="hover:brightness-50 mt-1 object-cover h-auto  md:h-60 md:w-screen"

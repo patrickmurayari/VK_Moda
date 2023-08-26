@@ -131,7 +131,7 @@ function Home() {
                 </div>
                 <div className=" md:mt-20">
                     <div className="">
-                        <h1 data-aos="zoom-in-right" data-aos-duration="1500" className="text-black font-extralight font-montserrat_alternates text-lg mt-10 md:text-4xl">Categorias Destacadas</h1>
+                        <h1 data-aos="zoom-in-right" data-aos-duration="1500" className="text-black font-extralight font-montserrat_alternates text-lg mt-8 md:text-4xl">Categorias Destacadas</h1>
                     </div>
                     <CardProducts products={ProductsCategoria} />
                 </div>
@@ -198,9 +198,9 @@ function Home() {
                         </div>
                         <div className=' p-4 md:p-8  ' id="contactos">
                             <div className='max-w-screen-md mx-auto'>
-                                <h1 data-aos="zoom-in-right" data-aos-duration="1500" className='text-center text-3xl md:text-6xl font-extralight text-black mt-12 mb-6 font-serif'>Contactanos</h1>
+                                <h1  className='text-center text-3xl md:text-6xl font-extralight text-black mt-12 mb-6 font-serif'>Contactanos</h1>
                                 <div className="flex flex-col justify-center mt-4 md:mt-6">
-                                    <div data-aos="zoom-in-up" data-aos-duration="1500" className='text-black text-xl md:text-2xl'>
+                                    <div  className='text-black text-xl md:text-2xl'>
                                         <p className='mb-10'>
                                             Visítanos en: <span className='font-bold text-black'>Isla Jorge 299</span>
                                         </p>

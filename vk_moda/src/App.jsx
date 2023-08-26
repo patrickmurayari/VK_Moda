@@ -28,6 +28,7 @@ function App() {
           <Route path="/vestidos" element={<Vestidos />}></Route>
           <Route path="*" element={<NotFound />}></Route>
         </Routes>
+        <footer/>
     </>
   )
 }

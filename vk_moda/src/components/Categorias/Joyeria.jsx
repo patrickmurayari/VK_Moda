@@ -66,7 +66,7 @@ const Joyeria = () => {
         <div className="relative min-h-screen ">
             
             <NavCategoria />
-            <div className=" mt-15 md:mt-20">
+            <div className=" flex justify-center mt-15 md:mt-20">
             <h1 className="text-black font-extralight  font-montserrat_alternates text-2xl mt-10 md:text-4xl">JOYERIA</h1>
             </div>
             <div className="mt-20">
