@@ -69,7 +69,7 @@ const Bolsos = () => {
             <div className=" mt-20 md:mt-20">
             <h1 className="text-black font-extralight  font-montserrat_alternates text-2xl mt-10 md:text-4xl">BOLSOS</h1>
             </div>
-            <div className="lg:mt-14">
+            <div className="mt-20">
                 <div className="grid grid-cols-1  md:grid-cols-4 gap-10 md:gap-10">
                     {products &&
                         products.map((elem, index) => (

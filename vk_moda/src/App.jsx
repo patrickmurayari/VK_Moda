@@ -26,7 +26,7 @@ function App() {
           <Route path="/indumentaria" element={<Indumentaria />}></Route>
           <Route path="/joyeria" element={<Joyeria />}></Route>
           <Route path="/vestidos" element={<Vestidos />}></Route>
-          <Route path="*" element={<NotFound />}></Route>
+         
         </Routes>
         <footer/>
     </>
