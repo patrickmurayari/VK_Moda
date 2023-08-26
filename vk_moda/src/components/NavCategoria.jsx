@@ -12,17 +12,17 @@ function Navbar() {
 
 
     return (
-        <nav className={'bg-black md:h-32  py-4 px-8 fixed top-0 left-0 w-full z-50 '}>
+        <nav className={'bg-black md:h-24  py-4 px-8 fixed top-0 left-0 w-full z-50 '}>
             <div className="flex items-center justify-between">
                 <div className="flex items-center">
                     <Link to="/" spy={true} smooth={true} offset={-100} duration={500}>
                         <img data-aos="fade-right" data-aos-duration="3000" src={logo} alt="Logo" className="h-14 w-14 mr-2 rounded-full" />
                     </Link>
-                    <span  data-aos="zoom-im" data-aos-duration="3000" className="text-black font-semibold">VK Moda</span>
+                    <span  data-aos="zoom-im" data-aos-duration="3000" className="text-white font-semibold">Diseño y Moda</span>
                 </div>
-                <ul className={'md:flex md:mt-20'}>
+                <ul className={'md:flex md:mt-10'}>
                     <li data-aos="zoom-im" data-aos-duration="3000" >
-                        <Link to="/" className="text-white md:text-base text-xl cursor-pointer hover:text-orange-600">Volver al inicio</Link>
+                        <Link to="/" className="text-white md:text-base text-xl cursor-pointer hover:text-gray-400">Volver al inicio</Link>
                     </li>
                 </ul>
                 <div> 

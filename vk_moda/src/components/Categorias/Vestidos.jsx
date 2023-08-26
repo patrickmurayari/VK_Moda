@@ -1,6 +1,5 @@
 // import vestidos from "../../img/Categoria/joya2.jpg"
 import NavCategoria from "../NavCategoria"
-import vestido1 from "../../img/Productos/vestidos/vestido1.jpg"
 import vestido2 from "../../img/Productos/vestidos/vestido2.jpg"
 import insta from "../../img/insta.png"
 import facebook from "../../img/facebook.png"
