@@ -65,7 +65,7 @@ const Indumentaria = () => {
         <div className="relative min-h-screen ">
 
             <NavCategoria />
-            <div className=" flex justify-center mt-15 md:mt-20">
+            <div className=" flex justify-center mt-20 md:mt-20">
                 <h1 className="text-black font-extralight  font-montserrat_alternates text-2xl mt-10 md:text-4xl">INDUMENTARIA</h1>
             </div>
             <div className="mt-20">
@@ -90,7 +90,7 @@ const Indumentaria = () => {
                         ))}
                 </div>
             </div>
-            <div className="flex justify-center gap-2 md:mt-6">
+            <div className="flex justify-center  mt-10 gap-2 md:mt-6">
                 <img className="w-10 h-10" src={insta} alt="" />
                 <img className="w-10 h-10" src={facebook} alt="" />
             </div>
