@@ -147,6 +147,7 @@ function Home() {
                         <img className="md:h-full  md:w-full h-[300px] rounded-2xl  " src={ofertas} alt="" />
                     </div>
                     <CardOfertas products={ProductsCategoria} />
+                    <CardOfertas products={ProductsCategoria} />
                 </div>
                 <div className="container mx-auto mt-20">
                     <div className="flex flex-col md:flex-row items-center justify-center md:justify-between">
