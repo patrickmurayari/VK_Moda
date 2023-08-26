@@ -102,8 +102,8 @@ function Home() {
     return (
         <div>
 
-            <div className=" w-full m-auto py-6 md:py-16 px-4 relative group" id="carrousel">
-                <div className="w-full h-[200px] md:h-[700px]  overflow-hidden relative">
+            <div className="w-full m-auto py-6 md:py-16 px-4 relative group" id="carrousel">
+                <div className="bg-black w-full h-[400px] md:h-[700px]  overflow-hidden relative">
                     {slides.map((slide, slideIndex) => (
                         <img
                             key={slideIndex}
@@ -115,7 +115,7 @@ function Home() {
                     ))}
                 </div>
 
-                <div className="flex top-4 justify-center py-2">
+                <div className=" flex top-4 justify-center py-2">
                     {slides.map((slide, slideIndex) => (
                         <div
                             id="productos"
@@ -223,7 +223,7 @@ function Home() {
                     </div>
                 </div>
             </div>
-            <footer className="bg-white text-black text-center py-0.5">
+            <footer className="bg-black text-white text-center py-0.5">
                 <p>Diseño Web &copy; Pauin 2023</p>
             </footer>
         </div>

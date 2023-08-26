@@ -1,6 +1,6 @@
-import wplogo from "./img/wplogo.png"
-import { Routes, Route, BrowserRouter, useLocation } from "react-router-dom"
+import { Routes, Route} from "react-router-dom"
 import './App.css'
+import wplogo from "./img/wplogo.png"
 
 import Navbar from './components/Navbar'
 import NotFound from './components/NotFound'
@@ -13,15 +13,13 @@ import Vestidos from "./components/Categorias/Vestidos"
 
 function App() {
   return (
-
-    <div>
+    <>
       <div className="flex justify-end mt-8 ">
         <a href="https://api.whatsapp.com/send?phone=541131666991" target="_blank" rel="noopener noreferrer">
           <img src={wplogo} alt="WhatsApp" className="h-12  md:h-16 md:w-16 fixed bottom-4 z-50  right-2" />
-        </a>
-      </div>
+          </a>
+        </div>
       <Navbar />
-      <BrowserRouter>
         <Routes>
           <Route path="/" element={<Carrouselhome />}></Route>
           <Route path="/bolsos" element={<Bolsos />}></Route>
@@ -30,11 +28,7 @@ function App() {
           <Route path="/vestidos" element={<Vestidos />}></Route>
           <Route path="*" element={<NotFound />}></Route>
         </Routes>
-        
-      </BrowserRouter>
-     
-    </div>
-
+    </>
   )
 }
 
