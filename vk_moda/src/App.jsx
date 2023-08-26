@@ -9,6 +9,7 @@ import Bolsos from "./components/Categorias/Bolsos"
 import Indumentaria from "./components/Categorias/Indumentaria"
 import Joyeria from "./components/Categorias/Joyeria"
 import Vestidos from "./components/Categorias/Vestidos"
+import Footer from "./components/Footer"
 
 
 function App() {
@@ -28,7 +29,9 @@ function App() {
           <Route path="/vestidos" element={<Vestidos />}></Route>
          
         </Routes>
-        <footer/>
+      <div className="mt-4">
+      <Footer/>
+        </div>  
     </>
   )
 }
