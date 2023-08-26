@@ -19,8 +19,10 @@ import facebook from "../img/facebook.png"
 
 import CardOfertas from "./CardOfertas";
 import CardProducts from "./CardCategoria";
-import CardNuevaColeccion from "./CardNuevaColeccion";
 import CarrouselSwip from "./CarrouselSwip";
+
+import logovk from "../img/logoVK.png"
+import about from "../img/about.jpg"
 
 const ProductsCategoria = [
     {
@@ -49,58 +51,6 @@ const ProductsCategoria = [
         id_name: "joyeria",
         image: `${joya1}`,
         name: "JOYERIA",
-        // description: "$3519",
-    },
-
-]
-
-const NuevaColeccion = [
-    {
-        id: 1,
-        image: `${vestidos}`,
-        name: "VESTIDOS",
-        // description: "$3519",
-    },
-    {
-        id: 2,
-        image: `${vestidos}`,
-        name: "VESTIDOS",
-        // description: "$3519",
-    },
-    {
-        id: 3,
-        image: `${vestidos}`,
-        name: "VESTIDOS",
-        // description: "$3519",
-    },
-    {
-        id: 4,
-        image: `${vestidos}`,
-        name: "VESTIDOS",
-        // description: "$3519",
-    },
-    {
-        id: 5,
-        image: `${vestidos}`,
-        name: "VESTIDOS",
-        // description: "$3519",
-    },
-    {
-        id: 6,
-        image: `${vestidos}`,
-        name: "VESTIDOS",
-        // description: "$3519",
-    },
-    {
-        id: 7,
-        image: `${vestidos}`,
-        name: "VESTIDOS",
-        // description: "$3519",
-    },
-    {
-        id: 8,
-        image: `${vestidos}`,
-        name: "VESTIDOS",
         // description: "$3519",
     },
 
@@ -185,9 +135,11 @@ function Home() {
                     </div>
                     <CardProducts products={ProductsCategoria} />
                 </div>
-                <div className=" mt-24 md:mt-28">
-                    <h1 className="text-black font-extralight font-montserrat_alternates   text-2xl mt-10 md:text-4xl">Nueva coleccion 2023</h1>
-                    <CarrouselSwip />
+                <div className=" mt-24 md:mt-28" id="coleccion">
+                    <h1 data-aos="zoom-in-right" data-aos-duration="1500" className="text-black font-extralight font-montserrat_alternates   text-2xl mt-10 md:text-4xl">Nueva coleccion 2023</h1>
+                    <div className=" mt-6">
+                        <CarrouselSwip />
+                    </div>
                 </div>
                 <div className=" mt-20 md:mt-20">
 
@@ -201,20 +153,22 @@ function Home() {
                         <div data-aos="zoom-in" data-aos-duration="1500" className="md:w-1/2 mb-4 md:mb-0">
                             <img
                                 className="w-full  h-auto"
-                                src={foto1}
+                                src={logovk}
                                 alt="Nuestra empresa"
                             />
                         </div>
                         <div data-aos="fade-up" data-aos-duration="1500" id="Quienes-somos" className="md:w-1/2 md:ml-8">
                             <h2 className="text-black font-extralight font-montserrat_alternates   text-2xl  md:text-4xl ">Quiénes Somos</h2>
                             <p className="text-gray-600 mt-10 ">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ut ante vel dui volutpat
-                                eleifend. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac
-                                turpis egestas.
+                            Somos tu destino único para todo lo relacionado con la moda y la indumentaria. Nos enorgullece ofrecer una amplia
+                            gama de estilos, tallas y diseños que se adaptan a todos los gustos y ocasiones
                             </p>
                             <p className="text-gray-600 mt-2">
-                                Suspendisse potenti. Vestibulum ac lacus vel mauris eleifend aliquet. Maecenas feugiat
-                                arcu eu enim tristique dignissim.
+                            Nuestra pasión por la moda no se limita solo a ofrecer productos de alta calidad, sino que también nos destacamos 
+                            en la creación de prendas únicas que reflejen tu estilo personal. Nuestro equipo de expertos en diseño y confección 
+                            está listo para convertir tus ideas en realidad. Desde diseños personalizados que se ajustan perfectamente a tu 
+                            visión hasta adaptaciones únicas de prendas existentes, estamos comprometidos a brindarte una experiencia de moda 
+                            verdaderamente personalizada.
                             </p>
                         </div>
                     </div>
@@ -224,20 +178,20 @@ function Home() {
                                 <div data-aos="fade-down" data-aos-duration="1500" className="md:w-3/4">
                                     <h2 className="text-black font-extralight font-montserrat_alternates text-2xl md:text-4xl">Por que elegirnos</h2>
                                     <p className="text-gray-600 mt-10">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ut ante vel dui volutpat
-                                        eleifend. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac
-                                        turpis egestas.
+                                    Lo que nos distingue es nuestro compromiso con la calidad y la atención al detalle. Cada prenda que vendemos 
+                                    y creamos está cuidadosamente elaborada para asegurarnos de que te sientas cómodo, seguro y elegante en 
+                                    cada ocasión.
                                     </p>
                                     <p className="text-gray-600 mt-2">
-                                        Suspendisse potenti. Vestibulum ac lacus vel mauris eleifend aliquet. Maecenas feugiat
-                                        arcu eu enim tristique dignissim.
+                                    Creemos que la moda es una forma de expresión personal, y estamos aquí para ayudarte a 
+                                    expresarte de la mejor manera posible.
                                     </p>
                                 </div>
                             </div>
                             <div data-aos="zoom-in" data-aos-duration="1500" className="md:w-1/2 md:ml-8">
                                 <img
                                     className="w-full h-auto"
-                                    src={foto2}
+                                    src={about}
                                     alt="Nuestra empresa"
                                 />
                             </div>
@@ -251,23 +205,27 @@ function Home() {
                                             Visítanos en: <span className='font-bold text-black'>Isla Jorge 299</span>
                                         </p>
                                         <p className='mb-10'>
-                                            Llámanos: <span className='font-bold text-black'>(+54) 1131666991</span>
+                                            Llámanos: <span className='font-bold text-black'>(+54) 1126073801</span>
                                         </p>
                                         <p className='mb-4'>
-                                            Escríbenos: <span className='font-bold text-black'>armando@granjaelsol.com</span>
+                                            Escríbenos: <span className='font-bold text-black'>virginiamurayari@gmail.com</span>
                                         </p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div className="flex justify-center gap-2 md:mt-3">
-                            <img className="w-10 h-10" src={insta} alt="" />
+                            <a href="https://www.instagram.com/vk_design_moda/" target="_blank" rel="noopener noreferrer" >
+                                <img className="w-10 h-10" src={insta} alt="" />
+                            </a>
                             <img className="w-10 h-10" src={facebook} alt="" />
                         </div>
                     </div>
                 </div>
             </div>
-
+            <footer className="bg-white text-black text-center py-0.5">
+                <p>Diseño Web &copy; Pauin 2023</p>
+            </footer>
         </div>
     );
 }
