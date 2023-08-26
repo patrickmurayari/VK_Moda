@@ -8,6 +8,10 @@ export default {
     extend: {
       fontFamily: {
         montserrat_alternates: ['Montserrat Alternates', 'sans-serif'],
+      }
+      ,
+      brightness: {
+        '55': 'brightness(0.55)',
       },
     },
   },

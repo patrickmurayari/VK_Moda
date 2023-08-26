@@ -70,7 +70,7 @@ const Bolsos = () => {
                 <h1 data-aos="zoom-in-right" data-aos-duration="1500" className="text-black font-extralight  font-montserrat_alternates text-2xl mt-10 md:text-4xl">BOLSOS</h1>
             </div>
             <div className="mt-20">
-                <div className="grid grid-cols-2   md:grid-cols-4 gap-2 md:gap-10">
+                <div className="grid grid-cols-1   md:grid-cols-4 gap-24 md:gap-10">
                     {products &&
                         products.map((elem, index) => (
                             <div
@@ -78,7 +78,7 @@ const Bolsos = () => {
                                 className="flex flex-col items-center justify-center w-full h-96 p-8 md:p-8  transition-transform transform-gpu hover:scale-105 hover:transition-transform duration-300"
                             >
                                 <img
-                                    className="  rounded-3xl transition-transform mt-1 object-cover w-96 h-44 md:h-96 md:w-screen"
+                                    className="  rounded-3xl transition-transform mt-1 object-cover h-96 md:h-96 md:w-screen"
                                     src={elem.image}
                                     alt="producto"
                                 />

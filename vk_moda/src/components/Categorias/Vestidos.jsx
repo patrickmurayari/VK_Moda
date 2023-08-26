@@ -73,7 +73,7 @@ const Vestidos = () => {
                                 className="flex flex-col  items-center justify-center w-full h-96 p-8 md:p-8  transition-transform transform-gpu hover:scale-105 hover:transition-transform duration-300"
                             >
                                 <img
-                                    className="hover:brightness-50 mt-1 object-cover h-96  md:h-96 md:w-screen"
+                                    className=" rounded-3xl  mt-1 object-cover h-96  md:h-96 md:w-screen"
                                     src={elem.image}
                                     alt="producto"
                                 />
