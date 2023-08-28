@@ -1,26 +1,20 @@
 import { useState, useEffect } from "react";
 
 import { RxDot } from "react-icons/rx";
-
-
 import foto1 from "../img/Carrousel/foto1.jpg";
 import foto2 from "../img/Carrousel/foto2.jpg";
 import foto3 from "../img/Carrousel/fotoPortada.jpg";
 import foto4 from "../img/Carrousel/fotoPortada1.jpg";
 import ofertas from "../img/ofertafoto.jpg";
-
 import carteras from "../img/Categoria/bolsofoto.jpg";
 import joya1 from "../img/Categoria/fotojoyas.jpg";
 import vestidos from "../img/Categoria/joya2.jpg";
 import ropapersonalizada from "../img/Categoria/ropapersonalizada1.jpg";
-
 import insta from "../img/insta.png"
 import facebook from "../img/facebook.png"
-
 import CardOfertas from "./CardOfertas";
 import CardProducts from "./CardCategoria";
 import CarrouselSwip from "./CarrouselSwip";
-
 import logovk from "../img/logoVK.png"
 import about from "../img/about.jpg"
 
@@ -37,21 +31,21 @@ const ProductsCategoria = [
         id_name: "bolsos",
         image: `${carteras}`,
         name: "BOLSOS",
-        precio : "$3519",
+        precio: "$3519",
     },
     {
         id: 3,
         id_name: "indumentaria",
         image: `${ropapersonalizada}`,
         name: "INDUMENTARIA",
-        precio : "$3519",
+        precio: "$3519",
     },
     {
         id: 4,
         id_name: "joyeria",
         image: `${joya1}`,
         name: "JOYERIA",
-       precio : "$3519",
+        precio: "$3519",
     },
 
 ]
@@ -101,7 +95,6 @@ function Home() {
 
     return (
         <div>
-
             <div className="w-full m-auto py-16  md:py-16 px-4 relative group" id="carrousel">
                 <div className="bg-black w-full h-[400px] md:h-[700px]  overflow-hidden relative">
                     {slides.map((slide, slideIndex) => (
@@ -114,7 +107,6 @@ function Home() {
                         />
                     ))}
                 </div>
-
                 <div className=" flex top-4 justify-center py-2">
                     {slides.map((slide, slideIndex) => (
                         <div
@@ -124,7 +116,6 @@ function Home() {
                             className={`text-1xl cursor-pointer ${slideIndex === currentIndex ? "text-black" : "text-gray-400"
                                 }`}
                         >
-
                             <RxDot />
                         </div>
                     ))}
@@ -142,10 +133,9 @@ function Home() {
                     </div>
                 </div>
                 <div className=" mt-20 md:mt-20">
-
-                <div className="flex justify-center items-center w-full">
-  <img className="object-cover  md:h-[600px] md:w-[2000px] h-[300px] transform scale-110" src={ofertas} alt="" />
-</div>
+                    <div className="flex justify-center items-center w-full">
+                        <img className="object-cover  md:h-[600px] md:w-[2000px] h-[300px] transform scale-110" src={ofertas} alt="" />
+                    </div>
                     <CardOfertas products={ProductsCategoria} />
                     <CardOfertas products={ProductsCategoria} />
                 </div>
@@ -161,15 +151,16 @@ function Home() {
                         <div data-aos="fade-up" data-aos-duration="1500" id="Quienes-somos" className="md:w-1/2 md:ml-8">
                             <h2 className="text-black font-extralight font-montserrat_alternates   text-2xl  md:text-4xl ">Quiénes Somos</h2>
                             <p className="text-gray-600 mt-10 ">
-                            Somos tu destino único para todo lo relacionado con la moda y la indumentaria. Nos enorgullece ofrecer una amplia
-                            gama de estilos, tallas y diseños que se adaptan a todos los gustos y ocasiones
+                                Somos una marca con mas de 20 años de experiencia con todo lo relacionado a la moda y la indumentaria. 
+                                Nos enorgullece ofrecer una amplia gama de estilos, tallas y diseños que se adaptan a todos los gustos y 
+                                ocasiones
                             </p>
                             <p className="text-gray-600 mt-2">
-                            Nuestra pasión por la moda no se limita solo a ofrecer productos de alta calidad, sino que también nos destacamos 
-                            en la creación de prendas únicas que reflejen tu estilo personal. Nuestro equipo de expertos en diseño y confección 
-                            está listo para convertir tus ideas en realidad. Desde diseños personalizados que se ajustan perfectamente a tu 
-                            visión hasta adaptaciones únicas de prendas existentes, estamos comprometidos a brindarte una experiencia de moda 
-                            verdaderamente personalizada.
+                                Nuestra pasión por la moda no se limita solo a ofrecer productos de alta calidad, sino que también nos destacamos
+                                en la creación de prendas únicas que reflejen tu estilo personal. Nuestro equipo de expertos en diseño y confección
+                                está listo para convertir tus ideas en realidad. Desde diseños personalizados que se ajustan perfectamente a tu
+                                visión hasta adaptaciones únicas de prendas existentes, estamos comprometidos a brindarte una experiencia de moda
+                                verdaderamente personalizada.
                             </p>
                         </div>
                     </div>
@@ -179,13 +170,13 @@ function Home() {
                                 <div data-aos="fade-down" data-aos-duration="1500" className="md:w-3/4">
                                     <h2 className="text-black font-extralight font-montserrat_alternates text-2xl md:text-4xl">Por que elegirnos</h2>
                                     <p className="text-gray-600 mt-10">
-                                    Lo que nos distingue es nuestro compromiso con la calidad y la atención al detalle. Cada prenda que vendemos 
-                                    y creamos está cuidadosamente elaborada para asegurarnos de que te sientas cómodo, seguro y elegante en 
-                                    cada ocasión.
+                                        Lo que nos distingue es nuestro compromiso con la calidad y la atención al detalle. Cada prenda que vendemos
+                                        y creamos está cuidadosamente elaborada para asegurarnos de que te sientas cómodo, seguro y elegante en
+                                        cada ocasión.
                                     </p>
                                     <p className="text-gray-600 mt-2">
-                                    Creemos que la moda es una forma de expresión personal, y estamos aquí para ayudarte a 
-                                    expresarte de la mejor manera posible.
+                                        Sabemos que la moda es una forma de expresión personal, y estamos aquí para ayudarte a
+                                        expresarte de la mejor manera posible.
                                     </p>
                                 </div>
                             </div>
@@ -203,13 +194,16 @@ function Home() {
                                 <div className="flex flex-col justify-center mt-4 md:mt-6">
                                     <div className='text-black text-xl md:text-2xl'>
                                         <p className='mb-10'>
-                                            Visítanos en: <span className='font-bold text-black'>Isla Jorge 299</span>
+                                            Visítanos en: <span className='font-bold text-black'>Av. Bartolome Mitre 363 - Shopping Via Manzanares </span>
+                                        </p>
+                                        <p className='mb-10'>
+                                            Nuestros Horarios <span className='font-bold text-black'>Lunes a viernes de 10 am 13pm - 16 a 20pm</span>
                                         </p>
                                         <p className='mb-10'>
                                             Llámanos: <span className='font-bold text-black'>(+54) 1126073801</span>
                                         </p>
                                         <p className='mb-4'>
-                                            Escríbenos: <span className='font-bold text-black'>virginiamurayari@gmail.com</span>
+                                            Escríbenos: <span className='font-bold text-black'>murayarivirginia797@gmail.com</span>
                                         </p>
                                     </div>
                                 </div>
@@ -223,7 +217,7 @@ function Home() {
                         </div>
                     </div>
                 </div>
-            </div> 
+            </div>
         </div>
     );
 }

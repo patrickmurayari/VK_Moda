@@ -39,7 +39,7 @@ function Navbar() {
                         </svg>
                     </button>
                 </div>
-                <ul className={`md:flex md:mt-10 ${menuOpen ? 'flex flex-col gap-6 text-xl border  border-blue-50' : 'hidden'} md:space-x-6 mt-4  md:gap-10 md:mt-0`}>
+                <ul className={`md:flex md:mt-1 ${menuOpen ? 'flex flex-col gap-6 text-xl border  border-blue-50' : 'hidden'} md:space-x-6 mt-4  md:gap-10 md:mt-0`}>
                     <li data-aos="zoom-im" data-aos-duration="3000" >
                         <Link to="carrousel" spy={true} smooth={true} onClick={closeMenu}  offset={-100} duration={500} className="text-black md:text-base text-xl cursor-pointer hover:text-gray-400">Inicio</Link>
                     </li>
