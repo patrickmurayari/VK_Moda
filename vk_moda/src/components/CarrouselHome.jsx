@@ -8,14 +8,14 @@ import foto4 from "../img/Carrousel/fotoPortada1.jpg";
 import ofertas from "../img/ofertafoto.jpg";
 import carteras from "../img/Categoria/bolsofoto.jpg";
 import joya1 from "../img/Categoria/fotojoyas.jpg";
-import vestidos from "../img/Categoria/joya2.jpg";
+import vestidos from "../img/Categoria/fotovestido.jpg";
 import ropapersonalizada from "../img/Categoria/ropapersonalizada1.jpg";
 import insta from "../img/insta.png"
 import facebook from "../img/facebook.png"
 import CardOfertas from "./CardOfertas";
 import CardProducts from "./CardCategoria";
 import CarrouselSwip from "./CarrouselSwip";
-import logovk from "../img/logoVK.png"
+import fotoabout from "../img/fotoabout.jpg"
 import about from "../img/about.jpg"
 
 const ProductsCategoria = [
@@ -144,8 +144,8 @@ function Home() {
                         <div data-aos="zoom-in" data-aos-duration="1500" className="md:w-1/2 mb-4 md:mb-0">
                             <img
                                 className="w-full  h-auto"
-                                src={logovk}
-                                alt="Nuestra empresa"
+                                src={fotoabout}
+                                alt="quienes somos"
                             />
                         </div>
                         <div data-aos="fade-up" data-aos-duration="1500" id="Quienes-somos" className="md:w-1/2 md:ml-8">
@@ -197,7 +197,7 @@ function Home() {
                                             Visítanos en: <span className='font-bold text-black'>Av. Bartolome Mitre 363 - Shopping Via Manzanares </span>
                                         </p>
                                         <p className='mb-10'>
-                                            Nuestros Horarios <span className='font-bold text-black'>Lunes a viernes de 10 am 13pm - 16 a 20pm</span>
+                                            Nuestros Horarios <span className='font-bold text-black'>Lunes a sabados de 10 am 13pm - 16 a 20pm</span>
                                         </p>
                                         <p className='mb-10'>
                                             Llámanos: <span className='font-bold text-black'>(+54) 1126073801</span>

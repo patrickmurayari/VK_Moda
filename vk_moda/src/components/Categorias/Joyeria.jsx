@@ -1,4 +1,4 @@
-import vestidos from "../../img/Categoria/joya2.jpg"
+// import vestidos from "../../img/Categoria/fotovestido.jpg"
 import NavCategoria from "../NavCategoria"
 import joya1 from "../../img/Productos/joyas/joya1.jpg"
 import joya2 from "../../img/Productos/joyas/joya2.jpg"
@@ -6,6 +6,8 @@ import joya3 from "../../img/Productos/joyas/joya3.jpg"
 import joya4 from "../../img/Productos/joyas/joya4.jpg"
 import joya5 from "../../img/Productos/joyas/joya5.jpg"
 import joya6 from "../../img/Productos/joyas/joya6.jpg"
+import joya7 from "../../img/Productos/joyas/joya7.jpg"
+
 import insta from "../../img/insta.png"
 import facebook from "../../img/facebook.png"
 
@@ -48,13 +50,7 @@ const products = [
     },
     {
         id: 7,
-        image: `${joya5}`,
-        name: "VESTIDOS",
-        precio: "$3519",
-    },
-    {
-        id: 8,
-        image: `${vestidos}`,
+        image: `${joya7}`,
         name: "VESTIDOS",
         precio: "$3519",
     },
@@ -94,7 +90,7 @@ const Joyeria = () => {
                         ))}
                 </div>
             </div>
-            <div className="flex  mt-10 justify-center gap-2 md:mt-6">
+            <div className="flex mt-24 justify-center gap-2 md:mt-20">
                 <img className="w-10 h-10" src={insta} alt="" />
                 <img className="w-10 h-10" src={facebook} alt="" />
             </div>

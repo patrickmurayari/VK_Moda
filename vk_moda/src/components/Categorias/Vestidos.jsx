@@ -70,7 +70,7 @@ const Vestidos = () => {
                 <h1 data-aos="zoom-in-right" data-aos-duration="1500" className="text-black font-extralight  font-montserrat_alternates text-2xl mt-10 md:text-4xl">VESTIDOS</h1>
             </div>
             <div className="mt-20">
-                <div className="grid grid-cols-1  md:grid-cols-4 gap-16 md:gap-10">
+                <div className="grid grid-cols-1  md:grid-cols-4 gap-32 md:gap-20">
                     {products &&
                         products.map((elem, index) => (
                             <div
@@ -95,7 +95,7 @@ const Vestidos = () => {
                 </div>
 
             </div>
-            <div className=" mt-10 flex justify-center gap-2 md:mt-6">
+            <div className=" mt-24 flex justify-center gap-2 md:mt-28">
                 <img className="w-10 h-10" src={insta} alt="" />
                 <img className="w-10 h-10" src={facebook} alt="" />
             </div>
