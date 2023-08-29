@@ -1,6 +1,11 @@
 // import vestidos from "../../img/Categoria/joya2.jpg"
 import NavCategoria from "../NavCategoria"
+import vestido1 from "../../img/Productos/vestidos/vestido1.jpg"
 import vestido2 from "../../img/Productos/vestidos/vestido2.jpg"
+import vestido3 from "../../img/Productos/vestidos/vestido3.jpg"
+import vestido4 from "../../img/Productos/vestidos/vestido4.jpg"
+import vestido5 from "../../img/Productos/vestidos/vestido5.jpg"
+
 import insta from "../../img/insta.png"
 import facebook from "../../img/facebook.png"
 
@@ -13,25 +18,25 @@ const products = [
     },
     {
         id: 2,
-        image: `${vestido2}`,
+        image: `${vestido1}`,
         name: "VESTIDOS",
         precio: "$3519",
     },
     {
         id: 3,
-        image: `${vestido2}`,
+        image: `${vestido3}`,
         name: "VESTIDOS",
         precio: "$3519",
     },
     {
         id: 4,
-        image: `${vestido2}`,
+        image: `${vestido4}`,
         name: "VESTIDOS",
         precio: "$3519",
     },
     {
         id: 5,
-        image: `${vestido2}`,
+        image: `${vestido5}`,
         name: "VESTIDOS",
         precio: "$3519",
     },

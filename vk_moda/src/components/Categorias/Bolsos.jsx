@@ -2,9 +2,12 @@ import NavCategoria from "../NavCategoria"
 import bolso1 from "../../img/Productos/bolsos/bolso1.jpg"
 import bolso2 from "../../img/Productos/bolsos/bolso2.jpg"
 import bolso3 from "../../img/Productos/bolsos/bolso3.jpg"
-import bolso4 from "../../img/Productos/bolsos/bolso1.jpg"
-import bolso5 from "../../img/Productos/bolsos/bolso2.jpg"
-import bolso6 from "../../img/Productos/bolsos/bolso3.jpg"
+import bolso4 from "../../img/Productos/bolsos/bolso4.jpg"
+import bolso5 from "../../img/Productos/bolsos/bolso5.jpg"
+import bolso6 from "../../img/Productos/bolsos/bolso6.jpg"
+import bolso7 from "../../img/Productos/bolsos/bolso7.jpg"
+import bolso8 from "../../img/Productos/bolsos/bolso8.jpg"
+
 import insta from "../../img/insta.png"
 import facebook from "../../img/facebook.png"
 
@@ -47,13 +50,13 @@ const products = [
     },
     {
         id: 7,
-        image: `${bolso1}`,
+        image: `${bolso7}`,
         name: "VESTIDOS",
         precio: "$3519",
     },
     {
         id: 8,
-        image: `${bolso2}`,
+        image: `${bolso8}`,
         name: "VESTIDOS",
         precio: "$3519",
     },
@@ -95,7 +98,7 @@ const Bolsos = () => {
                 </div>
 
             </div>
-            <div className="flex justify-center gap-2  mt-10 md:mt-6">
+            <div className="flex justify-center gap-2 mt-20 md:mt-24">
                 <img className="w-10 h-10" src={insta} alt="" />
                 <img className="w-10 h-10" src={facebook} alt="" />
             </div>

@@ -1,10 +1,16 @@
 import NavCategoria from "../NavCategoria"
 import indumentaria1 from "../../img/Productos/indumentaria/indumentaria1.jpg"
 import indumentaria2 from "../../img/Productos/indumentaria/indumentaria2.jpg"
-import indumentaria3 from "../../img/Productos/indumentaria/indumentaria1.jpg"
-import indumentaria4 from "../../img/Productos/indumentaria/indumentaria2.jpg"
-import indumentaria5 from "../../img/Productos/indumentaria/indumentaria1.jpg"
-import indumentaria6 from "../../img/Productos/indumentaria/indumentaria2.jpg"
+import indumentaria3 from "../../img/Productos/indumentaria/indumentaria3.jpg"
+import indumentaria4 from "../../img/Productos/indumentaria/indumentaria4.jpg"
+import indumentaria5 from "../../img/Productos/indumentaria/indumentaria5.jpg"
+import indumentaria6 from "../../img/Productos/indumentaria/indumentaria6.jpg"
+import indumentaria7 from "../../img/Productos/indumentaria/indumentaria7.jpg"
+import indumentaria8 from "../../img/Productos/indumentaria/indumentaria8.jpg"
+import indumentaria9 from "../../img/Productos/indumentaria/indumentaria10.jpg"
+import indumentaria10 from "../../img/Productos/indumentaria/indumentaria11.jpg"
+import indumentaria11 from "../../img/Productos/indumentaria/indumentaria12.jpg"
+
 import insta from "../../img/insta.png"
 import facebook from "../../img/facebook.png"
 
@@ -47,16 +53,35 @@ const products = [
     },
     {
         id: 7,
-        image: `${indumentaria1}`,
+        image: `${indumentaria7}`,
         name: "VESTIDOS",
         precio :  "$3519",
     },
     {
         id: 8,
-        image: `${indumentaria2}`,
+        image: `${indumentaria8}`,
         name: "VESTIDOS",
         precio :  "$3519",
     },
+    {
+        id: 9,
+        image: `${indumentaria9}`,
+        name: "VESTIDOS",
+        precio :  "$3519",
+    },
+    {
+        id: 10,
+        image: `${indumentaria10}`,
+        name: "VESTIDOS",
+        precio :  "$3519",
+    },
+    {
+        id: 11,
+        image: `${indumentaria11}`,
+        name: "VESTIDOS",
+        precio :  "$3519",
+    },
+
 
 ]
 
@@ -69,7 +94,7 @@ const Indumentaria = () => {
                 <h1 data-aos="zoom-in-right" data-aos-duration="1500" className="text-black font-extralight  font-montserrat_alternates text-2xl mt-10 md:text-4xl">INDUMENTARIA</h1>
             </div>
             <div className="mt-20">
-                <div className="grid grid-cols-1  md:grid-cols-4 gap-16 md:gap-10">
+                <div className="grid grid-cols-1  md:grid-cols-4 gap-44 md:gap-10">
                     {products &&
                         products.map((elem, index) => (
                             <div
@@ -93,7 +118,7 @@ const Indumentaria = () => {
                         ))}
                 </div>
             </div>
-            <div className="flex justify-center  mt-10 gap-2 md:mt-6">
+            <div className="flex justify-center mt-32 gap-2 md:mt-20">
                 <img className="w-10 h-10" src={insta} alt="" />
                 <img className="w-10 h-10" src={facebook} alt="" />
             </div>

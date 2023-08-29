@@ -1,11 +1,11 @@
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom"
 
 const CardProducts = ({ products }) => {
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
     
-    
-        const scrollToTop = () => {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
     return (
         <div className="md:mt-20 mt-16">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-4">
