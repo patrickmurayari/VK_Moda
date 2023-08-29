@@ -1,8 +1,5 @@
-
 import { Link } from 'react-router-dom'; // Asumiendo que estás utilizando React Router
-
 // Reemplaza con la ruta correcta de tu imagen
-
 function NotFound() {
   return (
     <div className="flex flex-col items-center justify-center h-screen">

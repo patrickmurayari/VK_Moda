@@ -2,8 +2,6 @@
 const CardOfertas = ({ products }) => {
     return (
         <div className="mt-20">
-
-
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-2 ">
                 {products &&
                     products.map((elem, index) => (

@@ -136,8 +136,10 @@ function Home() {
                     <div className="flex justify-center items-center w-full">
                         <img className="object-cover  md:h-[600px] md:w-[2000px] h-[300px] transform scale-110" src={ofertas} alt="" />
                     </div>
-                    <CardOfertas products={ProductsCategoria} />
-                    <CardOfertas products={ProductsCategoria} />
+                    <div data-aos="zoom-in-right" data-aos-duration="1500">
+                        <CardOfertas products={ProductsCategoria} />
+                        <CardOfertas products={ProductsCategoria} />
+                    </div>
                 </div>
                 <div className="container mx-auto mt-20">
                     <div className="flex flex-col md:flex-row items-center justify-center md:justify-between">
@@ -147,21 +149,23 @@ function Home() {
                                 src={fotoabout}
                                 alt="quienes somos"
                             />
-                        </div>
-                        <div data-aos="fade-up" data-aos-duration="1500" id="Quienes-somos" className="md:w-1/2 md:ml-8">
-                            <h2 className="text-black font-extralight font-montserrat_alternates   text-2xl  md:text-4xl ">Quiénes Somos</h2>
-                            <p className="text-gray-600 mt-10 ">
-                                Somos una marca con mas de 20 años de experiencia con todo lo relacionado a la moda y la indumentaria. 
-                                Nos enorgullece ofrecer una amplia gama de estilos, tallas y diseños que se adaptan a todos los gustos y 
-                                ocasiones
-                            </p>
-                            <p className="text-gray-600 mt-2">
-                                Nuestra pasión por la moda no se limita solo a ofrecer productos de alta calidad, sino que también nos destacamos
-                                en la creación de prendas únicas que reflejen tu estilo personal. Nuestro equipo de expertos en diseño y confección
-                                está listo para convertir tus ideas en realidad. Desde diseños personalizados que se ajustan perfectamente a tu
-                                visión hasta adaptaciones únicas de prendas existentes, estamos comprometidos a brindarte una experiencia de moda
-                                verdaderamente personalizada.
-                            </p>
+                        </div >
+                        <div data-aos="fade-up" data-aos-duration="1500" className="md:w-1/2 md:ml-8">
+                            <h2 className="text-black font-extralight font-montserrat_alternates text-2xl  md:text-4xl ">Quiénes Somos</h2>
+                            <div id="Quienes-somos">
+                                <p className="text-gray-600 mt-10 ">
+                                    Somos una marca con mas de 20 años de experiencia con todo lo relacionado a la moda y la indumentaria.
+                                    Nos enorgullece ofrecer una amplia gama de estilos, tallas y diseños que se adaptan a todos los gustos y
+                                    ocasiones
+                                </p>
+                                <p className="text-gray-600 mt-2">
+                                    Nuestra pasión por la moda no se limita solo a ofrecer productos de alta calidad, sino que también nos destacamos
+                                    en la creación de prendas únicas que reflejen tu estilo personal. Nuestro equipo de expertos en diseño y confección
+                                    está listo para convertir tus ideas en realidad. Desde diseños personalizados que se ajustan perfectamente a tu
+                                    visión hasta adaptaciones únicas de prendas existentes, estamos comprometidos a brindarte una experiencia de moda
+                                    verdaderamente personalizada.
+                                </p>
+                            </div>
                         </div>
                     </div>
                     <div className="container mx-auto mt-20">
@@ -188,10 +192,10 @@ function Home() {
                                 />
                             </div>
                         </div>
-                        <div className='p-4 md:p-8' id="contactos">
+                        <div className='p-4 md:p-8'>
                             <div className='max-w-screen-md mx-auto'>
                                 <h1 className='text-center text-3xl md:text-6xl font-extralight text-black mt-12 mb-6 font-serif'>Contactanos</h1>
-                                <div className="flex flex-col justify-center mt-4 md:mt-6">
+                                <div className="flex flex-col justify-center mt-4 md:mt-6" id="contactos" >
                                     <div className='text-black text-xl md:text-2xl'>
                                         <p className='mb-10'>
                                             Visítanos en: <span className='font-bold text-black'>Av. Bartolome Mitre 363 - Shopping Via Manzanares </span>

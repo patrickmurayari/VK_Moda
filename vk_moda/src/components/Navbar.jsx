@@ -26,7 +26,6 @@ function Navbar() {
                     </Link>
                     {!menuOpen ?( <span  data-aos="zoom-im" data-aos-duration="3000" className=" mt-1 text-black font-semibold">Diseño y Moda</span>
                     ): null}
-                   
                 </div>
                 <div className="md:hidden"> {/* Mostrar solo en dispositivos móviles */}
                     <button className="text-gray-600  mt-3 hover:text-black focus:outline-none" onClick={toggleMenu}>
@@ -58,7 +57,7 @@ function Navbar() {
                 </ul>
                 <div> 
                 {menuOpen ? null : (
-                        <div data-aos="zoom-im" data-aos-duration="3000" className="flex mt-2">
+                        <div data-aos="fade-right" data-aos-duration="3000" className="flex mt-2">
                             <a href="https://www.instagram.com/vk_design_moda/" target="_blank" rel="noopener noreferrer">
                                 <img  className="h-5 mb-1 mr-3 md:h-7" src={insta} alt="" />
                             </a>

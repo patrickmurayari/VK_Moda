@@ -93,7 +93,6 @@ const Vestidos = () => {
                             </div>
                         ))}
                 </div>
-
             </div>
             <div className=" mt-24 flex justify-center gap-2 md:mt-28">
                 <img className="w-10 h-10" src={insta} alt="" />

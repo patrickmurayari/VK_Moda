@@ -16,6 +16,7 @@ const CardProducts = ({ products }) => {
                             className="flex flex-col items-center justify-center w-full h-74 md:h-96 p-4 md:p-8  transition-transform transform-gpu hover:scale-105 hover:transition-transform duration-300"
                         >
                             <img
+                                data-aos="fade-in" data-aos-duration="1500"
                                 className="hover:brightness-50 mt-1 object-cover h-auto  md:h-60 md:w-screen"
                                 src={elem.image}
                                 alt="producto"
@@ -25,7 +26,7 @@ const CardProducts = ({ products }) => {
                                     {elem.name}
                                 </h6>
                                 <Link to={elem.id_name} onClick={scrollToTop}>
-                                    <button className="text-white bg-black h-15px w-44 md:mt-6">Ver Productos</button>
+                                    <button data-aos="zoom-in-right" data-aos-duration="1500"  className="text-white bg-black h-15px w-44 md:mt-6">Ver Productos</button>
                                 </Link>
                             </div>
                         </div>

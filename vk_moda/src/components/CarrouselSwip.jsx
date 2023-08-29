@@ -22,7 +22,7 @@ function CarrouselSwip() {
       <div className="row">
         <div className="col-lg-8 md:flex mx-auto"> {/* Utiliza una columna centrada */}
           <Swiper
-           modules={[Navigation, Pagination, Scrollbar, A11y,Autoplay]}
+            modules={[Navigation, Pagination, Scrollbar, A11y,Autoplay]}
             spaceBetween={2}
             slidesPerView={1}
             navigation
@@ -48,7 +48,6 @@ function CarrouselSwip() {
             <SwiperSlide><img className='w-100' src={foto8} alt="" /></SwiperSlide>
             <SwiperSlide><img className='w-100' src={foto11} alt="" /></SwiperSlide>
             <SwiperSlide><img className='w-100' src={foto9} alt="" /></SwiperSlide>
-            {/* ... Agrega más diapositivas según sea necesario */}
           </Swiper>
         </div>
       </div>
