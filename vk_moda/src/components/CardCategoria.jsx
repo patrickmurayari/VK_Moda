@@ -13,7 +13,7 @@ const CardProducts = ({ products }) => {
                     products.map((elem, index) => (
                         <div
                             key={index}
-                            className="flex flex-col items-center justify-center w-full h-74 md:h-96 p-4 md:p-8  transition-transform transform-gpu hover:scale-105 hover:transition-transform duration-300"
+                            className="flex flex-col items-center justify-center w-full h-74 md:h-96 p-4 md:p-8  transition-transform transform-gpu md:hover:scale-105 hover:transition-transform duration-300"
                         >
                             <img
                                 data-aos="fade-in" data-aos-duration="1500"
