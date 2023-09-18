@@ -219,7 +219,7 @@ function Home() {
                 </div>
                 <div className=" mt-20 md:mt-20">
                     <div className="flex justify-center items-center w-full">
-                        <img className=" md:h-[600px] md:w-[2000px] h-[300px] transform scale-110" src={ofertas} alt="" />
+                        <img className="object-cover  md:h-[600px] md:w-[2000px] h-[300px] transform scale-110" src={ofertas} alt="" />
                     </div>
                     <div>
                         <CardOfertas products={ofertsProducts} />
