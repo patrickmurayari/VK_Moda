@@ -7,6 +7,10 @@ import bolso5 from "../../img/Productos/bolsos/bolso5.jpg"
 import bolso6 from "../../img/Productos/bolsos/bolso6.jpg"
 import bolso7 from "../../img/Productos/bolsos/bolso7.jpg"
 import bolso8 from "../../img/Productos/bolsos/bolso8.jpg"
+import bolso9 from "../../img/Productos/bolsos/bolso9.jpg"
+import bolso10 from "../../img/Productos/bolsos/bolso10.jpg"
+import cartera1 from "../../img/Productos/bolsos/cartera1.jpg"
+import cartera2 from "../../img/Productos/bolsos/cartera2.jpg"
 
 import insta from "../../img/insta.png"
 import facebook from "../../img/facebook.png"
@@ -15,8 +19,8 @@ const products = [
     {
         id: 1,
         image: `${bolso1}`,
-        name: "VESTIDOS",
-        precio: "$3519",
+        name: "Bolso negro con stras",
+        precio: "$17000",
     },
     {
         id: 2,
@@ -33,26 +37,26 @@ const products = [
     {
         id: 4,
         image: `${bolso4}`,
-        name: "VESTIDOS",
-        precio: "$3519",
+        name: "About eco cuero con tirantes dorados",
+        precio: "$12000",
     },
     {
         id: 5,
         image: `${bolso5}`,
-        name: "VESTIDOS",
-        precio: "$3519",
+        name: "Mini bag con stras incrustadas",
+        precio: "$12000",
     },
     {
         id: 6,
         image: `${bolso6}`,
-        name: "VESTIDOS",
-        precio: "$3519",
+        name: "Small bag con tirantes de piel",
+        precio: "$15000",
     },
     {
         id: 7,
         image: `${bolso7}`,
-        name: "VESTIDOS",
-        precio: "$3519",
+        name: "Small bag color rosa pálido",
+        precio: "$13000",
     },
     {
         id: 8,
@@ -60,6 +64,31 @@ const products = [
         name: "VESTIDOS",
         precio: "$3519",
     },
+    {
+        id: 9,
+        image: `${bolso9}`,
+        name: "Bolso deportivo",
+        precio: "$3519",
+    },
+    {
+        id: 10,
+        image: `${bolso10}`,
+        name: "Mini bag",
+        precio: "$10000",
+    },
+    {
+        id: 11,
+        image: `${cartera1}`,
+        name: "Billetera",
+        precio: "$7000",
+    },
+    {
+        id: 12,
+        image: `${cartera2}`,
+        name: "Billetera",
+        precio: "$3500",
+    }
+
 
 ]
 
@@ -73,7 +102,7 @@ const Bolsos = () => {
                 <h1 data-aos="zoom-in-right" data-aos-duration="1500" className="text-black font-extralight  font-montserrat_alternates text-2xl mt-10 md:text-4xl">BOLSOS</h1>
             </div>
             <div className="mt-20">
-                <div className="grid grid-cols-1   md:grid-cols-4 gap-24 md:gap-10">
+                <div className="grid grid-cols-1   md:grid-cols-4 gap-24 md:gap-24">
                     {products &&
                         products.map((elem, index) => (
                             <div
