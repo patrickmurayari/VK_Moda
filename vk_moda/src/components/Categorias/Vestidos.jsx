@@ -12,26 +12,26 @@ const products = [
     {
         id: 1,
         image: `${vestido2}`,
-        name: "VESTIDOS",
-        precio: "$3519",
+        name: "Vestido estampado con largo simetrico",
+        precio: "$15000",
     },
     {
         id: 2,
         image: `${vestido1}`,
-        name: "VESTIDOS",
-        precio: "$3519",
+        name: "Vestido rojo de seda fría",
+        precio: "$18000",
     },
     {
         id: 3,
         image: `${vestido3}`,
-        name: "VESTIDOS",
-        precio: "$3519",
+        name: "Vestido rosa pálido",
+        precio: "$15000",
     },
     {
         id: 5,
         image: `${vestido5}`,
-        name: "VESTIDOS",
-        precio: "$3519",
+        name: "Vestido simétrico negro",
+        precio: "$18000",
     },
 
 ]
