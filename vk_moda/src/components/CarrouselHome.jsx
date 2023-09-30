@@ -180,8 +180,8 @@ function Home() {
 
     return (
         <div>
-            <div className="w-full m-auto py-16  md:py-16 px-4 relative group" id="carrousel">
-                <div className="bg-black w-full h-[400px] md:h-[700px]  overflow-hidden relative">
+            <div className="w-full py-0 md:px-1 relative group" id="carrousel">
+                <div className="bg-black w-full py-60 h-[400px] md:h-[700px]  overflow-hidden relative">
                     {slides.map((slide, slideIndex) => (
                         <img
                             key={slideIndex}
@@ -207,7 +207,7 @@ function Home() {
                 </div>
                 <div className=" md:mt-20">
                     <div className="">
-                        <h1 data-aos="zoom-in-right" data-aos-duration="1500" className="text-black font-extralight font-montserrat_alternates text-lg mt-8 md:text-4xl">Categorias Destacadas</h1>
+                        <h1 data-aos="zoom-in-right" data-aos-duration="1500" className="text-black flex justify-center font-extralight font-montserrat_alternates text-lg mt-8 md:text-4xl">Categorias Destacadas</h1>
                     </div>
                     <CardProducts products={ProductsCategoria} />
                 </div>
