@@ -40,7 +40,7 @@ function Navbar() {
                             data-aos-duration="3000" 
                             className="hidden md:block text-primary-900 font-elegant text-xl font-semibold tracking-wide"
                         >
-                            VK Moda
+                            VK
                         </span>
                     )}
                 </div>
