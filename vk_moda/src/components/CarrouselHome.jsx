@@ -15,6 +15,8 @@ import facebook from "../img/facebook.png"
 import CardOfertas from "./CardOfertas";
 import CardProducts from "./CardCategoria";
 import CarrouselSwip from "./CarrouselSwip";
+import MapaContacto from "./MapaContacto";
+import FormularioContacto from "./FormularioContacto";
 import fotoabout from "../img/fotoabout.jpg"
 import about from "../img/about.jpg"
 
@@ -205,15 +207,19 @@ function Home() {
                         </div>
                     ))}
                 </div>
-                <div className=" md:mt-20">
-                    <div className="">
-                        <h1 data-aos="zoom-in-right" data-aos-duration="1500" className="text-black flex justify-center font-extralight font-montserrat_alternates text-lg mt-8 md:text-4xl">Categorias Destacadas</h1>
+                <div className="md:mt-20 mt-12">
+                    <div className="text-center mb-12">
+                        <h1 data-aos="zoom-in-right" data-aos-duration="1500" className="text-primary-900 font-elegant text-3xl md:text-5xl font-bold tracking-wide">Categorías Destacadas</h1>
+                        <div className="w-24 h-1 bg-accent-600 mx-auto mt-4 rounded-full"></div>
                     </div>
                     <CardProducts products={ProductsCategoria} />
                 </div>
-                <div className=" mt-24 md:mt-28" id="coleccion">
-                    <h1 data-aos="zoom-in-right" data-aos-duration="1500" className="text-black font-extralight font-montserrat_alternates   text-2xl mt-10 md:text-4xl">Nueva coleccion 2023</h1>
-                    <div className="mt-6">
+                <div className="mt-24 md:mt-28 px-4 md:px-8" id="coleccion">
+                    <div className="text-center mb-12">
+                        <h1 data-aos="zoom-in-right" data-aos-duration="1500" className="text-primary-900 font-elegant text-3xl md:text-5xl font-bold tracking-wide">Nueva Colección 2024</h1>
+                        <div className="w-24 h-1 bg-accent-600 mx-auto mt-4 rounded-full"></div>
+                    </div>
+                    <div className="mt-8">
                         <CarrouselSwip />
                     </div>
                 </div>
@@ -234,15 +240,16 @@ function Home() {
                                 alt="quienes somos"
                             />
                         </div >
-                        <div data-aos="fade-up" data-aos-duration="1500" className="md:w-1/2 md:ml-8">
-                            <h2 className="text-black font-extralight font-montserrat_alternates text-2xl  md:text-4xl ">Quiénes Somos</h2>
+                        <div data-aos="fade-up" data-aos-duration="1500" className="md:w-1/2 md:ml-12">
+                            <h2 className="text-primary-900 font-elegant text-3xl md:text-4xl font-bold tracking-wide">Quiénes Somos</h2>
+                            <div className="w-16 h-1 bg-accent-600 mt-4 rounded-full"></div>
                             <div id="Quienes-somos">
-                                <p className="text-gray-600 mt-10 ">
-                                    Somos una marca con mas de 20 años de experiencia con todo lo relacionado a la moda y la indumentaria.
+                                <p className="text-neutral-600 mt-8 leading-relaxed text-base md:text-lg">
+                                    Somos una marca con más de 20 años de experiencia en el mundo de la moda e indumentaria.
                                     Nos enorgullece ofrecer una amplia gama de estilos, tallas y diseños que se adaptan a todos los gustos y
-                                    ocasiones
+                                    ocasiones.
                                 </p>
-                                <p className="text-gray-600 mt-2">
+                                <p className="text-neutral-600 mt-6 leading-relaxed text-base md:text-lg">
                                     Nuestra pasión por la moda no se limita solo a ofrecer productos de alta calidad, sino que también nos destacamos
                                     en la creación de prendas únicas que reflejen tu estilo personal. Nuestro equipo de expertos en diseño y confección
                                     está listo para convertir tus ideas en realidad. Desde diseños personalizados que se ajustan perfectamente a tu
@@ -256,13 +263,14 @@ function Home() {
                         <div className="flex flex-col md:flex-row items-center justify-center md:justify-between">
                             <div className="md:w-1/2 mb-4 md:mb-0">
                                 <div data-aos="fade-down" data-aos-duration="1500" className="md:w-3/4">
-                                    <h2 className="text-black font-extralight font-montserrat_alternates text-2xl md:text-4xl">Por que elegirnos</h2>
-                                    <p className="text-gray-600 mt-10">
+                                    <h2 className="text-primary-900 font-elegant text-3xl md:text-4xl font-bold tracking-wide">Por Qué Elegirnos</h2>
+                                    <div className="w-16 h-1 bg-accent-600 mt-4 rounded-full"></div>
+                                    <p className="text-neutral-600 mt-8 leading-relaxed text-base md:text-lg">
                                         Lo que nos distingue es nuestro compromiso con la calidad y la atención al detalle. Cada prenda que vendemos
                                         y creamos está cuidadosamente elaborada para asegurarnos de que te sientas cómodo, seguro y elegante en
                                         cada ocasión.
                                     </p>
-                                    <p className="text-gray-600 mt-2">
+                                    <p className="text-neutral-600 mt-6 leading-relaxed text-base md:text-lg">
                                         Sabemos que la moda es una forma de expresión personal, y estamos aquí para ayudarte a
                                         expresarte de la mejor manera posible.
                                     </p>
@@ -276,32 +284,103 @@ function Home() {
                                 />
                             </div>
                         </div>
-                        <div className='p-4 md:p-8'>
-                            <div className='max-w-screen-md mx-auto'>
-                                <h1 className='text-center text-3xl md:text-6xl font-extralight text-black mt-12 mb-6 font-serif'>Contactanos</h1>
-                                <div className="flex flex-col justify-center mt-4 md:mt-6" id="contactos" >
-                                    <div className='text-black text-xl md:text-2xl'>
-                                        <p className='mb-10'>
-                                            Visítanos en: <span className='font-bold text-black'>Av. Bartolome Mitre 363 - Shopping Via Manzanares </span>
-                                        </p>
-                                        <p className='mb-10'>
-                                            Nuestros Horarios <span className='font-bold text-black'>Lunes a sabados de 10 am 13pm - 16 a 20pm</span>
-                                        </p>
-                                        <p className='mb-10'>
-                                            Llámanos: <span className='font-bold text-black'>(+54) 1126073801</span>
-                                        </p>
-                                        <p className='mb-4'>
-                                            Escríbenos: <span className='font-bold text-black'>murayarivirginia797@gmail.com</span>
-                                        </p>
+                        <div className='p-4 md:p-12 bg-neutral-50 rounded-xl shadow-elegant mt-12' id="contactos">
+                            <div className='max-w-7xl mx-auto'>
+                                <h1 className='text-center text-3xl md:text-5xl font-elegant font-bold text-primary-900 mt-6 mb-2 tracking-wide'>Contáctanos</h1>
+                                <div className="w-24 h-1 bg-accent-600 mx-auto mb-12 rounded-full"></div>
+                                
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                                    {/* Columna Izquierda: Información y Mapa */}
+                                    <div className="space-y-8">
+                                        {/* Información de Contacto */}
+                                        <div className='text-neutral-700 space-y-6'>
+                                            <div className='flex items-start gap-4 p-4 bg-white rounded-lg shadow-elegant hover:shadow-elegant-lg transition-shadow'>
+                                                <span className='text-accent-600 font-bold text-3xl flex-shrink-0'>📍</span>
+                                                <div>
+                                                    <p className='font-semibold text-primary-900 text-lg'>Visítanos en:</p>
+                                                    <p className='text-neutral-600 mt-1 font-medium'>V&A DISEÑO Y MODA</p>
+                                                    <p className='text-neutral-600 text-sm'>Localidad: Zona Sur, Buenos Aires</p>
+                                                    <p className='text-neutral-600 text-sm'>Argentina</p>
+                                                    <a 
+                                                        href="https://www.google.com/maps/place/V%26A+DISE%C3%91O+Y+MODA/@-34.44548603723854,-58.98292763996581,15z/data=!4m6!3m5!1s0x95bc830071a4eb65:0x6abb3b406ef6f180!8m2!3d-34.44548603723854!4d-58.98292763996581!16s%2Fg%2F11s5v5v5v5"
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className='text-accent-600 hover:text-primary-900 text-xs font-semibold mt-2 inline-block transition-colors'
+                                                    >
+                                                        Ver en Google Maps →
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                            <div className='flex items-start gap-4 p-4 bg-white rounded-lg shadow-elegant hover:shadow-elegant-lg transition-shadow'>
+                                                <span className='text-accent-600 font-bold text-3xl flex-shrink-0'>🕐</span>
+                                                <div>
+                                                    <p className='font-semibold text-primary-900 text-lg'>Nuestros Horarios:</p>
+                                                    <p className='text-neutral-600 mt-1'>Lunes a Viernes: 10:00 - 13:00 | 16:00 - 20:00</p>
+                                                    <p className='text-neutral-600'>Sábados: 10:00 - 13:00 | 16:00 - 20:00</p>
+                                                    <p className='text-neutral-600 text-sm mt-2'>Domingos: Cerrado</p>
+                                                </div>
+                                            </div>
+
+                                            <div className='flex items-start gap-4 p-4 bg-white rounded-lg shadow-elegant hover:shadow-elegant-lg transition-shadow'>
+                                                <span className='text-accent-600 font-bold text-3xl flex-shrink-0'>📞</span>
+                                                <div>
+                                                    <p className='font-semibold text-primary-900 text-lg'>Llámanos:</p>
+                                                    <a href="tel:+541126073801" className='text-accent-600 hover:text-accent-700 font-semibold mt-1 transition-colors'>
+                                                        (+54) 11 2607-3801
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                            <div className='flex items-start gap-4 p-4 bg-white rounded-lg shadow-elegant hover:shadow-elegant-lg transition-shadow'>
+                                                <span className='text-accent-600 font-bold text-3xl flex-shrink-0'>✉️</span>
+                                                <div>
+                                                    <p className='font-semibold text-primary-900 text-lg'>Escríbenos:</p>
+                                                    <a href="mailto:murayarivirginia797@gmail.com" className='text-accent-600 hover:text-accent-700 font-semibold mt-1 transition-colors break-all'>
+                                                        murayarivirginia797@gmail.com
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Mapa */}
+                                        <div data-aos="zoom-in" data-aos-duration="1500">
+                                            <h3 className='text-lg font-semibold text-primary-900 mb-4'>Ubicación</h3>
+                                            <MapaContacto />
+                                        </div>
+                                    </div>
+
+                                    {/* Columna Derecha: Formulario */}
+                                    <div data-aos="fade-up" data-aos-duration="1500">
+                                        <h3 className='text-lg font-semibold text-primary-900 mb-6'>Envíanos un Mensaje</h3>
+                                        <div className='bg-white p-6 rounded-lg shadow-elegant'>
+                                            <FormularioContacto />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="flex justify-center gap-2 md:mt-3">
-                            <a href="https://www.instagram.com/vk_design_moda/" target="_blank" rel="noopener noreferrer" >
-                                <img className="w-10 h-10" src={insta} alt="" />
+                        <div className="flex justify-center gap-6 md:gap-8 mt-12 pb-8">
+                            <a 
+                                href="https://www.instagram.com/vk_design_moda/" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="group"
+                            >
+                                <div className="w-12 h-12 md:w-14 md:h-14 bg-accent-600 rounded-full flex items-center justify-center transition-all duration-300 group-hover:bg-primary-900 group-hover:shadow-elegant-lg transform group-hover:scale-110">
+                                    <img className="w-6 h-6 md:w-7 md:h-7" src={insta} alt="Instagram" />
+                                </div>
                             </a>
-                            <img className="w-10 h-10" src={facebook} alt="" />
+                            <a 
+                                href="https://www.facebook.com/Granjaelsolarman" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="group"
+                            >
+                                <div className="w-12 h-12 md:w-14 md:h-14 bg-accent-600 rounded-full flex items-center justify-center transition-all duration-300 group-hover:bg-primary-900 group-hover:shadow-elegant-lg transform group-hover:scale-110">
+                                    <img className="w-6 h-6 md:w-7 md:h-7" src={facebook} alt="Facebook" />
+                                </div>
+                            </a>
                         </div>
                     </div>
                 </div>

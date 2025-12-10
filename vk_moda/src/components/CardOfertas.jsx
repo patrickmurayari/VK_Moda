@@ -1,26 +1,45 @@
-
 const CardOfertas = ({ products }) => {
     return (
-        <div className="mt-20">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-2 ">
+        <div className="mt-20 px-4 md:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8">
                 {products &&
                     products.map((elem, index) => (
                         <div
                             key={index}
-                            className=" flex flex-col  items-center justify-center  w-full h-full p-4 md:p-8  transition-transform transform-gpu md:hover:scale-125 hover:transition-transform duration-300"
+                            className="group relative flex flex-col items-center justify-center w-full h-auto transition-all duration-500 hover:shadow-elegant-hover"
                         >
-                            <div className="absolute md:top-9 top-5 md:right-16 right-14 md:right-10 z-50 bg-black text-white px-2 py-1">
+                            {/* Badge de Oferta */}
+                            <div className="absolute top-4 right-4 z-20 bg-accent-600 text-white px-4 py-2 rounded-full font-medium text-sm shadow-elegant-lg transform group-hover:scale-110 transition-transform duration-300">
                                 ¡Oferta!
                             </div>
-                            <img
-                                className=" mt-1 object-cover h-auto w-60 md:h-60 md:w-60"
-                                src={elem.image}
-                                alt="producto"
-                            />
-                            <div className="flex flex-col gap-2 items-center justify-start w-full">
-                                <h6 data-aos="fade" data-aos-duration="3000"  className=" text-lg md:text-lg  font-extralight  text-center">{elem.name}</h6>
-                                <div>
-                                    <h3 data-aos="fade" data-aos-duration="3000"  className="font-bold items-center flex justify-center ">
+
+                            {/* Contenedor de imagen */}
+                            <div className="relative w-full overflow-hidden rounded-lg shadow-elegant">
+                                <img
+                                    className="w-full h-64 md:h-72 object-cover transition-transform duration-500 group-hover:scale-110"
+                                    src={elem.image}
+                                    alt={elem.name}
+                                />
+                                {/* Overlay oscuro en hover */}
+                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500 rounded-lg"></div>
+                            </div>
+
+                            {/* Contenido */}
+                            <div className="flex flex-col gap-3 items-center justify-center w-full mt-6">
+                                <h6 
+                                    data-aos="fade" 
+                                    data-aos-duration="3000"
+                                    className="text-lg md:text-lg font-medium text-primary-900 text-center"
+                                >
+                                    {elem.name}
+                                </h6>
+                                
+                                <div className="flex items-center gap-2">
+                                    <h3 
+                                        data-aos="fade" 
+                                        data-aos-duration="3000"
+                                        className="text-2xl md:text-3xl font-elegant font-bold text-accent-600"
+                                    >
                                         {elem.precio}
                                     </h3>
                                 </div>
@@ -31,6 +50,5 @@ const CardOfertas = ({ products }) => {
         </div>
     );
 };
-
 
 export default CardOfertas;

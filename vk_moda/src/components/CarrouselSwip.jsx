@@ -18,36 +18,84 @@ import 'swiper/css/scrollbar';
 import 'swiper/css/autoplay'
 function CarrouselSwip() {
   return (
-    <div className="container"> {/* Agrega una clase contenedora para centrar */}
-      <div className="row">
-        <div className="col-lg-8 md:flex mx-auto"> {/* Utiliza una columna centrada */}
+    <div className="container mx-auto px-4 md:px-8">
+      <div className="flex justify-center">
+        <div className="w-full max-w-6xl">
           <Swiper
-            modules={[Navigation, Pagination, Scrollbar, A11y,Autoplay]}
-            spaceBetween={2}
+            modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
+            spaceBetween={24}
             slidesPerView={1}
-            navigation
-            autoplay={true}
-            pagination={{ clickable: true }}
+            navigation={{
+              nextEl: '.swiper-button-next',
+              prevEl: '.swiper-button-prev',
+            }}
+            autoplay={{
+              delay: 4000,
+              disableOnInteraction: false,
+            }}
+            pagination={{ 
+              clickable: true,
+              dynamicBullets: true,
+            }}
             scrollbar={{ draggable: true }}
             autoHeight={true}
             breakpoints={{
               640: { slidesPerView: 1 },
-              768: { slidesPerView: 3 },
-              1024: { slidesPerView: 4 },
+              768: { slidesPerView: 2, spaceBetween: 20 },
+              1024: { slidesPerView: 3, spaceBetween: 24 },
             }}
-            onSlideChange={() => console.log('slide change')}
-            onSwiper={(swiper) => console.log(swiper)}
+            className="rounded-lg overflow-hidden shadow-elegant-lg"
           >
-            <SwiperSlide><img className='w-100' src={foto1} alt="" /></SwiperSlide>
-            <SwiperSlide><img className='w-100' src={foto4} alt="" /></SwiperSlide>
-            <SwiperSlide><img className='w-100' src={foto6} alt="" /></SwiperSlide>
-            <SwiperSlide><img className='w-100' src={foto2} alt="" /></SwiperSlide>
-            <SwiperSlide><img className='w-100' src={foto5} alt="" /></SwiperSlide>
-            <SwiperSlide><img className='w-100' src={foto3} alt="" /></SwiperSlide>
-            <SwiperSlide><img className='w-100' src={foto7} alt="" /></SwiperSlide>
-            <SwiperSlide><img className='w-100' src={foto8} alt="" /></SwiperSlide>
-            <SwiperSlide><img className='w-100' src={foto11} alt="" /></SwiperSlide>
-            <SwiperSlide><img className='w-100' src={foto9} alt="" /></SwiperSlide>
+            <SwiperSlide>
+              <div className="relative overflow-hidden rounded-lg shadow-elegant group">
+                <img className='w-full h-64 md:h-72 object-cover transition-transform duration-500 group-hover:scale-110' src={foto1} alt="Colección" />
+              </div>
+            </SwiperSlide>
+            <SwiperSlide>
+              <div className="relative overflow-hidden rounded-lg shadow-elegant group">
+                <img className='w-full h-64 md:h-72 object-cover transition-transform duration-500 group-hover:scale-110' src={foto4} alt="Colección" />
+              </div>
+            </SwiperSlide>
+            <SwiperSlide>
+              <div className="relative overflow-hidden rounded-lg shadow-elegant group">
+                <img className='w-full h-64 md:h-72 object-cover transition-transform duration-500 group-hover:scale-110' src={foto6} alt="Colección" />
+              </div>
+            </SwiperSlide>
+            <SwiperSlide>
+              <div className="relative overflow-hidden rounded-lg shadow-elegant group">
+                <img className='w-full h-64 md:h-72 object-cover transition-transform duration-500 group-hover:scale-110' src={foto2} alt="Colección" />
+              </div>
+            </SwiperSlide>
+            <SwiperSlide>
+              <div className="relative overflow-hidden rounded-lg shadow-elegant group">
+                <img className='w-full h-64 md:h-72 object-cover transition-transform duration-500 group-hover:scale-110' src={foto5} alt="Colección" />
+              </div>
+            </SwiperSlide>
+            <SwiperSlide>
+              <div className="relative overflow-hidden rounded-lg shadow-elegant group">
+                <img className='w-full h-64 md:h-72 object-cover transition-transform duration-500 group-hover:scale-110' src={foto3} alt="Colección" />
+              </div>
+            </SwiperSlide>
+            <SwiperSlide>
+              <div className="relative overflow-hidden rounded-lg shadow-elegant group">
+                <img className='w-full h-64 md:h-72 object-cover transition-transform duration-500 group-hover:scale-110' src={foto7} alt="Colección" />
+              </div>
+            </SwiperSlide>
+            <SwiperSlide>
+              <div className="relative overflow-hidden rounded-lg shadow-elegant group">
+                <img className='w-full h-64 md:h-72 object-cover transition-transform duration-500 group-hover:scale-110' src={foto8} alt="Colección" />
+              </div>
+            </SwiperSlide>
+            <SwiperSlide>
+              <div className="relative overflow-hidden rounded-lg shadow-elegant group">
+                <img className='w-full h-64 md:h-72 object-cover transition-transform duration-500 group-hover:scale-110' src={foto11} alt="Colección" />
+              </div>
+            </SwiperSlide>
+            <SwiperSlide>
+              <div className="relative overflow-hidden rounded-lg shadow-elegant group">
+                <img className='w-full h-64 md:h-72 object-cover transition-transform duration-500 group-hover:scale-110' src={foto9} alt="Colección" />
+              </div>
+            </SwiperSlide>
           </Swiper>
         </div>
       </div>
