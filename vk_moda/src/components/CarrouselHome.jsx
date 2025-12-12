@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 
 import { RxDot } from "react-icons/rx";
-import foto1 from "../img/Carrousel/foto1.jpg";
-import foto2 from "../img/Carrousel/foto2.jpg";
-import foto3 from "../img/Carrousel/fotoPortada.jpg";
-import foto4 from "../img/Carrousel/fotoPortada1.jpg";
-import ofertas from "../img/ofertafoto.jpg";
+import foto1 from "../img/Carrousel/foto11.jpg";
+import foto2 from "../img/Carrousel/foto21.jpg";
+import foto3 from "../img/Carrousel/foto31.jpg";
+import ofertas from "../img/ofertafoto1.jpg";
 import carteras from "../img/Categoria/bolsofoto.jpg";
 import joya1 from "../img/Categoria/fotojoyas.jpg";
 import vestidos from "../img/Categoria/fotovestido.jpg";
@@ -17,8 +16,8 @@ import CardProducts from "./CardCategoria";
 import CarrouselSwip from "./CarrouselSwip";
 import MapaContacto from "./MapaContacto";
 import FormularioContacto from "./FormularioContacto";
-import fotoabout from "../img/fotoabout.jpg"
-import about from "../img/about.jpg"
+import fotoabout from "../img/fotoabout11.jpg"
+import about from "../img/about1.jpg"
 
 import oferta1 from '../img/ofertas/oferta1.jpg'
 import oferta2 from '../img/ofertas/oferta2.jpg'
@@ -148,10 +147,7 @@ function Home() {
         },
         {
             url: `${foto2}`,
-        },
-        {
-            url: `${foto4}`,
-        },
+        }
 
     ];
 
@@ -183,13 +179,13 @@ function Home() {
     return (
         <div>
             <div className="w-full py-0 md:px-1 relative group" id="carrousel">
-                <div className="bg-black w-full py-60 h-[400px] md:h-[700px]  overflow-hidden relative">
+                <div className="bg-black w-full h-[700px] sm:h-[600px] md:h-[800px] lg:h-[900px] overflow-hidden relative">
                     {slides.map((slide, slideIndex) => (
                         <img
                             key={slideIndex}
                             src={slide.url}
                             alt={`Slide ${slideIndex}`}
-                            className={`w-full h-full absolute top-0 left-0 transition-opacity duration-1000 opacity-0  ${slideIndex === currentIndex ? "opacity-100" : "opacity-0"
+                            className={`w-full h-full absolute top-0 left-0 object-cover transition-opacity duration-1000 ${slideIndex === currentIndex ? "opacity-100" : "opacity-0"
                                 }`}
                         />
                     ))}
