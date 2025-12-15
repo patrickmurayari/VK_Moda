@@ -19,6 +19,7 @@ const CardOfertas = ({ products }) => {
                                     className="w-full h-64 md:h-72 object-cover transition-transform duration-500 group-hover:scale-110"
                                     src={elem.image}
                                     alt={elem.name}
+                                    
                                 />
                                 {/* Overlay oscuro en hover */}
                                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500 rounded-lg"></div>

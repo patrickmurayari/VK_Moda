@@ -1,4 +1,5 @@
-import { FiMail, FiPhone, FiMapPin, FiInstagram, FiFacebook, FiHeart } from 'react-icons/fi';
+import { FiMail, FiPhone, FiMapPin, FiHeart } from 'react-icons/fi';
+import SocialIcons from '../common/SocialIcons';
 
 function Footer() {
   const currentYear = new Date().getFullYear();
@@ -53,27 +54,8 @@ function Footer() {
             <h3 className="text-lg font-semibold mb-4 text-accent-600">
               Síguenos
             </h3>
-            <div className="flex justify-center md:justify-end gap-4">
-              <a 
-                href="https://www.instagram.com/vk_design_moda/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="w-10 h-10 bg-accent-600 rounded-full flex items-center justify-center 
-                           hover:bg-white hover:text-primary-900 transition-all duration-300 
-                           transform hover:scale-110"
-              >
-                <FiInstagram className="text-lg" />
-              </a>
-              <a 
-                href="https://www.facebook.com/Granjaelsolarman" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="w-10 h-10 bg-accent-600 rounded-full flex items-center justify-center 
-                           hover:bg-white hover:text-primary-900 transition-all duration-300 
-                           transform hover:scale-110"
-              >
-                <FiFacebook className="text-lg" />
-              </a>
+            <div className="flex justify-center md:justify-end">
+              <SocialIcons variant="gradient" size="md" />
             </div>
           </div>
         </div>

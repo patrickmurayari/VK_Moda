@@ -1,8 +1,7 @@
 import logo from "../../img/logoVK.png"
 import { useState } from 'react';
 import { Link } from "react-scroll"
-import insta from "../../img/insta.png"
-import facebook from "../../img/facebook.png"
+import SocialIcons from "../common/SocialIcons"
 
 function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -118,25 +117,9 @@ function Navbar() {
                 {!menuOpen && (
                     <div 
                         data-aos="fade-left" 
-                        data-aos-duration="3000" 
-                        className="hidden md:flex items-center gap-4"
+                        data-aos-duration="3000"
                     >
-                        <a 
-                            href="https://www.instagram.com/vk_design_moda/" 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="text-primary-700 hover:text-accent-600 transition-colors duration-300 hover:scale-110 transform"
-                        >
-                            <img className="h-5 md:h-6" src={insta} alt="Instagram" />
-                        </a>
-                        <a 
-                            href="https://www.facebook.com/Granjaelsolarman" 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="text-primary-700 hover:text-accent-600 transition-colors duration-300 hover:scale-110 transform"
-                        >
-                            <img className="h-5 md:h-6" src={facebook} alt="Facebook" />
-                        </a>
+                        <SocialIcons variant="minimal" size="md" />
                     </div>
                 )}
 
@@ -217,22 +200,7 @@ function Navbar() {
                     
                     {/* Redes Sociales Móvil */}
                     <div className="flex items-center gap-6 pt-4 border-t border-neutral-200">
-                        <a 
-                            href="https://www.instagram.com/vk_design_moda/" 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="text-primary-700 hover:text-accent-600 transition-colors duration-300"
-                        >
-                            <img className="h-6" src={insta} alt="Instagram" />
-                        </a>
-                        <a 
-                            href="https://www.facebook.com/Granjaelsolarman" 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="text-primary-700 hover:text-accent-600 transition-colors duration-300"
-                        >
-                            <img className="h-6" src={facebook} alt="Facebook" />
-                        </a>
+                        <SocialIcons variant="minimal" size="md" />
                     </div>
                 </div>
             )}

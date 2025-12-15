@@ -9,6 +9,9 @@ export default {
       fontFamily: {
         montserrat_alternates: ['Montserrat Alternates', 'sans-serif'],
         elegant: ['Playfair Display', 'serif'],
+        display: ['Cormorant Garamond', 'serif'],
+        body: ['Inter', 'sans-serif'],
+        heading: ['Syne', 'sans-serif'],
       },
       colors: {
         // Paleta elegante para moda
