@@ -1,8 +1,8 @@
-import logo from "../img/logoVK.png"
+import logo from "../../img/logoVK.png"
 import { useState } from 'react';
 import { Link } from "react-scroll"
-import insta from "../img/insta.png"
-import facebook from "../img/facebook.png"
+import insta from "../../img/insta.png"
+import facebook from "../../img/facebook.png"
 
 function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);

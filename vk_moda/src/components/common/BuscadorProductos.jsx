@@ -8,7 +8,6 @@ function BuscadorProductos({ productos, onFiltro }) {
   const productosFiltrados = useMemo(() => {
     let resultado = productos;
 
-    // Filtrar por búsqueda
     if (busqueda.trim()) {
       resultado = resultado.filter(
         (producto) =>
@@ -18,7 +17,6 @@ function BuscadorProductos({ productos, onFiltro }) {
       );
     }
 
-    // Filtrar por categoría
     if (filtroActivo !== 'todos') {
       resultado = resultado.filter(
         (producto) => producto.categoria === filtroActivo
@@ -33,7 +31,6 @@ function BuscadorProductos({ productos, onFiltro }) {
     setFiltroActivo('todos');
   };
 
-  // Llamar callback con productos filtrados
   if (onFiltro) {
     onFiltro(productosFiltrados);
   }
@@ -48,7 +45,6 @@ function BuscadorProductos({ productos, onFiltro }) {
 
   return (
     <div className="space-y-6 mb-8">
-      {/* Buscador */}
       <div className="relative">
         <div className="relative">
           <FiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 
@@ -76,7 +72,6 @@ function BuscadorProductos({ productos, onFiltro }) {
         </div>
       </div>
 
-      {/* Filtros por Categoría */}
       <div className="flex flex-wrap gap-2">
         {categorias.map((categoria) => (
           <button
@@ -93,7 +88,6 @@ function BuscadorProductos({ productos, onFiltro }) {
         ))}
       </div>
 
-      {/* Resultados */}
       <div className="flex items-center justify-between">
         <p className="text-neutral-600 font-medium">
           {productosFiltrados.length} producto{productosFiltrados.length !== 1 ? 's' : ''} encontrado{productosFiltrados.length !== 1 ? 's' : ''}

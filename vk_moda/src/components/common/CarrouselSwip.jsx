@@ -1,8 +1,8 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
-import foto1 from "../img/Coleccion/coleccionPic111.jpg"
-import foto2 from "../img/Coleccion/coleccionPic21.jpg"
-import foto3 from "../img/Coleccion/coleccionPic23.jpg"
+import foto1 from "../../img/Coleccion/coleccionPic111.jpg"
+import foto2 from "../../img/Coleccion/coleccionPic21.jpg"
+import foto3 from "../../img/Coleccion/coleccionPic23.jpg"
 
 
 import { Navigation, Pagination, Scrollbar, A11y,Autoplay } from 'swiper/modules';

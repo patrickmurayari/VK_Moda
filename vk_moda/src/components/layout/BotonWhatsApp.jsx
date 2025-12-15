@@ -14,7 +14,7 @@ function BotonWhatsApp() {
   const enviarMensaje = (mensaje) => {
     const numeroWhatsApp = '541126073801';
     const mensajeEncoded = encodeURIComponent(mensaje);
-    const url = `https://api.whatsapp.com/send?phone=${numeroWhatsApp}&text=${mensajeEncoding}`;
+    const url = `https://api.whatsapp.com/send?phone=${numeroWhatsApp}&text=${mensajeEncoded}`;
     window.open(url, '_blank');
     setMostrarMenu(false);
   };
@@ -48,31 +48,17 @@ function BotonWhatsApp() {
       {/* Botón Principal */}
       <button
         onClick={() => setMostrarMenu(!mostrarMenu)}
-        className="w-14 h-14 bg-green-500 hover:bg-green-600 text-white rounded-full 
-                   flex items-center justify-center shadow-elegant-lg 
-                   transition-all duration-300 transform hover:scale-110 active:scale-95
-                   relative group"
+        className="w-14 h-14 bg-accent-600 rounded-full flex items-center justify-center 
+                   shadow-elegant-lg hover:bg-primary-900 transition-all duration-300 
+                   transform hover:scale-110 active:scale-95 relative group"
         aria-label="Abrir WhatsApp"
       >
-        {mostrarMenu ? (
-          <FiX className="text-2xl" />
-        ) : (
-          <>
-            <FiMessageCircle className="text-2xl" />
-            <span className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full 
-                             animate-pulse"></span>
-          </>
+        <FiMessageCircle className="text-2xl text-white" />
+        {mostrarMenu && (
+          <FiX className="absolute text-2xl text-white" />
         )}
+        <span className="absolute -top-2 -right-2 w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
       </button>
-
-      {/* Tooltip */}
-      {!mostrarMenu && (
-        <div className="absolute bottom-20 right-0 bg-primary-900 text-white px-3 py-2 
-                        rounded-lg text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 
-                        transition-opacity duration-300 pointer-events-none">
-          ¿Necesitas ayuda?
-        </div>
-      )}
     </div>
   );
 }
