@@ -35,7 +35,7 @@ function Carrousel() {
         <div className="w-full relative group" id="carrousel">
             {/* Contenedor Principal del Carrousel */}
             <div 
-                className="relative w-full h-[500px] sm:h-[600px] md:h-[700px] lg:h-[850px] overflow-hidden bg-gradient-to-b from-primary-900 to-primary-800"
+                className="relative w-full h-[600px] sm:h-[600px] md:h-[700px] lg:h-[850px] overflow-hidden bg-gradient-to-b from-primary-900 to-primary-800"
                 onMouseEnter={() => setIsAutoPlay(false)}
                 onMouseLeave={() => setIsAutoPlay(true)}
             >

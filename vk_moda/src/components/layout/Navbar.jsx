@@ -24,8 +24,6 @@ function Navbar() {
                 <div className="flex items-center gap-3 cursor-pointer group">
                     <Link to="carrousel" spy={true} smooth={true} offset={-100} duration={500}>
                         <img 
-                            data-aos="fade-right" 
-                            data-aos-duration="3000" 
                             src={logo} 
                             alt="Logo VK Moda" 
                             className={`rounded-full transition-transform duration-300 group-hover:scale-110 ${
@@ -35,8 +33,6 @@ function Navbar() {
                     </Link>
                     {!menuOpen && (
                         <span 
-                            data-aos="zoom-in" 
-                            data-aos-duration="3000" 
                             className="hidden md:block text-primary-900 font-elegant text-xl font-semibold tracking-wide"
                         >
                             VK
@@ -115,10 +111,7 @@ function Navbar() {
 
                 {/* Redes Sociales Desktop */}
                 {!menuOpen && (
-                    <div 
-                        data-aos="fade-left" 
-                        data-aos-duration="3000"
-                    >
+                    <div>
                         <SocialIcons variant="minimal" size="md" />
                     </div>
                 )}
