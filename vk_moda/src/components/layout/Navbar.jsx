@@ -112,7 +112,7 @@ function Navbar() {
                 {/* Redes Sociales Desktop */}
                 {!menuOpen && (
                     <div>
-                        <SocialIcons variant="minimal" size="md" />
+                        <SocialIcons variant="default" size="md" />
                     </div>
                 )}
 
@@ -193,7 +193,7 @@ function Navbar() {
                     
                     {/* Redes Sociales Móvil */}
                     <div className="flex items-center gap-6 pt-4 border-t border-neutral-200">
-                        <SocialIcons variant="minimal" size="md" />
+                        <SocialIcons variant="default" size="md" />
                     </div>
                 </div>
             )}

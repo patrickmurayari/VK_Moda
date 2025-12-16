@@ -1,49 +1,50 @@
 const CardOfertas = ({ products }) => {
     return (
-        <div className="mt-20 px-4 md:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8">
+        <div className="w-full">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
                 {products &&
                     products.map((elem, index) => (
                         <div
                             key={index}
-                            className="group relative flex flex-col items-center justify-center w-full h-auto transition-all duration-500 hover:shadow-elegant-hover"
+                            className="group cursor-pointer"
                         >
-                            {/* Badge de Oferta */}
-                            <div className="absolute top-4 right-4 z-20 bg-accent-600 text-white px-4 py-2 rounded-full font-medium text-sm shadow-elegant-lg transform group-hover:scale-110 transition-transform duration-300">
-                                ¡Oferta!
-                            </div>
-
-                            {/* Contenedor de imagen */}
-                            <div className="relative w-full overflow-hidden rounded-lg shadow-elegant">
-                                <img
-                                    className="w-full h-64 md:h-72 object-cover transition-transform duration-500 group-hover:scale-110"
-                                    src={elem.image}
-                                    alt={elem.name}
+                            {/* Contenedor de imagen con badge */}
+                            <div className="relative overflow-hidden mb-6">
+                                <div className="relative h-96 overflow-hidden bg-neutral-100">
+                                    <img
+                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                        src={elem.image}
+                                        alt={elem.name}
+                                    />
+                                    {/* Overlay elegante */}
+                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-500"></div>
                                     
-                                />
-                                {/* Overlay oscuro en hover */}
-                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500 rounded-lg"></div>
+                                    {/* Badge de descuento - Posicionado elegantemente */}
+                                    <div className="absolute top-6 right-6 z-10 bg-accent-600 text-white px-5 py-2 rounded-full font-semibold text-sm shadow-elegant-lg transform group-hover:scale-110 transition-transform duration-300">
+                                        ¡Oferta!
+                                    </div>
+                                </div>
                             </div>
 
-                            {/* Contenido */}
-                            <div className="flex flex-col gap-3 items-center justify-center w-full mt-6">
-                                <h6 
-                                    data-aos="fade" 
-                                    data-aos-duration="3000"
-                                    className="text-lg md:text-lg font-medium text-primary-900 text-center"
-                                >
+                            {/* Información del producto */}
+                            <div className="space-y-4">
+                                <h3 className="text-lg font-elegant font-semibold text-primary-900 group-hover:text-accent-600 transition-colors duration-300 tracking-wide line-clamp-2">
                                     {elem.name}
-                                </h6>
+                                </h3>
                                 
-                                <div className="flex items-center gap-2">
-                                    <h3 
-                                        data-aos="fade" 
-                                        data-aos-duration="3000"
-                                        className="text-2xl md:text-3xl font-elegant font-bold text-accent-600"
-                                    >
+                                {/* Línea decorativa */}
+                                <div className="flex items-center gap-3">
+                                    <div className="h-px flex-1 bg-neutral-300"></div>
+                                    <p className="text-accent-600 font-bold text-2xl whitespace-nowrap">
                                         {elem.precio}
-                                    </h3>
+                                    </p>
+                                    <div className="h-px flex-1 bg-neutral-300"></div>
                                 </div>
+                                
+                                {/* Texto de interacción */}
+                                <p className="text-neutral-500 text-sm font-light tracking-wide opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center">
+                                    Ver detalles
+                                </p>
                             </div>
                         </div>
                     ))}
