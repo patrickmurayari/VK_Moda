@@ -30,33 +30,47 @@ function GaleriaProductos({ productos }) {
     return (
         <>
             {/* Grid de Productos */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
                 {productos.map((producto, index) => (
                     <div
                         key={producto.id}
                         className="group cursor-pointer"
                         onClick={() => abrirModal(index)}
                     >
-                        <div className="relative overflow-hidden rounded-lg shadow-elegant hover:shadow-elegant-lg transition-all duration-300">
-                            <img
-                                src={producto.image}
-                                alt={producto.name}
-                                className="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110"
-                            />
-                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center">
-                                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    <div className="w-14 h-14 bg-accent-600 rounded-full flex items-center justify-center">
-                                        <FiChevronRight className="text-white text-2xl" />
+                        {/* Contenedor de imagen con overlay elegante */}
+                        <div className="relative overflow-hidden rounded-none mb-6">
+                            <div className="relative h-96 overflow-hidden bg-neutral-100">
+                                <img
+                                    src={producto.image}
+                                    alt={producto.name}
+                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                />
+                                {/* Overlay oscuro elegante */}
+                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-500"></div>
+                                
+                                {/* Icono de visualización */}
+                                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                                    <div className="w-16 h-16 border-2 border-white rounded-full flex items-center justify-center backdrop-blur-sm bg-white/10">
+                                        <FiChevronRight className="text-white text-3xl" />
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="mt-4">
-                            <h3 className="text-lg font-semibold text-primary-900 group-hover:text-accent-600 transition-colors">
+
+                        {/* Información del producto */}
+                        <div className="space-y-3">
+                            <h3 className="text-lg font-elegant font-semibold text-primary-900 group-hover:text-accent-600 transition-colors duration-300 tracking-wide">
                                 {producto.name}
                             </h3>
-                            <p className="text-accent-600 font-bold text-xl mt-2">
-                                {producto.precio}
+                            <div className="flex items-center gap-3">
+                                <div className="h-px flex-1 bg-neutral-300"></div>
+                                <p className="text-accent-600 font-bold text-lg whitespace-nowrap">
+                                    {producto.precio}
+                                </p>
+                                <div className="h-px flex-1 bg-neutral-300"></div>
+                            </div>
+                            <p className="text-neutral-500 text-sm font-light tracking-wide opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                Ver detalles
                             </p>
                         </div>
                     </div>

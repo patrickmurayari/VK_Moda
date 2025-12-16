@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { FiSearch, FiX } from 'react-icons/fi';
 
 function BuscadorProductos({ productos, onFiltro }) {
@@ -26,14 +26,16 @@ function BuscadorProductos({ productos, onFiltro }) {
     return resultado;
   }, [busqueda, filtroActivo, productos]);
 
+  useEffect(() => {
+    if (onFiltro) {
+      onFiltro(productosFiltrados);
+    }
+  }, [productosFiltrados, onFiltro]);
+
   const handleLimpiar = () => {
     setBusqueda('');
     setFiltroActivo('todos');
   };
-
-  if (onFiltro) {
-    onFiltro(productosFiltrados);
-  }
 
   const categorias = [
     { id: 'todos', nombre: 'Todos' },

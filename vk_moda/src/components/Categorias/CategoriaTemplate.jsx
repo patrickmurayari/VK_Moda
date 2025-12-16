@@ -1,46 +1,44 @@
-import { useState } from "react";
-import BuscadorProductos from "../common/BuscadorProductos";
 import GaleriaProductos from "../common/GaleriaProductos";
 
 function CategoriaTemplate({ titulo, productos }) {
-    const [productosFiltrados, setProductosFiltrados] = useState(productos);
-
-    const handleFiltro = (productosFiltrados) => {
-        setProductosFiltrados(productosFiltrados);
-    };
-
     return (
-        <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100 pt-32 pb-12">
-            <div className="max-w-7xl mx-auto px-4 md:px-8">
-                {/* Encabezado */}
-                <div className="text-center mb-12">
-                    <h1 className="text-4xl md:text-5xl font-elegant font-bold text-primary-900 mb-4 tracking-wide">
+        <div className="min-h-screen bg-white">
+            {/* Hero Section */}
+            <div className="relative h-96 bg-gradient-to-r from-primary-900 via-primary-800 to-accent-600 overflow-hidden">
+                <div className="absolute inset-0 opacity-10">
+                    <div className="absolute top-0 right-0 w-96 h-96 bg-accent-600 rounded-full -mr-48 -mt-48"></div>
+                    <div className="absolute bottom-0 left-0 w-80 h-80 bg-primary-900 rounded-full -ml-40 -mb-40"></div>
+                </div>
+                
+                <div className="relative h-full flex flex-col items-center justify-center px-4">
+                    <h1 className="text-5xl md:text-6xl font-elegant font-bold text-white mb-6 tracking-wider text-center">
                         {titulo}
                     </h1>
-                    <div className="w-24 h-1 bg-accent-600 mx-auto rounded-full"></div>
-                    <p className="text-neutral-600 mt-6 text-lg">
-                        Descubre nuestra colección exclusiva de {titulo.toLowerCase()}
+                    <div className="w-32 h-1 bg-accent-400 rounded-full"></div>
+                    <p className="text-white/80 mt-8 text-lg md:text-xl text-center max-w-2xl font-light">
+                        Explora nuestra colección exclusiva de {titulo.toLowerCase()}
                     </p>
                 </div>
+            </div>
 
-                {/* Buscador y Filtros */}
-                <div className="mb-12">
-                    <BuscadorProductos 
-                        productos={productos} 
-                        onFiltro={handleFiltro}
-                    />
+            {/* Contenido */}
+            <div className="max-w-7xl mx-auto px-4 md:px-8 py-20">
+                {/* Decoración superior */}
+                <div className="flex items-center justify-center gap-4 mb-16">
+                    <div className="h-px w-12 bg-accent-600"></div>
+                    <span className="text-accent-600 font-semibold tracking-widest text-sm">COLECCIÓN</span>
+                    <div className="h-px w-12 bg-accent-600"></div>
                 </div>
 
                 {/* Galería de Productos */}
-                {productosFiltrados.length > 0 ? (
-                    <GaleriaProductos productos={productosFiltrados} />
-                ) : (
-                    <div className="text-center py-12">
-                        <p className="text-neutral-600 text-lg">
-                            No se encontraron productos que coincidan con tu búsqueda.
-                        </p>
-                    </div>
-                )}
+                <GaleriaProductos productos={productos} />
+
+                {/* Decoración inferior */}
+                <div className="flex items-center justify-center gap-4 mt-20">
+                    <div className="h-px w-12 bg-neutral-300"></div>
+                    <span className="text-neutral-500 font-light tracking-widest text-xs">FIN DE LA COLECCIÓN</span>
+                    <div className="h-px w-12 bg-neutral-300"></div>
+                </div>
             </div>
         </div>
     );

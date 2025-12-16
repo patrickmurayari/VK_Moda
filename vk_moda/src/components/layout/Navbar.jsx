@@ -14,7 +14,7 @@ function Navbar() {
     };
 
     return (
-        <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+        <nav className={`fixed top-0 left-0 w-screen z-50 transition-all duration-300 ${
             menuOpen 
                 ? 'bg-white h-screen shadow-elegant-lg' 
                 : 'bg-white/95 backdrop-blur-md h-20 md:h-24 shadow-elegant'
