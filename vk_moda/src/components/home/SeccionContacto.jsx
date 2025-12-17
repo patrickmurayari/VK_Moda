@@ -2,7 +2,7 @@ import MapaContacto from "../common/MapaContacto";
 
 function SeccionContacto() {
     return (
-        <div className='p-4 md:p-12 bg-neutral-50 rounded-xl shadow-elegant mt-12' id="contactos">
+        <div className='p-4 md:p-12 bg-neutral-50 rounded-xl shadow-elegant mt-8 md:mt-12' id="contactos">
             <div className='max-w-4xl mx-auto'>
                 <h1 className='text-center text-3xl md:text-5xl font-elegant font-bold text-primary-900 mt-6 mb-2 tracking-wide'>Contáctanos</h1>
                 <div className="w-24 h-1 bg-accent-600 mx-auto mb-12 rounded-full"></div>

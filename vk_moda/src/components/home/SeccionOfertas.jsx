@@ -3,7 +3,7 @@ import { ofertasProducts } from "../../data/ofertasData";
 
 function SeccionOfertas() {
     return (
-        <div className="mt-32 md:mt-40 py-20" id="ofertas">
+        <div className="mt-16 md:mt-20 py-20" id="ofertas">
             {/* Fondo decorativo */}
             <div className="absolute inset-0 -z-10 overflow-hidden">
                 <div className="absolute top-0 left-0 w-96 h-96 bg-accent-600/5 rounded-full -ml-48 -mt-48"></div>
@@ -11,7 +11,7 @@ function SeccionOfertas() {
             </div>
 
             {/* Encabezado */}
-            <div className="text-center mb-16 md:mb-20 px-4 md:px-8">
+            <div className="text-center mb-12 md:mb-16 px-4 md:px-8">
                 <div className="flex items-center justify-center gap-4 mb-8">
                     <div className="h-px w-12 bg-accent-600"></div>
                     <span className="text-accent-600 font-semibold tracking-widest text-sm uppercase">Promociones</span>

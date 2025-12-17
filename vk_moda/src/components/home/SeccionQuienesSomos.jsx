@@ -3,7 +3,7 @@ import about from "../../img/about1.jpg"
 
 function SeccionQuienesSomos() {
     return (
-        <div className="mt-32 md:mt-40 py-20" id="Quienes-somos">
+        <div className="mt-16 md:mt-20 py-20" id="Quienes-somos">
             {/* Fondo decorativo */}
             <div className="absolute inset-0 -z-10 overflow-hidden">
                 <div className="absolute top-0 right-0 w-96 h-96 bg-accent-600/5 rounded-full -mr-48 -mt-48"></div>
@@ -11,7 +11,7 @@ function SeccionQuienesSomos() {
             </div>
 
             {/* Primera sección - Quiénes Somos */}
-            <div className="max-w-7xl mx-auto px-4 md:px-8 mb-20 md:mb-32">
+            <div className="max-w-7xl mx-auto px-4 md:px-8 mb-16 md:mb-24">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
                     {/* Imagen con efecto elegante */}
                     <div className="relative overflow-hidden group">

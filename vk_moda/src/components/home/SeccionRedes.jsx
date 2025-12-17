@@ -2,7 +2,7 @@ import SocialIcons from "../common/SocialIcons";
 
 function SeccionRedes() {
     return (
-        <div className="flex justify-center mt-12 pb-8">
+        <div className="flex justify-center mt-8 pb-8">
             <SocialIcons variant="default" size="lg" />
         </div>
     );
