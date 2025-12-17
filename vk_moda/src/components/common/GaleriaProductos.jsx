@@ -1,9 +1,18 @@
 import { useState } from 'react';
-import { FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi';
+import { FiChevronLeft, FiChevronRight, FiX, FiHeart, FiEye } from 'react-icons/fi';
 
 function GaleriaProductos({ productos }) {
     const [modalAbierto, setModalAbierto] = useState(false);
     const [productoSeleccionado, setProductoSeleccionado] = useState(null);
+    const [wishlist, setWishlist] = useState({});
+
+    const toggleWishlist = (id, e) => {
+        e.stopPropagation();
+        setWishlist(prev => ({
+            ...prev,
+            [id]: !prev[id]
+        }));
+    };
 
     const abrirModal = (index) => {
         setProductoSeleccionado(productos[index]);
@@ -30,51 +39,75 @@ function GaleriaProductos({ productos }) {
     return (
         <>
             {/* Grid de Productos */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-                {productos.map((producto, index) => (
-                    <div
-                        key={producto.id}
-                        className="group cursor-pointer"
-                        onClick={() => abrirModal(index)}
-                    >
-                        {/* Contenedor de imagen con overlay elegante */}
-                        <div className="relative overflow-hidden rounded-none mb-6">
-                            <div className="relative h-96 overflow-hidden bg-neutral-100">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                {productos.map((producto, index) => {
+                    const precioSinImpuestos = (producto.precio * 0.826).toFixed(2);
+                    
+                    return (
+                        <div
+                            key={producto.id}
+                            className="group relative bg-white"
+                        >
+                            {/* Contenedor de imagen */}
+                            <div className="relative overflow-hidden bg-neutral-50">
                                 <img
                                     src={producto.image}
                                     alt={producto.name}
-                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                    className="w-full h-auto object-cover aspect-[3/4]"
                                 />
-                                {/* Overlay oscuro elegante */}
-                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-500"></div>
                                 
-                                {/* Icono de visualización */}
-                                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                                    <div className="w-16 h-16 border-2 border-white rounded-full flex items-center justify-center backdrop-blur-sm bg-white/10">
-                                        <FiChevronRight className="text-white text-3xl" />
-                                    </div>
-                                </div>
+                                {/* Wishlist button */}
+                                <button 
+                                    onClick={(e) => toggleWishlist(producto.id, e)}
+                                    className="absolute top-3 right-3 p-2 bg-white rounded-full shadow-md hover:bg-gray-50 transition-colors z-10"
+                                    aria-label={wishlist[producto.id] ? 'Eliminar de favoritos' : 'Agregar a favoritos'}
+                                >
+                                    <FiHeart 
+                                        className={`w-4 h-4 md:w-5 md:h-5 transition-colors ${
+                                            wishlist[producto.id] 
+                                                ? 'text-red-500 fill-current' 
+                                                : 'text-gray-600'
+                                        }`} 
+                                    />
+                                </button>
+                                
+                                {/* Quick view button */}
+                                <button 
+                                    onClick={() => abrirModal(index)}
+                                    className="absolute bottom-3 right-3 w-10 h-10 md:w-12 md:h-12 bg-primary-900 text-white rounded-full flex items-center justify-center hover:bg-accent-600 transition-colors shadow-lg z-10"
+                                    aria-label="Vista rápida"
+                                >
+                                    <FiEye className="w-4 h-4 md:w-5 md:h-5" />
+                                </button>
                             </div>
-                        </div>
 
-                        {/* Información del producto */}
-                        <div className="space-y-3">
-                            <h3 className="text-lg font-elegant font-semibold text-primary-900 group-hover:text-accent-600 transition-colors duration-300 tracking-wide">
-                                {producto.name}
-                            </h3>
-                            <div className="flex items-center gap-3">
-                                <div className="h-px flex-1 bg-neutral-300"></div>
-                                <p className="text-accent-600 font-bold text-lg whitespace-nowrap">
-                                    {producto.precio}
-                                </p>
-                                <div className="h-px flex-1 bg-neutral-300"></div>
+                            {/* Información del producto */}
+                            <div className="p-3 md:p-4">
+                                {/* Precio */}
+                                <div className="mb-2">
+                                    <p className="text-base md:text-lg font-bold text-primary-900">
+                                        $ {producto.precio.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                    </p>
+                                    <p className="text-xs md:text-sm text-neutral-500">
+                                        *Precio sin impuestos nacionales: <span className="text-accent-600 font-semibold">$ {precioSinImpuestos}</span>
+                                    </p>
+                                </div>
+                                
+                                {/* Nombre del producto */}
+                                <h3 className="text-sm md:text-base font-medium text-primary-900 mb-2 line-clamp-2 hover:text-accent-600 transition-colors">
+                                    {producto.name}
+                                </h3>
+                                
+                                {/* Colores disponibles */}
+                                {producto.colores && (
+                                    <p className="text-xs md:text-sm text-neutral-600">
+                                        + {producto.colores} colores
+                                    </p>
+                                )}
                             </div>
-                            <p className="text-neutral-500 text-sm font-light tracking-wide opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                Ver detalles
-                            </p>
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
 
             {/* Modal Fullscreen */}
