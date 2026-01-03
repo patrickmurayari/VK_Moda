@@ -3,7 +3,7 @@ import about from "../../img/about1.jpg"
 
 function SeccionQuienesSomos() {
     return (
-        <div className="mt-16 md:mt-20 py-20" id="Quienes-somos">
+        <div className="mt-16 md:mt-20 py-20" id="quienes-somos">
             {/* Fondo decorativo */}
             <div className="absolute inset-0 -z-10 overflow-hidden">
                 <div className="absolute top-0 right-0 w-96 h-96 bg-accent-600/5 rounded-full -mr-48 -mt-48"></div>

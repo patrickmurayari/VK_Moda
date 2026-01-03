@@ -12,6 +12,7 @@ export default {
         display: ['Cormorant Garamond', 'serif'],
         body: ['Inter', 'sans-serif'],
         heading: ['Syne', 'sans-serif'],
+        luxury: ['Cormorant Garamond', 'serif'],
       },
       colors: {
         // Paleta elegante para moda
