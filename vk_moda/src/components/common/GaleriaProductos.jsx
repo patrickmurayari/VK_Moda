@@ -1,10 +1,13 @@
 import { useState } from 'react';
-import { FiChevronLeft, FiChevronRight, FiX, FiHeart, FiEye } from 'react-icons/fi';
+import PropTypes from 'prop-types';
+import { FiChevronLeft, FiChevronRight, FiX, FiHeart } from 'react-icons/fi';
 
-function GaleriaProductos({ productos }) {
+function GaleriaProductos({ productos, mostrarPrecio = true }) {
     const [modalAbierto, setModalAbierto] = useState(false);
-    const [productoSeleccionado, setProductoSeleccionado] = useState(null);
+    const [indiceSeleccionado, setIndiceSeleccionado] = useState(null);
     const [wishlist, setWishlist] = useState({});
+
+    const productoSeleccionado = indiceSeleccionado !== null ? productos[indiceSeleccionado] : null;
 
     const toggleWishlist = (id, e) => {
         e.stopPropagation();
@@ -14,26 +17,24 @@ function GaleriaProductos({ productos }) {
         }));
     };
 
-    const abrirModal = (index) => {
-        setProductoSeleccionado(productos[index]);
-        setModalAbierto(true);
-    };
-
+    
     const cerrarModal = () => {
         setModalAbierto(false);
-        setProductoSeleccionado(null);
+        setIndiceSeleccionado(null);
     };
 
     const irAnterior = () => {
-        const indiceActual = productos.findIndex(p => p.id === productoSeleccionado.id);
-        const nuevoIndice = (indiceActual - 1 + productos.length) % productos.length;
-        setProductoSeleccionado(productos[nuevoIndice]);
+        setIndiceSeleccionado((prev) => {
+            if (prev === null) return prev;
+            return (prev - 1 + productos.length) % productos.length;
+        });
     };
 
     const irSiguiente = () => {
-        const indiceActual = productos.findIndex(p => p.id === productoSeleccionado.id);
-        const nuevoIndice = (indiceActual + 1) % productos.length;
-        setProductoSeleccionado(productos[nuevoIndice]);
+        setIndiceSeleccionado((prev) => {
+            if (prev === null) return prev;
+            return (prev + 1) % productos.length;
+        });
     };
 
     return (
@@ -41,70 +42,69 @@ function GaleriaProductos({ productos }) {
             {/* Grid de Productos */}
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
                 {productos.map((producto, index) => {
-                    const precioSinImpuestos = (producto.precio * 0.826).toFixed(2);
-                    
+                    const wishlistId = producto.id ?? index;
+
                     return (
                         <div
-                            key={producto.id}
-                            className="group relative bg-white"
+                            key={producto.id ?? index}
+                            className="group relative"
                         >
                             {/* Contenedor de imagen */}
-                            <div className="relative overflow-hidden bg-neutral-50">
+                            <div className="relative overflow-hidden rounded-2xl bg-neutral-50 ring-1 ring-black/5 shadow-sm transition-all duration-300 group-hover:-translate-y-0.5 group-hover:shadow-xl">
                                 <img
                                     src={producto.image}
                                     alt={producto.name}
-                                    className="w-full h-auto object-cover aspect-[3/4]"
+                                    className="w-full h-auto object-cover aspect-[3/4] transition-transform duration-500 group-hover:scale-[1.03]"
                                 />
-                                
+
+                                {!mostrarPrecio && (
+                                    <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[5] bg-gradient-to-t from-black/75 via-black/15 to-transparent p-4">
+                                        <h3 className="text-sm md:text-base font-semibold tracking-wide text-white line-clamp-2">
+                                            {producto.name}
+                                        </h3>
+                                        {producto.colores && (
+                                            <p className="mt-1 text-xs md:text-sm text-white/80">
+                                                + {producto.colores} colores
+                                            </p>
+                                        )}
+                                    </div>
+                                )}
+
                                 {/* Wishlist button */}
-                                <button 
-                                    onClick={(e) => toggleWishlist(producto.id, e)}
+                                <button
+                                    onClick={(e) => toggleWishlist(wishlistId, e)}
                                     className="absolute top-3 right-3 p-2 bg-white rounded-full shadow-md hover:bg-gray-50 transition-colors z-10"
-                                    aria-label={wishlist[producto.id] ? 'Eliminar de favoritos' : 'Agregar a favoritos'}
+                                    aria-label={wishlist[wishlistId] ? 'Eliminar de favoritos' : 'Agregar a favoritos'}
                                 >
-                                    <FiHeart 
+                                    <FiHeart
                                         className={`w-4 h-4 md:w-5 md:h-5 transition-colors ${
-                                            wishlist[producto.id] 
-                                                ? 'text-red-500 fill-current' 
+                                            wishlist[wishlistId]
+                                                ? 'text-red-500 fill-current'
                                                 : 'text-gray-600'
-                                        }`} 
+                                        }`}
                                     />
                                 </button>
-                                
-                                {/* Quick view button */}
-                                <button 
-                                    onClick={() => abrirModal(index)}
-                                    className="absolute bottom-3 right-3 w-10 h-10 md:w-12 md:h-12 bg-primary-900 text-white rounded-full flex items-center justify-center hover:bg-accent-600 transition-colors shadow-lg z-10"
-                                    aria-label="Vista rápida"
-                                >
-                                    <FiEye className="w-4 h-4 md:w-5 md:h-5" />
-                                </button>
-                            </div>
+
+                                                            </div>
 
                             {/* Información del producto */}
-                            <div className="p-3 md:p-4">
-                                {/* Precio */}
-                                <div className="mb-2">
-                                    <p className="text-base md:text-lg font-bold text-primary-900">
-                                        $ {producto.precio.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            {mostrarPrecio && (
+                                <div className="p-3 md:p-4">
+                                    <p className="text-base md:text-lg font-bold text-primary-900 mb-2">
+                                        $ {Number(producto.precio).toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                     </p>
-                                    <p className="text-xs md:text-sm text-neutral-500">
-                                        *Precio sin impuestos nacionales: <span className="text-accent-600 font-semibold">$ {precioSinImpuestos}</span>
-                                    </p>
+
+                                    <h3 className="text-sm md:text-base font-medium text-primary-900 mb-2 line-clamp-2 hover:text-accent-600 transition-colors">
+                                        {producto.name}
+                                    </h3>
+
+                                    {producto.colores && (
+                                        <p className="text-xs md:text-sm text-neutral-600">
+                                            + {producto.colores} colores
+                                        </p>
+                                    )}
                                 </div>
-                                
-                                {/* Nombre del producto */}
-                                <h3 className="text-sm md:text-base font-medium text-primary-900 mb-2 line-clamp-2 hover:text-accent-600 transition-colors">
-                                    {producto.name}
-                                </h3>
-                                
-                                {/* Colores disponibles */}
-                                {producto.colores && (
-                                    <p className="text-xs md:text-sm text-neutral-600">
-                                        + {producto.colores} colores
-                                    </p>
-                                )}
-                            </div>
+                            )}
                         </div>
                     );
                 })}
@@ -157,9 +157,11 @@ function GaleriaProductos({ productos }) {
                         <h2 className="text-2xl font-bold text-primary-900 mb-2">
                             {productoSeleccionado.name}
                         </h2>
-                        <p className="text-accent-600 font-bold text-2xl">
-                            {productoSeleccionado.precio}
-                        </p>
+                        {mostrarPrecio && (
+                            <p className="text-accent-600 font-bold text-2xl">
+                                $ {Number(productoSeleccionado.precio).toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            </p>
+                        )}
                     </div>
 
                     {/* Controles Móvil */}
@@ -184,5 +186,18 @@ function GaleriaProductos({ productos }) {
         </>
     );
 }
+
+GaleriaProductos.propTypes = {
+    productos: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+            image: PropTypes.string,
+            name: PropTypes.string,
+            precio: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+            colores: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+        })
+    ).isRequired,
+    mostrarPrecio: PropTypes.bool
+};
 
 export default GaleriaProductos;

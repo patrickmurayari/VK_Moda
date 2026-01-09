@@ -31,7 +31,7 @@ function CategoriaTemplate({ titulo, productos }) {
                 </div>
 
                 {/* Galería de Productos */}
-                <GaleriaProductos productos={productos} />
+                <GaleriaProductos productos={productos} mostrarPrecio={false} />
 
                 {/* Decoración inferior */}
                 <div className="flex items-center justify-center gap-4 mt-20">
