@@ -1,6 +1,8 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
+import foto0 from "../../img/Coleccion/coleccionPic1.jpg"
 import foto1 from "../../img/Coleccion/coleccionPic111.jpg"
+import foto1b from "../../img/Coleccion/coleccionPic2.jpg"
 import foto2 from "../../img/Coleccion/coleccionPic21.jpg"
 import foto3 from "../../img/Coleccion/coleccionPic23.jpg"
 import { Navigation, Pagination, A11y, Autoplay, EffectCoverflow } from 'swiper/modules';
@@ -51,6 +53,21 @@ function CarrouselSwip() {
                 <div className="relative overflow-hidden group h-96 md:h-[500px]">
                   <img 
                     className='w-full h-full object-cover transition-transform duration-700 group-hover:scale-105' 
+                    src={foto0} 
+                    alt="Colección 2026" 
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+                  <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
+                    <h3 className="text-white text-2xl md:text-3xl font-elegant font-bold tracking-wide">Nueva Colección 2026</h3>
+                    <p className="text-white/90 text-sm md:text-base mt-3 font-light">Estilo actual, detalles que enamoran</p>
+                  </div>
+                </div>
+              </SwiperSlide>
+
+              <SwiperSlide>
+                <div className="relative overflow-hidden group h-96 md:h-[500px]">
+                  <img 
+                    className='w-full h-full object-cover transition-transform duration-700 group-hover:scale-105' 
                     src={foto1} 
                     alt="Colección 1" 
                   />
@@ -58,6 +75,21 @@ function CarrouselSwip() {
                   <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
                     <h3 className="text-white text-2xl md:text-3xl font-elegant font-bold tracking-wide">Colección Primavera</h3>
                     <p className="text-white/90 text-sm md:text-base mt-3 font-light">Descubre las nuevas tendencias</p>
+                  </div>
+                </div>
+              </SwiperSlide>
+
+              <SwiperSlide>
+                <div className="relative overflow-hidden group h-96 md:h-[500px]">
+                  <img 
+                    className='w-full h-full object-cover transition-transform duration-700 group-hover:scale-105' 
+                    src={foto1b} 
+                    alt="Colección 2026 - Look" 
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+                  <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
+                    <h3 className="text-white text-2xl md:text-3xl font-elegant font-bold tracking-wide">Looks listos para salir</h3>
+                    <p className="text-white/90 text-sm md:text-base mt-3 font-light">Combinaciones que realzan tu silueta</p>
                   </div>
                 </div>
               </SwiperSlide>

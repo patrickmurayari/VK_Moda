@@ -20,7 +20,7 @@ function SeccionColeccion() {
                 <h1  
                     className="text-primary-900 font-elegant text-3xl sm:text-4xl md:text-6xl font-bold tracking-wider mb-6"
                 >
-                    Nueva Colección 2024
+                    Nueva Colección 2026
                 </h1>
                 
                 <div className="flex items-center justify-center gap-4">

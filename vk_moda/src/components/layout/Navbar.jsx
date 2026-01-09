@@ -106,16 +106,6 @@ function Navbar() {
                             Colección
                         </Link>
                         <Link 
-                            to="ofertas" 
-                            spy={true} 
-                            smooth={true} 
-                            offset={-100} 
-                            duration={500} 
-                            className={`relative text-base font-normal transition-colors duration-300 ${isScrolled ? 'text-gray-700' : 'text-white'} hover:text-orange-400 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-accent-600 after:scale-x-0 after:origin-center after:transition-transform after:duration-300 after:ease-out hover:after:scale-x-100`}
-                        >
-                            Ofertas
-                        </Link>
-                        <Link 
                             to="quienes-somos" 
                             spy={true} 
                             smooth={true} 
@@ -241,18 +231,6 @@ function Navbar() {
                                     className="group flex items-center justify-between py-4 border-b border-black/10"
                                 >
                                     <span className="font-heading text-[15px] font-semibold tracking-[0.22em] uppercase text-neutral-900/90 transition-colors duration-300">Colección</span>
-                                    <span className="h-1.5 w-1.5 rounded-full transition-colors duration-300"></span>
-                                </Link>
-                                <Link 
-                                    to="ofertas" 
-                                    spy={true} 
-                                    smooth={true} 
-                                    onClick={closeMenu} 
-                                    offset={-100} 
-                                    duration={500} 
-                                    className="group flex items-center justify-between py-4 border-b border-black/10"
-                                >
-                                    <span className="font-heading text-[15px] font-semibold tracking-[0.22em] uppercase text-neutral-900/90 transition-colors duration-300">Ofertas</span>
                                     <span className="h-1.5 w-1.5 rounded-full transition-colors duration-300"></span>
                                 </Link>
                                 <Link 

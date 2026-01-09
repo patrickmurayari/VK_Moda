@@ -6,7 +6,7 @@ import NotFound from './components/common/NotFound'
 import HeroSection from './components/home/HeroSection'
 import SeccionCategorias from './components/home/SeccionCategorias'
 import SeccionColeccion from './components/home/SeccionColeccion'
-import SeccionOfertas from './components/home/SeccionOfertas'
+import SeccionEditorialModa from './components/home/SeccionEditorialModa'
 import SeccionQuienesSomos from './components/home/SeccionQuienesSomos'
 import SeccionContacto from './components/home/SeccionContacto'
 import Bolsos from "./components/Categorias/Bolsos"
@@ -21,7 +21,7 @@ function Home() {
             <HeroSection />
             <SeccionCategorias />
             <SeccionColeccion />
-            <SeccionOfertas />
+            <SeccionEditorialModa />
             <SeccionQuienesSomos />
             <SeccionContacto />
         </div>
