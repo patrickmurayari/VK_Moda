@@ -1,14 +1,39 @@
 import { FiMail, FiPhone, FiMapPin, FiHeart } from 'react-icons/fi';
+import { FaCcMastercard, FaCcVisa } from 'react-icons/fa';
+import { SiMercadopago } from 'react-icons/si';
 import SocialIcons from '../common/SocialIcons';
 
 function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-primary-900 text-white mt-20">
-      {/* Contenido Principal */}
-      <div className="max-w-6xl mx-auto px-6 md:px-12 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-8">
+    <footer className="mt-0">
+      <div className="bg-neutral-50">
+        <div className="max-w-6xl mx-auto px-6 md:px-12 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <p className="text-xs font-semibold tracking-widest uppercase text-neutral-600">
+            Métodos de pago
+          </p>
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="flex items-center gap-2 rounded-md border border-neutral-200 bg-white px-3 py-2">
+              <FaCcMastercard className="text-xl text-neutral-900" />
+              <span className="text-xs font-medium text-neutral-700">Mastercard</span>
+            </div>
+            <div className="flex items-center gap-2 rounded-md border border-neutral-200 bg-white px-3 py-2">
+              <FaCcVisa className="text-xl text-neutral-900" />
+              <span className="text-xs font-medium text-neutral-700">Visa</span>
+            </div>
+            <div className="flex items-center gap-2 rounded-md border border-neutral-200 bg-white px-3 py-2">
+              <SiMercadopago className="text-xl text-neutral-900" />
+              <span className="text-xs font-medium text-neutral-700">Mercado Pago</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-primary-900 text-white">
+        {/* Contenido Principal */}
+        <div className="max-w-6xl mx-auto px-6 md:px-12 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-8">
           
           {/* Sección 1: Información */}
           <div className="text-center md:text-left">
@@ -71,6 +96,7 @@ function Footer() {
           <p className="text-neutral-500 text-xs mt-2">
             Todos los derechos reservados | Diseño y Moda
           </p>
+        </div>
         </div>
       </div>
     </footer>

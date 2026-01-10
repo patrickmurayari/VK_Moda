@@ -15,7 +15,7 @@ function SeccionQuienesSomos() {
                 <div className="grid grid-cols-1 md:grid-cols-2">
                     <div className="relative h-[50vh] md:h-screen group">
                         <img
-                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                            className="absolute inset-0 w-full h-full object-cover object-[center_20%] md:object-[center_15%] transition-transform duration-700 group-hover:scale-105"
                             src={fotoabout}
                             alt="quienes somos"
                         />
@@ -32,9 +32,9 @@ function SeccionQuienesSomos() {
                     </div>
                 </div>
 
-                <div className="absolute inset-0 z-10 flex items-center justify-center px-4 py-10">
-                    <div className="w-full max-w-4xl rounded-2xl bg-white/90 backdrop-blur-xl border border-white/60 shadow-elegant-lg p-6 sm:p-8 md:p-10">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
+                <div className="relative z-10 flex justify-center px-4 py-8 md:absolute md:inset-0 md:items-center md:py-10">
+                    <div className="w-full max-w-md sm:max-w-lg md:max-w-xl rounded-2xl bg-white/90 backdrop-blur-lg border border-white/60 shadow-elegant-lg p-6 sm:p-8 md:p-10">
+                        <div className="grid grid-cols-1 gap-8 md:gap-10">
                             <div className="space-y-6">
                                 <div>
                                     <div className="flex items-center gap-4 mb-6">
@@ -56,7 +56,7 @@ function SeccionQuienesSomos() {
                                 </p>
                             </div>
 
-                            <div className="space-y-6">
+                            <div className="space-y-6 pt-8 border-t border-primary-900/10">
                                 <div>
                                     <div className="flex items-center gap-4 mb-6">
                                         <div className="h-px w-12 bg-accent-600"></div>

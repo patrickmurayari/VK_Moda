@@ -1,4 +1,5 @@
 import MapaContacto from "../common/MapaContacto";
+import { FiMapPin, FiClock, FiPhone, FiMail } from "react-icons/fi";
 
 function SeccionContacto() {
     return (
@@ -7,11 +8,11 @@ function SeccionContacto() {
                 <h1 className='text-center text-3xl md:text-5xl font-elegant font-bold text-primary-900 mt-6 mb-2 tracking-wide'>Contáctanos</h1>
                 <div className="w-24 h-1 bg-accent-600 mx-auto mb-12 rounded-full"></div>
                 
-                <div className="space-y-8">
+                <div className="space-y-8 md:grid md:grid-cols-2 md:gap-10 md:items-start md:space-y-0">
                     {/* Información de Contacto */}
-                    <div className='text-neutral-700 space-y-6 max-w-2xl mx-auto'>
+                    <div className='text-neutral-700 space-y-6 max-w-2xl mx-auto md:max-w-none md:mx-0'>
                         <div className='flex items-start gap-4 p-4 bg-white rounded-lg shadow-elegant hover:shadow-elegant-lg transition-shadow'>
-                            <span className='text-accent-600 font-bold text-3xl flex-shrink-0'>📍</span>
+                            <FiMapPin className='text-accent-600 text-2xl mt-1 flex-shrink-0' />
                             <div>
                                 <p className='font-semibold text-primary-900 text-lg'>Visítanos en:</p>
                                 <p className='text-neutral-600 mt-1 font-medium'>V&A DISEÑO Y MODA</p>
@@ -29,7 +30,7 @@ function SeccionContacto() {
                         </div>
 
                         <div className='flex items-start gap-4 p-4 bg-white rounded-lg shadow-elegant hover:shadow-elegant-lg transition-shadow'>
-                            <span className='text-accent-600 font-bold text-3xl flex-shrink-0'>🕐</span>
+                            <FiClock className='text-accent-600 text-2xl mt-1 flex-shrink-0' />
                             <div>
                                 <p className='font-semibold text-primary-900 text-lg'>Nuestros Horarios:</p>
                                 <p className='text-neutral-600 mt-1'>Lunes a Viernes: 10:00 - 13:00 | 16:00 - 20:00</p>
@@ -39,7 +40,7 @@ function SeccionContacto() {
                         </div>
 
                         <div className='flex items-start gap-4 p-4 bg-white rounded-lg shadow-elegant hover:shadow-elegant-lg transition-shadow'>
-                            <span className='text-accent-600 font-bold text-3xl flex-shrink-0'>📞</span>
+                            <FiPhone className='text-accent-600 text-2xl mt-1 flex-shrink-0' />
                             <div>
                                 <p className='font-semibold text-primary-900 text-lg'>Llámanos:</p>
                                 <a href="tel:+541126073801" className='text-accent-600 hover:text-accent-700 font-semibold mt-1 transition-colors'>
@@ -49,7 +50,7 @@ function SeccionContacto() {
                         </div>
 
                         <div className='flex items-start gap-4 p-4 bg-white rounded-lg shadow-elegant hover:shadow-elegant-lg transition-shadow'>
-                            <span className='text-accent-600 font-bold text-3xl flex-shrink-0'>✉️</span>
+                            <FiMail className='text-accent-600 text-2xl mt-1 flex-shrink-0' />
                             <div>
                                 <p className='font-semibold text-primary-900 text-lg'>Escríbenos:</p>
                                 <a href="mailto:murayarivirginia797@gmail.com" className='text-accent-600 hover:text-accent-700 font-semibold mt-1 transition-colors break-all'>
@@ -60,8 +61,8 @@ function SeccionContacto() {
                     </div>
 
                     {/* Mapa */}
-                    <div className="mt-12">
-                        <h3 className='text-center text-2xl font-semibold text-primary-900 mb-6'>Ubicación</h3>
+                    <div className="mt-12 md:mt-0">
+                        <h3 className='text-center md:text-left text-2xl font-semibold text-primary-900 mb-6'>Ubicación</h3>
                         <div className="rounded-lg overflow-hidden shadow-elegant">
                             <MapaContacto />
                         </div>
