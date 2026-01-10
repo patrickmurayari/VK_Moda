@@ -1,12 +1,16 @@
 import { useState, useEffect } from 'react';
 import { Link } from "react-scroll"
+import { Link as RouterLink, useLocation } from "react-router-dom";
 import { Search, Menu, X } from 'lucide-react';
 import logoVK from "../../img/logov.jpeg";
 
 function Navbar() {
+    const location = useLocation();
     const [menuOpen, setMenuOpen] = useState(false);
     const [searchOpen, setSearchOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
+
+    const isCategoryPage = ['/vestidos', '/bolsos', '/indumentaria', '/joyeria'].includes(location.pathname);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -35,6 +39,10 @@ function Navbar() {
         };
     }, [menuOpen]);
 
+    useEffect(() => {
+        setMenuOpen(false);
+    }, [location.pathname]);
+
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
     };
@@ -59,22 +67,39 @@ function Navbar() {
                 <div className="flex items-center justify-between px-6 md:px-12 py-3 md:py-5">
                     {/* Logo */}
                     <div className="flex items-center gap-3 cursor-pointer group">
-                        <Link to="hero" spy={true} smooth={true} offset={-100} duration={500}>
-                            <div className="relative">
-                                <div className={`w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center transition-colors duration-300 ${
-                                    isScrolled || menuOpen ? 'bg-white shadow-elegant' : 'bg-white/90'
-                                }`}>
-                                    <img
-                                        src={logoVK}
-                                        alt="Logo VK Moda"
-                                        className="w-10 h-10 md:w-12 md:h-12 rounded-full object-contain"
-                                    />
+                        {isCategoryPage ? (
+                            <RouterLink to="/">
+                                <div className="relative">
+                                    <div className={`w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center transition-colors duration-300 ${
+                                        isScrolled || menuOpen ? 'bg-white shadow-elegant' : 'bg-white/90'
+                                    }`}>
+                                        <img
+                                            src={logoVK}
+                                            alt="Logo VK Moda"
+                                            className="w-10 h-10 md:w-12 md:h-12 rounded-full object-contain"
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-                        </Link>
+                            </RouterLink>
+                        ) : (
+                            <Link to="hero" spy={true} smooth={true} offset={-100} duration={500}>
+                                <div className="relative">
+                                    <div className={`w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center transition-colors duration-300 ${
+                                        isScrolled || menuOpen ? 'bg-white shadow-elegant' : 'bg-white/90'
+                                    }`}>
+                                        <img
+                                            src={logoVK}
+                                            alt="Logo VK Moda"
+                                            className="w-10 h-10 md:w-12 md:h-12 rounded-full object-contain"
+                                        />
+                                    </div>
+                                </div>
+                            </Link>
+                        )}
                     </div>
 
-                    <div className="hidden md:flex items-center gap-8">
+                    {!isCategoryPage && (
+                        <div className="hidden md:flex items-center gap-8">
                         <Link 
                             to="hero" 
                             spy={true} 
@@ -125,7 +150,8 @@ function Navbar() {
                         >
                             Contáctanos
                         </Link>
-                    </div>
+                        </div>
+                    )}
 
                     {/* Right Side Icons */}
                     <div className="flex items-center gap-4">
@@ -152,17 +178,19 @@ function Navbar() {
                         )}
                         
                         {/* Menu Toggle - Mobile Only */}
-                        <button 
-                            className={`md:hidden ${menuOpen || isScrolled ? 'text-gray-900' : 'text-white'} hover:text-gray-200 transition-colors duration-300 focus:outline-none`} 
-                            onClick={toggleMenu}
-                            aria-label="Toggle menu"
-                        >
-                            {menuOpen ? (
-                                <X className="h-6 w-6" />
-                            ) : (
-                                <Menu className="h-6 w-6" />
-                            )}
-                        </button>
+                        {!isCategoryPage && (
+                            <button 
+                                className={`md:hidden ${menuOpen || isScrolled ? 'text-gray-900' : 'text-white'} hover:text-gray-200 transition-colors duration-300 focus:outline-none`} 
+                                onClick={toggleMenu}
+                                aria-label="Toggle menu"
+                            >
+                                {menuOpen ? (
+                                    <X className="h-6 w-6" />
+                                ) : (
+                                    <Menu className="h-6 w-6" />
+                                )}
+                            </button>
+                        )}
                     </div>
                 </div>
 
@@ -184,6 +212,7 @@ function Navbar() {
                 )}
             </nav>
 
+            {!isCategoryPage && (
             <div className={`fixed inset-0 z-40 md:hidden transition-opacity duration-300 ${menuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
                 <div
                     className={`absolute inset-0 bg-black/45 backdrop-blur-sm transition-opacity duration-300 ${menuOpen ? 'opacity-100' : 'opacity-0'}`}
@@ -287,6 +316,7 @@ function Navbar() {
                     </div>
                 </div>
             </div>
+            )}
         </>
     );
 }

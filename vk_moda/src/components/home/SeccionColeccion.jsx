@@ -2,7 +2,7 @@ import CarrouselSwip from "../common/CarrouselSwip";
 
 function SeccionColeccion() {
     return (
-        <div className="mt-16 md:mt-20 py-20" id="coleccion">
+        <div className="mt-16 md:mt-20 pt-20 pb-10 md:pb-12" id="coleccion">
             {/* Fondo decorativo */}
             <div className="absolute inset-0 -z-10 overflow-hidden">
                 <div className="absolute top-0 right-0 w-96 h-96 bg-accent-600/5 rounded-full -mr-48 -mt-48"></div>
@@ -41,6 +41,12 @@ function SeccionColeccion() {
                 className="mt-12 md:mt-16 w-full"
             >
                 <CarrouselSwip />
+            </div>
+
+            <div className="mt-10 md:mt-12 flex items-center justify-center gap-4" aria-hidden="true">
+                <div className="h-px w-20 bg-neutral-300"></div>
+                <div className="h-2 w-2 rounded-full bg-accent-600"></div>
+                <div className="h-px w-20 bg-neutral-300"></div>
             </div>
         </div>
     );

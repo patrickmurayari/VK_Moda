@@ -15,9 +15,9 @@ function CarrouselSwip() {
   return (
     <div className="w-full">
       {/* Mobile: ancho completo, Desktop: contenedor con max-width */}
-      <div className="md:container md:mx-auto md:px-4 lg:px-8">
+      <div className="w-full">
         <div className="flex justify-center">
-          <div className="w-full md:max-w-7xl relative">
+          <div className="w-full relative">
             {/* Botones de navegación */}
             <button className="swiper-button-prev-custom absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 bg-white/95 hover:bg-accent-600 text-primary-900 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 shadow-elegant hover:shadow-elegant-lg -ml-4 md:-ml-6 lg:-ml-8">
               <FiChevronLeft className="text-xl md:text-2xl" />
@@ -43,14 +43,14 @@ function CarrouselSwip() {
               breakpoints={{
                 0: { slidesPerView: 1, spaceBetween: 0 },
                 640: { slidesPerView: 1, spaceBetween: 0 },
-                768: { slidesPerView: 1.3, spaceBetween: 16 },
-                1024: { slidesPerView: 1.8, spaceBetween: 20 },
-                1280: { slidesPerView: 2, spaceBetween: 24 },
+                768: { slidesPerView: 1, spaceBetween: 0 },
+                1024: { slidesPerView: 1, spaceBetween: 0 },
+                1280: { slidesPerView: 1, spaceBetween: 0 },
               }}
               className="rounded-none overflow-visible"
             >
               <SwiperSlide>
-                <div className="relative overflow-hidden group h-96 md:h-[500px]">
+                <div className="relative overflow-hidden group h-[78vh] min-h-[480px] md:h-[72vh] md:min-h-[520px] lg:h-[75vh] lg:min-h-[620px]">
                   <img 
                     className='w-full h-full object-cover transition-transform duration-700 group-hover:scale-105' 
                     src={foto0} 
@@ -65,7 +65,7 @@ function CarrouselSwip() {
               </SwiperSlide>
 
               <SwiperSlide>
-                <div className="relative overflow-hidden group h-96 md:h-[500px]">
+                <div className="relative overflow-hidden group h-[78vh] min-h-[480px] md:h-[72vh] md:min-h-[520px] lg:h-[75vh] lg:min-h-[620px]">
                   <img 
                     className='w-full h-full object-cover transition-transform duration-700 group-hover:scale-105' 
                     src={foto1} 
@@ -80,7 +80,7 @@ function CarrouselSwip() {
               </SwiperSlide>
 
               <SwiperSlide>
-                <div className="relative overflow-hidden group h-96 md:h-[500px]">
+                <div className="relative overflow-hidden group h-[78vh] min-h-[480px] md:h-[72vh] md:min-h-[520px] lg:h-[75vh] lg:min-h-[620px]">
                   <img 
                     className='w-full h-full object-cover transition-transform duration-700 group-hover:scale-105' 
                     src={foto1b} 
@@ -95,7 +95,7 @@ function CarrouselSwip() {
               </SwiperSlide>
 
               <SwiperSlide>
-                <div className="relative overflow-hidden group h-96 md:h-[500px]">
+                <div className="relative overflow-hidden group h-[78vh] min-h-[480px] md:h-[72vh] md:min-h-[520px] lg:h-[75vh] lg:min-h-[620px]">
                   <img 
                     className='w-full h-full object-cover transition-transform duration-700 group-hover:scale-105' 
                     src={foto2} 
@@ -110,7 +110,7 @@ function CarrouselSwip() {
               </SwiperSlide>
 
               <SwiperSlide>
-                <div className="relative overflow-hidden group h-96 md:h-[500px]">
+                <div className="relative overflow-hidden group h-[78vh] min-h-[480px] md:h-[72vh] md:min-h-[520px] lg:h-[75vh] lg:min-h-[620px]">
                   <img 
                     className='w-full h-full object-cover transition-transform duration-700 group-hover:scale-105' 
                     src={foto3} 
