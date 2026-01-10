@@ -44,15 +44,15 @@ function CarrouselSwip() {
                 0: { slidesPerView: 1, spaceBetween: 0 },
                 640: { slidesPerView: 1, spaceBetween: 0 },
                 768: { slidesPerView: 1, spaceBetween: 0 },
-                1024: { slidesPerView: 1, spaceBetween: 0 },
-                1280: { slidesPerView: 1, spaceBetween: 0 },
+                1024: { slidesPerView: 2, slidesPerGroup: 2, spaceBetween: 24 },
+                1280: { slidesPerView: 2, slidesPerGroup: 2, spaceBetween: 32 },
               }}
               className="rounded-none overflow-visible"
             >
               <SwiperSlide>
-                <div className="relative overflow-hidden group h-[78vh] min-h-[480px] md:h-[72vh] md:min-h-[520px] lg:h-[75vh] lg:min-h-[620px]">
+                <div className="relative overflow-hidden group h-[78vh] min-h-[480px] md:h-[72vh] md:min-h-[520px] lg:h-[75vh] lg:min-h-[620px] lg:bg-primary-900">
                   <img 
-                    className='w-full h-full object-cover transition-transform duration-700 group-hover:scale-105' 
+                    className='w-full h-full object-cover lg:object-contain transition-transform duration-700 group-hover:scale-105 lg:group-hover:scale-100' 
                     src={foto0} 
                     alt="Colección 2026" 
                   />
@@ -65,9 +65,9 @@ function CarrouselSwip() {
               </SwiperSlide>
 
               <SwiperSlide>
-                <div className="relative overflow-hidden group h-[78vh] min-h-[480px] md:h-[72vh] md:min-h-[520px] lg:h-[75vh] lg:min-h-[620px]">
+                <div className="relative overflow-hidden group h-[78vh] min-h-[480px] md:h-[72vh] md:min-h-[520px] lg:h-[75vh] lg:min-h-[620px] lg:bg-primary-900">
                   <img 
-                    className='w-full h-full object-cover transition-transform duration-700 group-hover:scale-105' 
+                    className='w-full h-full object-cover lg:object-contain transition-transform duration-700 group-hover:scale-105 lg:group-hover:scale-100' 
                     src={foto1} 
                     alt="Colección 1" 
                   />
@@ -80,9 +80,9 @@ function CarrouselSwip() {
               </SwiperSlide>
 
               <SwiperSlide>
-                <div className="relative overflow-hidden group h-[78vh] min-h-[480px] md:h-[72vh] md:min-h-[520px] lg:h-[75vh] lg:min-h-[620px]">
+                <div className="relative overflow-hidden group h-[78vh] min-h-[480px] md:h-[72vh] md:min-h-[520px] lg:h-[75vh] lg:min-h-[620px] lg:bg-primary-900">
                   <img 
-                    className='w-full h-full object-cover transition-transform duration-700 group-hover:scale-105' 
+                    className='w-full h-full object-cover lg:object-contain transition-transform duration-700 group-hover:scale-105 lg:group-hover:scale-100' 
                     src={foto1b} 
                     alt="Colección 2026 - Look" 
                   />
@@ -95,9 +95,9 @@ function CarrouselSwip() {
               </SwiperSlide>
 
               <SwiperSlide>
-                <div className="relative overflow-hidden group h-[78vh] min-h-[480px] md:h-[72vh] md:min-h-[520px] lg:h-[75vh] lg:min-h-[620px]">
+                <div className="relative overflow-hidden group h-[78vh] min-h-[480px] md:h-[72vh] md:min-h-[520px] lg:h-[75vh] lg:min-h-[620px] lg:bg-primary-900">
                   <img 
-                    className='w-full h-full object-cover transition-transform duration-700 group-hover:scale-105' 
+                    className='w-full h-full object-cover lg:object-contain transition-transform duration-700 group-hover:scale-105 lg:group-hover:scale-100' 
                     src={foto2} 
                     alt="Colección 2" 
                   />
@@ -110,9 +110,9 @@ function CarrouselSwip() {
               </SwiperSlide>
 
               <SwiperSlide>
-                <div className="relative overflow-hidden group h-[78vh] min-h-[480px] md:h-[72vh] md:min-h-[520px] lg:h-[75vh] lg:min-h-[620px]">
+                <div className="relative overflow-hidden group h-[78vh] min-h-[480px] md:h-[72vh] md:min-h-[520px] lg:h-[75vh] lg:min-h-[620px] lg:bg-primary-900">
                   <img 
-                    className='w-full h-full object-cover transition-transform duration-700 group-hover:scale-105' 
+                    className='w-full h-full object-cover lg:object-contain transition-transform duration-700 group-hover:scale-105 lg:group-hover:scale-100' 
                     src={foto3} 
                     alt="Colección 3" 
                   />
