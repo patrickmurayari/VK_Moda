@@ -5,10 +5,9 @@ import foto1 from "../../img/Coleccion/coleccionPic111.jpg"
 import foto1b from "../../img/Coleccion/coleccionPic2.jpg"
 import foto2 from "../../img/Coleccion/coleccionPic21.jpg"
 import foto3 from "../../img/Coleccion/coleccionPic23.jpg"
-import { Navigation, Pagination, A11y, Autoplay, EffectCoverflow } from 'swiper/modules';
+import { Navigation, Pagination, A11y, Autoplay } from 'swiper/modules';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import 'swiper/css/effect-coverflow';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 function CarrouselSwip() {
@@ -24,7 +23,7 @@ function CarrouselSwip() {
             </button>
 
             <Swiper
-              modules={[Navigation, Pagination, A11y, Autoplay, EffectCoverflow]}
+              modules={[Navigation, Pagination, A11y, Autoplay]}
               spaceBetween={0}
               slidesPerView={1}
               navigation={{

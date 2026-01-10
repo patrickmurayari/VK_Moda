@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Link } from "react-scroll"
 import { Link as RouterLink, useLocation } from "react-router-dom";
 import { Search, Menu, X } from 'lucide-react';
-import logoVK from "../../img/logov.jpeg";
 
 function Navbar() {
     const location = useLocation();
@@ -74,7 +73,7 @@ function Navbar() {
                                         isScrolled || menuOpen ? 'bg-white shadow-elegant' : 'bg-white/90'
                                     }`}>
                                         <img
-                                            src={logoVK}
+                                            src="/logov.jpeg"
                                             alt="Logo VK Moda"
                                             className="w-10 h-10 md:w-12 md:h-12 rounded-full object-contain"
                                         />
@@ -88,7 +87,7 @@ function Navbar() {
                                         isScrolled || menuOpen ? 'bg-white shadow-elegant' : 'bg-white/90'
                                     }`}>
                                         <img
-                                            src={logoVK}
+                                            src="/logov.jpeg"
                                             alt="Logo VK Moda"
                                             className="w-10 h-10 md:w-12 md:h-12 rounded-full object-contain"
                                         />
