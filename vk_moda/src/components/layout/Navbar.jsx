@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from "react-scroll"
 import { Search, Menu, X } from 'lucide-react';
-import logoVK from "../../img/logoVK.png";
+import logoVK from "../../img/logov.jpeg";
 
 function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);

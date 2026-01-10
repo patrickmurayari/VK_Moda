@@ -7,6 +7,7 @@ import HeroSection from './components/home/HeroSection'
 import SeccionCategorias from './components/home/SeccionCategorias'
 import SeccionColeccion from './components/home/SeccionColeccion'
 import SeccionEditorialModa from './components/home/SeccionEditorialModa'
+import SeccionInspiracionModa from './components/home/SeccionInspiracionModa'
 import SeccionQuienesSomos from './components/home/SeccionQuienesSomos'
 import SeccionContacto from './components/home/SeccionContacto'
 import Bolsos from "./components/Categorias/Bolsos"
@@ -22,6 +23,7 @@ function Home() {
             <SeccionCategorias />
             <SeccionColeccion />
             <SeccionEditorialModa />
+            <SeccionInspiracionModa />
             <SeccionQuienesSomos />
             <SeccionContacto />
         </div>

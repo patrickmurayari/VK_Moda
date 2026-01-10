@@ -1,0 +1,90 @@
+import { Link } from "react-scroll";
+
+import imgLeft from "../../img/Otros/otro6.jpg";
+import imgRight from "../../img/Otros/otro3.jpg";
+
+function SeccionInspiracionModa() {
+    return (
+        <section className="mt-12 md:mt-16 py-14" aria-label="Inspiración V&A">
+            <div className="px-4 md:px-8">
+                <div className="grid grid-cols-2 lg:grid-cols-2 gap-4 md:gap-6">
+                    <div className="group relative overflow-hidden rounded-2xl bg-neutral-100 aspect-[3/4] sm:aspect-[4/3] lg:aspect-[16/9]">
+                        <img
+                            src={imgLeft}
+                            alt="Inspiración urbana"
+                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-transparent"></div>
+
+                        <div className="absolute inset-x-0 bottom-0 p-4 sm:p-6 lg:p-8">
+                            <p className="text-white/90 font-heading text-[10px] sm:text-xs tracking-[0.28em] uppercase">
+                                INSPIRACIÓN
+                            </p>
+                            <h3 className="mt-2 text-white font-display text-xl sm:text-2xl lg:text-4xl font-light leading-tight">
+                                Looks urbanos
+                            </h3>
+                            <p className="mt-2 text-white/85 text-xs sm:text-sm lg:text-base font-light max-w-md">
+                                Prendas para todos los días con caída, comodidad y un toque de diseño.
+                            </p>
+
+                            <div className="mt-4">
+                                <Link
+                                    to="categorias"
+                                    spy={true}
+                                    smooth={true}
+                                    offset={-100}
+                                    duration={500}
+                                    className="inline-flex items-center justify-center rounded-xl bg-white/15 px-4 py-2 text-[10px] sm:text-xs font-heading font-semibold tracking-[0.22em] uppercase text-white backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-colors"
+                                >
+                                    Ver categorías
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="group relative overflow-hidden rounded-2xl bg-neutral-100 aspect-[3/4] sm:aspect-[4/3] lg:aspect-[16/9]">
+                        <img
+                            src={imgRight}
+                            alt="Inspiración clásica"
+                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-transparent"></div>
+
+                        <div className="absolute inset-x-0 bottom-0 p-4 sm:p-6 lg:p-8">
+                            <p className="text-white/90 font-heading text-[10px] sm:text-xs tracking-[0.28em] uppercase">
+                                ATELIER
+                            </p>
+                            <h3 className="mt-2 text-white font-display text-xl sm:text-2xl lg:text-4xl font-light leading-tight">
+                                A medida
+                            </h3>
+                            <p className="mt-2 text-white/85 text-xs sm:text-sm lg:text-base font-light max-w-md">
+                                Ajustes, arreglos y confección para que te quede perfecto.
+                            </p>
+
+                            <div className="mt-4">
+                                <Link
+                                    to="contactos"
+                                    spy={true}
+                                    smooth={true}
+                                    offset={-100}
+                                    duration={500}
+                                    className="inline-flex items-center justify-center rounded-xl bg-white/15 px-4 py-2 text-[10px] sm:text-xs font-heading font-semibold tracking-[0.22em] uppercase text-white backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-colors"
+                                >
+                                    Consultar
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="mt-12 text-center">
+                    <p className="text-neutral-600 font-body text-base sm:text-lg">
+                        Inspirate con nuestra selección y encontrá tu próximo look en V&A.
+                    </p>
+                </div>
+            </div>
+        </section>
+    );
+}
+
+export default SeccionInspiracionModa;
