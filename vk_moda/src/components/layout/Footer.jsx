@@ -16,7 +16,7 @@ function Footer() {
           {/* Sección 1: Información */}
           <div className="lg:col-span-4">
             <h3 className="text-2xl font-display font-semibold tracking-wide text-primary-900">
-              VK Moda
+              V&A Taylor Shop
             </h3>
             <p className="mt-3 text-sm leading-relaxed text-neutral-700 font-body">
               Diseño, confección e indumentaria con identidad. Más de 20 años creando piezas que celebran el arte de la moda.
