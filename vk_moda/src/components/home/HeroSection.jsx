@@ -70,12 +70,16 @@ function HeroSection() {
                         src={slides[currentSlide].image}
                         alt={slides[currentSlide].title}
                         className="absolute inset-0 w-full h-full object-cover"
+                        loading="eager"
+                        decoding="async"
                     />
                     {incomingSlide !== null && (
                         <img
                             src={slides[incomingSlide].image}
                             alt={slides[incomingSlide].title}
                             className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-out will-change-transform ${showIncoming ? 'opacity-100 scale-100' : 'opacity-0 scale-105'}`}
+                            loading="eager"
+                            decoding="async"
                         />
                     )}
                 </div>

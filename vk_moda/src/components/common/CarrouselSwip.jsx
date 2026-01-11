@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import foto0 from "../../img/Coleccion/coleccionPic1.jpg"
@@ -11,6 +12,13 @@ import 'swiper/css/pagination';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 function CarrouselSwip() {
+  useEffect(() => {
+    [foto0, foto1, foto1b, foto2, foto3].forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
+
   return (
     <div className="w-full">
       {/* Mobile: ancho completo, Desktop: contenedor con max-width */}
@@ -26,6 +34,8 @@ function CarrouselSwip() {
               modules={[Navigation, Pagination, A11y, Autoplay]}
               spaceBetween={0}
               slidesPerView={1}
+              loop={true}
+              speed={700}
               navigation={{
                 nextEl: '.swiper-button-next-custom',
                 prevEl: '.swiper-button-prev-custom',
@@ -33,11 +43,21 @@ function CarrouselSwip() {
               autoplay={{
                 delay: 5000,
                 disableOnInteraction: false,
+                waitForTransition: true,
               }}
               pagination={{ 
                 clickable: true,
                 dynamicBullets: true,
                 el: '.swiper-pagination-custom',
+                renderBullet: (index, className) => {
+                  return `<span class="${className} w-2.5 h-2.5 bg-neutral-400 rounded-full cursor-pointer transition-all duration-300 hover:bg-accent-600 hover:scale-125"></span>`;
+                },
+              }}
+              onTouchEnd={(swiper) => {
+                if (swiper?.autoplay) {
+                  swiper.autoplay.stop();
+                  swiper.autoplay.start();
+                }
               }}
               breakpoints={{
                 0: { slidesPerView: 1, spaceBetween: 0 },
@@ -46,14 +66,16 @@ function CarrouselSwip() {
                 1024: { slidesPerView: 2, slidesPerGroup: 2, spaceBetween: 24 },
                 1280: { slidesPerView: 2, slidesPerGroup: 2, spaceBetween: 32 },
               }}
-              className="rounded-none overflow-visible"
+              className="rounded-none overflow-hidden lg:overflow-visible bg-primary-900"
             >
               <SwiperSlide>
-                <div className="relative overflow-hidden group h-[78vh] min-h-[480px] md:h-[72vh] md:min-h-[520px] lg:h-[75vh] lg:min-h-[620px] lg:bg-primary-900">
+                <div className="relative overflow-hidden group h-[78vh] min-h-[480px] md:h-[72vh] md:min-h-[520px] lg:h-[75vh] lg:min-h-[620px] bg-primary-900">
                   <img 
                     className='w-full h-full object-cover lg:object-contain transition-transform duration-700 group-hover:scale-105 lg:group-hover:scale-100' 
                     src={foto0} 
                     alt="Colección 2026" 
+                    loading="eager"
+                    decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
                   <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
@@ -64,11 +86,13 @@ function CarrouselSwip() {
               </SwiperSlide>
 
               <SwiperSlide>
-                <div className="relative overflow-hidden group h-[78vh] min-h-[480px] md:h-[72vh] md:min-h-[520px] lg:h-[75vh] lg:min-h-[620px] lg:bg-primary-900">
+                <div className="relative overflow-hidden group h-[78vh] min-h-[480px] md:h-[72vh] md:min-h-[520px] lg:h-[75vh] lg:min-h-[620px] bg-primary-900">
                   <img 
                     className='w-full h-full object-cover lg:object-contain transition-transform duration-700 group-hover:scale-105 lg:group-hover:scale-100' 
                     src={foto1} 
                     alt="Colección 1" 
+                    loading="eager"
+                    decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
                   <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
@@ -79,11 +103,13 @@ function CarrouselSwip() {
               </SwiperSlide>
 
               <SwiperSlide>
-                <div className="relative overflow-hidden group h-[78vh] min-h-[480px] md:h-[72vh] md:min-h-[520px] lg:h-[75vh] lg:min-h-[620px] lg:bg-primary-900">
+                <div className="relative overflow-hidden group h-[78vh] min-h-[480px] md:h-[72vh] md:min-h-[520px] lg:h-[75vh] lg:min-h-[620px] bg-primary-900">
                   <img 
                     className='w-full h-full object-cover lg:object-contain transition-transform duration-700 group-hover:scale-105 lg:group-hover:scale-100' 
                     src={foto1b} 
                     alt="Colección 2026 - Look" 
+                    loading="eager"
+                    decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
                   <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
@@ -94,11 +120,13 @@ function CarrouselSwip() {
               </SwiperSlide>
 
               <SwiperSlide>
-                <div className="relative overflow-hidden group h-[78vh] min-h-[480px] md:h-[72vh] md:min-h-[520px] lg:h-[75vh] lg:min-h-[620px] lg:bg-primary-900">
+                <div className="relative overflow-hidden group h-[78vh] min-h-[480px] md:h-[72vh] md:min-h-[520px] lg:h-[75vh] lg:min-h-[620px] bg-primary-900">
                   <img 
                     className='w-full h-full object-cover lg:object-contain transition-transform duration-700 group-hover:scale-105 lg:group-hover:scale-100' 
                     src={foto2} 
                     alt="Colección 2" 
+                    loading="eager"
+                    decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
                   <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
@@ -109,11 +137,13 @@ function CarrouselSwip() {
               </SwiperSlide>
 
               <SwiperSlide>
-                <div className="relative overflow-hidden group h-[78vh] min-h-[480px] md:h-[72vh] md:min-h-[520px] lg:h-[75vh] lg:min-h-[620px] lg:bg-primary-900">
+                <div className="relative overflow-hidden group h-[78vh] min-h-[480px] md:h-[72vh] md:min-h-[520px] lg:h-[75vh] lg:min-h-[620px] bg-primary-900">
                   <img 
                     className='w-full h-full object-cover lg:object-contain transition-transform duration-700 group-hover:scale-105 lg:group-hover:scale-100' 
                     src={foto3} 
                     alt="Colección 3" 
+                    loading="eager"
+                    decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
                   <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
@@ -132,11 +162,7 @@ function CarrouselSwip() {
       </div>
 
       {/* Paginación personalizada - Centrada y moderna */}
-      <div className="swiper-pagination-custom flex justify-center items-center gap-4 mt-10 px-4">
-        <div className="swiper-pagination-bullet w-2.5 h-2.5 bg-neutral-400 rounded-full cursor-pointer transition-all duration-300 hover:bg-accent-600 hover:scale-125"></div>
-        <div className="swiper-pagination-bullet w-2.5 h-2.5 bg-neutral-400 rounded-full cursor-pointer transition-all duration-300 hover:bg-accent-600 hover:scale-125"></div>
-        <div className="swiper-pagination-bullet w-2.5 h-2.5 bg-neutral-400 rounded-full cursor-pointer transition-all duration-300 hover:bg-accent-600 hover:scale-125"></div>
-      </div>
+      <div className="swiper-pagination-custom flex justify-center items-center gap-4 mt-10 px-4"></div>
     </div>
   )
 }

@@ -9,4 +9,8 @@ html {
 
 body {
   overflow-x: hidden;
+  background: #faf8f6;
+  color: #1c1917;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
