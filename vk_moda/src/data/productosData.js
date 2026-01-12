@@ -27,6 +27,8 @@ import vestido1 from '../img/Productos/vestidos/vestido1.jpg'
 import vestido2 from '../img/Productos/vestidos/vestido2.jpg'
 import vestido3 from '../img/Productos/vestidos/vestido3.jpg'
 import vestido5 from '../img/Productos/vestidos/vestido5.jpg'
+import vestido8 from '../img/Productos/vestidos/vestido8.jpeg'
+import vestido9 from '../img/Productos/vestidos/vestido9.jpeg'
 
 import joya1 from '../img/Productos/joyas/joya1.jpg'
 import joya2 from '../img/Productos/joyas/joya2.jpg'
@@ -35,6 +37,14 @@ import joya4 from '../img/Productos/joyas/joya4.jpg'
 import joya5 from '../img/Productos/joyas/joya5.jpg'
 import joya6 from '../img/Productos/joyas/joya6.jpg'
 import joya7 from '../img/Productos/joyas/joya7.jpg'
+
+import joya8 from '../img/Productos/joyas/joya8.jpeg'
+import joya9 from '../img/Productos/joyas/joya9.jpeg'
+import joya10 from '../img/Productos/joyas/joya10.jpeg'
+import joya11 from '../img/Productos/joyas/joya11.jpeg'
+
+import hombre1 from '../img/Productos/hombre/homvbre1.jpeg'
+import hombre2 from '../img/Productos/hombre/hombre2.jpeg'
 
 export const productosBolsos = [
     {
@@ -232,6 +242,21 @@ export const productosVestidos = [
         precio: "$18000",
         categoria: "vestidos"
     }
+    ,
+    {
+        id: 5,
+        image: vestido8,
+        name: "Top rojo de encaje con breteles",
+        precio: "$18000",
+        categoria: "vestidos"
+    },
+    {
+        id: 6,
+        image: vestido9,
+        name: "Vestido midi animal print combinado",
+        precio: "$18000",
+        categoria: "vestidos"
+    }
 ]
 
 export const productosJoyeria = [
@@ -283,5 +308,51 @@ export const productosJoyeria = [
         name: "Collar de moda",
         precio: "$5800",
         categoria: "joyeria"
+    }
+    ,
+    {
+        id: 8,
+        image: joya8,
+        name: "Aros dorados texturados con detalle triangular",
+        precio: "$5800",
+        categoria: "joyeria"
+    },
+    {
+        id: 9,
+        image: joya9,
+        name: "Aros argolla dorados con flor animal print",
+        precio: "$5800",
+        categoria: "joyeria"
+    },
+    {
+        id: 10,
+        image: joya10,
+        name: "Aros flor de resina ámbar con base dorada",
+        precio: "$5800",
+        categoria: "joyeria"
+    },
+    {
+        id: 11,
+        image: joya11,
+        name: "Aros con argollas doradas y flores de resina ámbar",
+        precio: "$5800",
+        categoria: "joyeria"
+    }
+]
+
+export const productosHombre = [
+    {
+        id: 1,
+        image: hombre1,
+        name: "Camisa polo celeste cuello mao",
+        precio: "$18000",
+        categoria: "hombre"
+    },
+    {
+        id: 2,
+        image: hombre2,
+        name: "Remera roja estampada",
+        precio: "$18000",
+        categoria: "hombre"
     }
 ]

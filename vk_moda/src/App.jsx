@@ -14,6 +14,7 @@ const Bolsos = lazy(() => import("./components/Categorias/Bolsos"))
 const Indumentaria = lazy(() => import("./components/Categorias/Indumentaria"))
 const Joyeria = lazy(() => import("./components/Categorias/Joyeria"))
 const Vestidos = lazy(() => import("./components/Categorias/Vestidos"))
+const Hombre = lazy(() => import("./components/Categorias/Hombre"))
 
 const SeccionEditorialModa = lazy(() => import('./components/home/SeccionEditorialModa'))
 const SeccionInspiracionModa = lazy(() => import('./components/home/SeccionInspiracionModa'))
@@ -106,6 +107,7 @@ function App() {
           <Route path="/indumentaria" element={<Indumentaria />}></Route>
           <Route path="/joyeria" element={<Joyeria />}></Route>
           <Route path="/vestidos" element={<Vestidos />}></Route>
+          <Route path="/hombre" element={<Hombre />}></Route>
           <Route path="*" element={<NotFound />}></Route>
         </Routes>
       </Suspense>

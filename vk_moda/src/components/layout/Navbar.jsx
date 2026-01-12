@@ -9,7 +9,7 @@ function Navbar() {
     const [searchOpen, setSearchOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
 
-    const isCategoryPage = ['/vestidos', '/bolsos', '/indumentaria', '/joyeria'].includes(location.pathname);
+    const isCategoryPage = ['/vestidos', '/bolsos', '/indumentaria', '/joyeria', '/hombre'].includes(location.pathname);
 
     useEffect(() => {
         const handleScroll = () => {

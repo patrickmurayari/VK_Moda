@@ -2,6 +2,7 @@ import vestidos from '../img/Categoria/fotovestido.jpg'
 import carteras from '../img/Categoria/bolsofoto.jpg'
 import ropapersonalizada from '../img/Categoria/ropapersonalizada1.jpg'
 import joya1 from '../img/Categoria/fotojoyas.jpg'
+import hombreFoto from '../img/Categoria/hombrefoto.jpg'
 
 export const ProductsCategoria = [
     {
@@ -30,6 +31,13 @@ export const ProductsCategoria = [
         id_name: "joyeria",
         image: joya1,
         name: "JOYERIA",
+        precio: "$3519",
+    },
+    {
+        id: 5,
+        id_name: "hombre",
+        image: hombreFoto,
+        name: "INDUMENTARIA HOMBRE",
         precio: "$3519",
     },
 ]
