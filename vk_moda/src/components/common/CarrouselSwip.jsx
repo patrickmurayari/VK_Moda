@@ -34,6 +34,7 @@ function CarrouselSwip() {
               modules={[Navigation, Pagination, A11y, Autoplay]}
               spaceBetween={0}
               slidesPerView={1}
+              slidesPerGroup={1}
               loop={true}
               speed={700}
               navigation={{
@@ -53,16 +54,10 @@ function CarrouselSwip() {
                   return `<span class="${className} w-2.5 h-2.5 bg-neutral-400 rounded-full cursor-pointer transition-all duration-300 hover:bg-accent-600 hover:scale-125"></span>`;
                 },
               }}
-              onTouchEnd={(swiper) => {
-                if (swiper?.autoplay) {
-                  swiper.autoplay.stop();
-                  swiper.autoplay.start();
-                }
-              }}
               breakpoints={{
-                0: { slidesPerView: 1, spaceBetween: 0 },
-                640: { slidesPerView: 1, spaceBetween: 0 },
-                768: { slidesPerView: 1, spaceBetween: 0 },
+                0: { slidesPerView: 1, slidesPerGroup: 1, spaceBetween: 0 },
+                640: { slidesPerView: 1, slidesPerGroup: 1, spaceBetween: 0 },
+                768: { slidesPerView: 1, slidesPerGroup: 1, spaceBetween: 0 },
                 1024: { slidesPerView: 2, slidesPerGroup: 2, spaceBetween: 24 },
                 1280: { slidesPerView: 2, slidesPerGroup: 2, spaceBetween: 32 },
               }}
