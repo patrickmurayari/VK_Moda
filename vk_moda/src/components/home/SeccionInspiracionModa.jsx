@@ -1,14 +1,14 @@
 import { Link } from "react-scroll";
 
 import imgLeft from "../../img/Otros/otro6.jpg";
-import imgRight from "../../img/Otros/otro3.jpg";
+import imgRight from "../../img/Otros/otro4.jpg";
 
 function SeccionInspiracionModa() {
     return (
         <section className="mt-12 md:mt-16 py-14" aria-label="Inspiración V&A">
-            <div className="px-4 md:px-8">
-                <div className="grid grid-cols-2 lg:grid-cols-2 gap-4 md:gap-6">
-                    <div className="group relative overflow-hidden rounded-2xl bg-neutral-100 aspect-[3/4] sm:aspect-[4/3] lg:aspect-[16/9]">
+            <div className="px-4 md:px-8 lg:px-0">
+                <div className="grid grid-cols-2 lg:grid-cols-2 gap-4 md:gap-6 lg:gap-8">
+                    <div className="group relative overflow-hidden rounded-none bg-neutral-100 aspect-[3/4] sm:aspect-[4/3] lg:aspect-auto lg:h-[82vh] lg:min-h-[640px] 2xl:h-[88vh] 2xl:min-h-[720px]">
                         <img
                             src={imgLeft}
                             alt="Inspiración urbana"
@@ -42,7 +42,7 @@ function SeccionInspiracionModa() {
                         </div>
                     </div>
 
-                    <div className="group relative overflow-hidden rounded-2xl bg-neutral-100 aspect-[3/4] sm:aspect-[4/3] lg:aspect-[16/9]">
+                    <div className="group relative overflow-hidden rounded-none bg-neutral-100 aspect-[3/4] sm:aspect-[4/3] lg:aspect-auto lg:h-[82vh] lg:min-h-[640px] 2xl:h-[88vh] 2xl:min-h-[720px]">
                         <img
                             src={imgRight}
                             alt="Inspiración clásica"
