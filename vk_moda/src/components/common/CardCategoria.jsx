@@ -13,13 +13,13 @@ const CardProducts = ({ products }) => {
              key={key}
              to={elem.id_name} 
              onClick={scrollToTop}
-             className="group h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-600/60 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-50 rounded-3xl"
+             className="group h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-600/60 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-50"
              aria-label={`Ver productos de ${elem.name}`}
          >
-             <div className="relative h-full flex flex-col overflow-hidden rounded-3xl bg-white border border-neutral-200/70 shadow-elegant transition-all duration-500 group-hover:-translate-y-1 group-hover:shadow-elegant-hover cursor-pointer">
+             <div className="relative h-full flex flex-col overflow-hidden bg-white border border-neutral-200/70 shadow-elegant transition-all duration-500 group-hover:-translate-y-1 group-hover:shadow-elegant-hover cursor-pointer">
                  
                  {/* Contenedor de imagen con overlay elegante */}
-                 <div className="relative w-full h-72 md:h-80 overflow-hidden bg-neutral-100">
+                 <div className="relative w-full h-80 md:h-[28rem] overflow-hidden bg-neutral-100">
                      <img
                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                          src={elem.image}
@@ -30,14 +30,7 @@ const CardProducts = ({ products }) => {
                      <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-transparent opacity-90"></div>
  
                      {/* Título sobre la imagen */}
-                     <div className="absolute inset-x-0 bottom-0 p-5">
-                         <p className="text-white/90 font-heading text-[10px] tracking-[0.28em] uppercase">
-                             Categoría
-                         </p>
-                         <h6 className="mt-2 text-white font-display text-2xl font-light tracking-wide">
-                             {elem.name}
-                         </h6>
-                     </div>
+                     <div className="hidden" aria-hidden="true"></div>
                      
                      {/* Icono de flecha en hover */}
                      <div className="absolute inset-0 flex items-center justify-center">
@@ -49,13 +42,12 @@ const CardProducts = ({ products }) => {
                  
                  {/* Contenido */}
                  <div className="flex flex-col flex-grow px-6 py-6 justify-between bg-white">
-                     <p className="text-neutral-600 font-body text-sm leading-relaxed">
-                         Descubrí piezas seleccionadas con diseño y terminaciones que elevan tu look.
-                     </p>
-                     
+                     <h6 className="text-primary-900 font-display text-2xl font-light tracking-wide">
+                         {elem.name}
+                     </h6>
                      {/* CTA */}
                      <div className="mt-6">
-                         <div className="inline-flex items-center gap-2 rounded-full bg-primary-900 px-5 py-2.5 text-[11px] font-heading font-semibold tracking-[0.22em] uppercase text-white transition-colors duration-300 group-hover:bg-accent-600">
+                         <div className="inline-flex items-center gap-2 bg-primary-900 px-5 py-2.5 text-[11px] font-heading font-semibold tracking-[0.22em] uppercase text-white transition-colors duration-300 group-hover:bg-accent-600">
                              Ver productos
                              <FiArrowRight className="w-4 h-4" />
                          </div>
@@ -63,7 +55,7 @@ const CardProducts = ({ products }) => {
                  </div>
                  
                  {/* Borde elegante en hover */}
-                 <div className="absolute inset-0 rounded-3xl border border-accent-600/0 group-hover:border-accent-600/35 transition-all duration-500 pointer-events-none"></div>
+                 <div className="absolute inset-0 border border-accent-600/0 group-hover:border-accent-600/35 transition-all duration-500 pointer-events-none"></div>
  
                  {/* Shine sutil */}
                  <div className="pointer-events-none absolute -inset-20 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
@@ -74,12 +66,12 @@ const CardProducts = ({ products }) => {
      );
     
     return (
-        <div className="md:mt-20 mt-16 px-4 md:px-8">
+        <div className="md:mt-20 mt-16 px-2 md:px-8">
             <div className="max-w-7xl mx-auto">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-6 md:mb-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 mb-6 md:mb-8">
                     {products && products.slice(0, 3).map((elem, index) => renderCard(elem, elem.id ?? index))}
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 md:gap-8 max-w-4xl mx-auto">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 md:gap-8 md:max-w-4xl md:mx-auto">
                     {products && products.slice(3, 5).map((elem, index) => renderCard(elem, elem.id ?? index + 3))}
                 </div>
             </div>

@@ -13,32 +13,30 @@ function SeccionEditorialModa() {
                 <div className="absolute bottom-0 right-0 w-80 h-80 bg-primary-900/5 rounded-full -mr-40 -mb-40"></div>
             </div>
 
-            <div className="px-4 md:px-8">
-                <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+            <div className="w-full">
+                <div className="grid lg:grid-cols-2 gap-10 lg:gap-0 items-center">
                     <div className="w-full">
-                        <div className="bg-white shadow-elegant rounded-2xl p-4 md:p-6">
-                            <div className="relative overflow-hidden rounded-xl">
-                                <img
-                                    src={editorialImg}
-                                    alt="V&A Diseño y Moda"
-                                    className="w-full h-[320px] sm:h-[420px] lg:h-[520px] object-cover"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent"></div>
+                        <div className="relative overflow-hidden">
+                            <img
+                                src={editorialImg}
+                                alt="V&A Diseño y Moda"
+                                className="w-full h-[520px] sm:h-[600px] lg:h-[760px] xl:h-[860px] object-cover"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent"></div>
 
-                                <div className="hidden lg:block absolute -bottom-8 -left-8">
-                                    <div className="bg-white rounded-2xl shadow-elegant-lg p-3">
-                                        <img
-                                            src={detailImg}
-                                            alt="Inspiración de moda"
-                                            className="w-44 h-44 object-cover rounded-xl"
-                                        />
-                                    </div>
+                            <div className="hidden lg:block absolute bottom-6 left-6">
+                                <div className="bg-white shadow-elegant-lg p-3">
+                                    <img
+                                        src={detailImg}
+                                        alt="Inspiración de moda"
+                                        className="w-44 h-44 object-cover"
+                                    />
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div className="w-full">
+                    <div className="w-full px-4 md:px-8 lg:pl-14">
                         <div className="max-w-xl">
                             <p className="text-accent-600 font-heading text-xs sm:text-sm tracking-[0.28em] uppercase">
                                 V&A DISEÑO Y MODA
@@ -60,7 +58,7 @@ function SeccionEditorialModa() {
                                     smooth={true}
                                     offset={-100}
                                     duration={500}
-                                    className="inline-flex items-center justify-center rounded-xl bg-primary-900 px-6 py-3 font-heading text-[12px] font-semibold tracking-[0.22em] uppercase text-white hover:bg-accent-600 transition-colors"
+                                    className="inline-flex items-center justify-center rounded-none bg-primary-900 px-6 py-3 font-heading text-[12px] font-semibold tracking-[0.22em] uppercase text-white hover:bg-accent-600 transition-colors"
                                 >
                                     Ver colección
                                 </Link>
@@ -71,7 +69,7 @@ function SeccionEditorialModa() {
                                     smooth={true}
                                     offset={-100}
                                     duration={500}
-                                    className="inline-flex items-center justify-center rounded-xl border border-black/15 bg-white px-6 py-3 font-heading text-[12px] font-semibold tracking-[0.22em] uppercase text-neutral-900 hover:bg-neutral-50 transition-colors"
+                                    className="inline-flex items-center justify-center rounded-none border border-black/15 bg-white px-6 py-3 font-heading text-[12px] font-semibold tracking-[0.22em] uppercase text-neutral-900 hover:bg-neutral-50 transition-colors"
                                 >
                                     Consultar arreglos
                                 </Link>
@@ -80,8 +78,8 @@ function SeccionEditorialModa() {
                     </div>
                 </div>
 
-                <div className="mt-16 md:mt-20 grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
-                    <div className="w-full">
+                <div className="mt-16 md:mt-20 lg:mt-0 grid lg:grid-cols-2 gap-10 lg:gap-0 items-center">
+                    <div className="w-full px-4 md:px-8 lg:pr-14">
                         <div className="max-w-xl">
                             <p className="text-accent-600 font-heading text-xs sm:text-sm tracking-[0.28em] uppercase">
                                 ATELIER & DETALLES
@@ -103,7 +101,7 @@ function SeccionEditorialModa() {
                                     smooth={true}
                                     offset={-100}
                                     duration={500}
-                                    className="inline-flex items-center justify-center rounded-xl bg-primary-900 px-6 py-3 font-heading text-[12px] font-semibold tracking-[0.22em] uppercase text-white hover:bg-accent-600 transition-colors"
+                                    className="inline-flex items-center justify-center rounded-none bg-primary-900 px-6 py-3 font-heading text-[12px] font-semibold tracking-[0.22em] uppercase text-white hover:bg-accent-600 transition-colors"
                                 >
                                     Pedir turno
                                 </Link>
@@ -114,7 +112,7 @@ function SeccionEditorialModa() {
                                     smooth={true}
                                     offset={-100}
                                     duration={500}
-                                    className="inline-flex items-center justify-center rounded-xl border border-black/15 bg-white px-6 py-3 font-heading text-[12px] font-semibold tracking-[0.22em] uppercase text-neutral-900 hover:bg-neutral-50 transition-colors"
+                                    className="inline-flex items-center justify-center rounded-none border border-black/15 bg-white px-6 py-3 font-heading text-[12px] font-semibold tracking-[0.22em] uppercase text-neutral-900 hover:bg-neutral-50 transition-colors"
                                 >
                                     Ver prendas
                                 </Link>
@@ -123,23 +121,21 @@ function SeccionEditorialModa() {
                     </div>
 
                     <div className="w-full">
-                        <div className="bg-white shadow-elegant rounded-2xl p-4 md:p-6">
-                            <div className="relative overflow-hidden rounded-xl">
-                                <img
-                                    src={editorialAltImg}
-                                    alt="Atelier V&A Diseño y Moda"
-                                    className="w-full h-[320px] sm:h-[420px] lg:h-[520px] object-cover"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent"></div>
+                        <div className="relative overflow-hidden">
+                            <img
+                                src={editorialAltImg}
+                                alt="Atelier V&A Diseño y Moda"
+                                className="w-full h-[520px] sm:h-[600px] lg:h-[760px] xl:h-[860px] object-cover"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent"></div>
 
-                                <div className="hidden lg:block absolute -bottom-8 -right-8">
-                                    <div className="bg-white rounded-2xl shadow-elegant-lg p-3">
-                                        <img
-                                            src={detailAltImg}
-                                            alt="Detalle de confección"
-                                            className="w-44 h-44 object-cover rounded-xl"
-                                        />
-                                    </div>
+                            <div className="hidden lg:block absolute bottom-6 right-6">
+                                <div className="bg-white shadow-elegant-lg p-3">
+                                    <img
+                                        src={detailAltImg}
+                                        alt="Detalle de confección"
+                                        className="w-44 h-44 object-cover"
+                                    />
                                 </div>
                             </div>
                         </div>

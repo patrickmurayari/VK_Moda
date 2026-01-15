@@ -1,9 +1,9 @@
 import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-import foto11 from '../../img/Carrousel/foto11.jpg';
-import foto21 from '../../img/Carrousel/foto21.jpg';
-import foto3 from '../../img/Carrousel/foto3.jpg';
+import foto11 from '../../img/Carrousel/foto111.jpg';
+import foto21 from '../../img/Carrousel/foto311.png';
+import foto3 from '../../img/Carrousel/foto211.jpg';
 
 function HeroSection() {
     const [currentSlide, setCurrentSlide] = useState(0);
