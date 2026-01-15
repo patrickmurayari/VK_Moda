@@ -19,7 +19,7 @@ const CardProducts = ({ products }) => {
              <div className="relative h-full flex flex-col overflow-hidden bg-white border border-neutral-200/70 shadow-elegant transition-all duration-500 group-hover:-translate-y-1 group-hover:shadow-elegant-hover cursor-pointer">
                  
                  {/* Contenedor de imagen con overlay elegante */}
-                 <div className="relative w-full h-80 md:h-[28rem] overflow-hidden bg-neutral-100">
+                 <div className="relative w-full h-96 md:h-[32rem] overflow-hidden bg-neutral-100">
                      <img
                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                          src={elem.image}

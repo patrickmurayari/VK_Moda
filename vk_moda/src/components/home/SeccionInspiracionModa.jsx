@@ -5,10 +5,10 @@ import imgRight from "../../img/Otros/otro4.jpg";
 
 function SeccionInspiracionModa() {
     return (
-        <section className="mt-12 md:mt-16 py-14" aria-label="Inspiración V&A">
-            <div className="px-4 md:px-8 lg:px-0">
-                <div className="grid grid-cols-2 lg:grid-cols-2 gap-4 md:gap-6 lg:gap-8">
-                    <div className="group relative overflow-hidden rounded-none bg-neutral-100 aspect-[3/4] sm:aspect-[4/3] lg:aspect-auto lg:h-[82vh] lg:min-h-[640px] 2xl:h-[88vh] 2xl:min-h-[720px]">
+        <section className="mt-12 md:mt-16 py-0 md:py-14" aria-label="Inspiración V&A">
+            <div className="px-0 md:px-8 lg:px-0">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-0 md:gap-6 lg:gap-8">
+                    <div className="group relative overflow-hidden rounded-none bg-neutral-100 h-screen w-full md:w-auto md:h-auto md:aspect-[4/3] lg:aspect-auto lg:h-[82vh] lg:min-h-[640px] 2xl:h-[88vh] 2xl:min-h-[720px]">
                         <img
                             src={imgLeft}
                             alt="Inspiración urbana"
@@ -34,7 +34,7 @@ function SeccionInspiracionModa() {
                                     smooth={true}
                                     offset={-100}
                                     duration={500}
-                                    className="inline-flex items-center justify-center rounded-xl bg-white/15 px-4 py-2 text-[10px] sm:text-xs font-heading font-semibold tracking-[0.22em] uppercase text-white backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-colors"
+                                    className="inline-flex items-center justify-center rounded-none bg-white/15 px-4 py-2 text-[10px] sm:text-xs font-heading font-semibold tracking-[0.22em] uppercase text-white backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-colors"
                                 >
                                     Ver categorías
                                 </Link>
@@ -42,7 +42,7 @@ function SeccionInspiracionModa() {
                         </div>
                     </div>
 
-                    <div className="group relative overflow-hidden rounded-none bg-neutral-100 aspect-[3/4] sm:aspect-[4/3] lg:aspect-auto lg:h-[82vh] lg:min-h-[640px] 2xl:h-[88vh] 2xl:min-h-[720px]">
+                    <div className="group relative overflow-hidden rounded-none bg-neutral-100 h-screen w-full md:w-auto md:h-auto md:aspect-[4/3] lg:aspect-auto lg:h-[82vh] lg:min-h-[640px] 2xl:h-[88vh] 2xl:min-h-[720px]">
                         <img
                             src={imgRight}
                             alt="Inspiración clásica"
@@ -68,7 +68,7 @@ function SeccionInspiracionModa() {
                                     smooth={true}
                                     offset={-100}
                                     duration={500}
-                                    className="inline-flex items-center justify-center rounded-xl bg-white/15 px-4 py-2 text-[10px] sm:text-xs font-heading font-semibold tracking-[0.22em] uppercase text-white backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-colors"
+                                    className="inline-flex items-center justify-center rounded-none bg-white/15 px-4 py-2 text-[10px] sm:text-xs font-heading font-semibold tracking-[0.22em] uppercase text-white backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-colors"
                                 >
                                     Consultar
                                 </Link>

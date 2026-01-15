@@ -1,8 +1,8 @@
-import vestidos from '../img/Categoria/fotovestido.jpg'
-import carteras from '../img/Categoria/bolsofoto.jpg'
+import vestidos from '../img/Categoria/fotovestido1.jpg'
+import carteras from '../img/Categoria/bolsofoto11.jpg'
 import ropapersonalizada from '../img/Categoria/ropapersonalizada1.jpg'
 import joya1 from '../img/Categoria/fotojoyas.jpg'
-import hombreFoto from '../img/Categoria/hombrefoto.jpg'
+import hombreFoto from '../img/Categoria/hombrefoto111.png'
 
 export const ProductsCategoria = [
     {
