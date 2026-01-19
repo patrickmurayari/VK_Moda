@@ -1,21 +1,12 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { FiChevronLeft, FiChevronRight, FiX, FiHeart } from 'react-icons/fi';
+import { FiChevronLeft, FiChevronRight, FiX, FiShoppingBag } from 'react-icons/fi';
 
 function GaleriaProductos({ productos, mostrarPrecio = true }) {
     const [modalAbierto, setModalAbierto] = useState(false);
     const [indiceSeleccionado, setIndiceSeleccionado] = useState(null);
-    const [wishlist, setWishlist] = useState({});
 
     const productoSeleccionado = indiceSeleccionado !== null ? productos[indiceSeleccionado] : null;
-
-    const toggleWishlist = (id, e) => {
-        e.stopPropagation();
-        setWishlist(prev => ({
-            ...prev,
-            [id]: !prev[id]
-        }));
-    };
 
     
     const cerrarModal = () => {
@@ -40,21 +31,19 @@ function GaleriaProductos({ productos, mostrarPrecio = true }) {
     return (
         <>
             {/* Grid de Productos */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10 lg:gap-0 lg:[&>*:not(:first-child)]:border-l lg:[&>*:not(:first-child)]:border-neutral-200">
                 {productos.map((producto, index) => {
-                    const wishlistId = producto.id ?? index;
-
                     return (
                         <div
                             key={producto.id ?? index}
-                            className="group relative"
+                            className="group relative w-full lg:px-6"
                         >
                             {/* Contenedor de imagen */}
-                            <div className="relative overflow-hidden rounded-2xl bg-neutral-50 ring-1 ring-black/5 shadow-sm transition-all duration-300 group-hover:-translate-y-0.5 group-hover:shadow-xl">
+                            <div className="relative overflow-hidden rounded-none bg-neutral-50 ring-1 ring-black/5 shadow-sm transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:shadow-xl">
                                 <img
                                     src={producto.image}
                                     alt={producto.name}
-                                    className="w-full h-auto object-cover aspect-[3/4] transition-transform duration-500 group-hover:scale-[1.03]"
+                                    className="w-full object-cover h-[78vh] sm:h-auto sm:aspect-[3/4] lg:h-[72vh] lg:aspect-auto transition-transform duration-700 group-hover:scale-[1.02]"
                                 />
 
                                 {!mostrarPrecio && (
@@ -72,34 +61,27 @@ function GaleriaProductos({ productos, mostrarPrecio = true }) {
 
                                 {/* Wishlist button */}
                                 <button
-                                    onClick={(e) => toggleWishlist(wishlistId, e)}
-                                    className="absolute top-3 right-3 p-2 bg-white rounded-full shadow-md hover:bg-gray-50 transition-colors z-10"
-                                    aria-label={wishlist[wishlistId] ? 'Eliminar de favoritos' : 'Agregar a favoritos'}
+                                    type="button"
+                                    onClick={() => {
+                                        setIndiceSeleccionado(index);
+                                        setModalAbierto(true);
+                                    }}
+                                    className="absolute left-1/2 bottom-5 -translate-x-1/2 flex items-center justify-center w-12 h-12 rounded-full bg-white/80 backdrop-blur-sm border border-white shadow-md transition-colors z-10 hover:bg-white"
+                                    aria-label="Ver producto"
                                 >
-                                    <FiHeart
-                                        className={`w-4 h-4 md:w-5 md:h-5 transition-colors ${
-                                            wishlist[wishlistId]
-                                                ? 'text-red-500 fill-current'
-                                                : 'text-gray-600'
-                                        }`}
-                                    />
+                                    <FiShoppingBag className="w-5 h-5 text-neutral-700" />
                                 </button>
-
-                                                            </div>
+                            </div>
 
                             {/* Información del producto */}
                             {mostrarPrecio && (
-                                <div className="p-3 md:p-4">
-                                    <p className="text-base md:text-lg font-bold text-primary-900 mb-2">
-                                        $ {Number(producto.precio).toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                    </p>
-
-                                    <h3 className="text-sm md:text-base font-medium text-primary-900 mb-2 line-clamp-2 hover:text-accent-600 transition-colors">
+                                <div className="pt-7 pb-6 text-center">
+                                    <h3 className="text-[15px] md:text-sm font-body font-medium tracking-wide text-accent-600 mb-1 line-clamp-2 transition-all duration-300 ease-out group-hover:-translate-y-0.5 group-hover:text-accent-700">
                                         {producto.name}
                                     </h3>
 
                                     {producto.colores && (
-                                        <p className="text-xs md:text-sm text-neutral-600">
+                                        <p className="mt-2 text-xs md:text-sm text-neutral-600">
                                             + {producto.colores} colores
                                         </p>
                                     )}
@@ -157,11 +139,6 @@ function GaleriaProductos({ productos, mostrarPrecio = true }) {
                         <h2 className="text-2xl font-bold text-primary-900 mb-2">
                             {productoSeleccionado.name}
                         </h2>
-                        {mostrarPrecio && (
-                            <p className="text-accent-600 font-bold text-2xl">
-                                $ {Number(productoSeleccionado.precio).toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                            </p>
-                        )}
                     </div>
 
                     {/* Controles Móvil */}

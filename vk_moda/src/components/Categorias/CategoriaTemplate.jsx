@@ -22,7 +22,7 @@ function CategoriaTemplate({ titulo, productos }) {
             </div>
 
             {/* Contenido */}
-            <div className="max-w-7xl mx-auto px-4 md:px-8 py-20">
+            <div className="w-full px-2 sm:px-4 md:px-8 lg:px-12 py-20">
                 {/* Decoración superior */}
                 <div className="flex items-center justify-center gap-4 mb-16">
                     <div className="h-px w-12 bg-accent-600"></div>
@@ -31,7 +31,7 @@ function CategoriaTemplate({ titulo, productos }) {
                 </div>
 
                 {/* Galería de Productos */}
-                <GaleriaProductos productos={productos} mostrarPrecio={false} />
+                <GaleriaProductos productos={productos} mostrarPrecio={true} />
 
                 {/* Decoración inferior */}
                 <div className="flex items-center justify-center gap-4 mt-20">
