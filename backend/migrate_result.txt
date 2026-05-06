@@ -1,0 +1,1 @@
+❌ ERROR: column "orden" of relation "categorias" does not exist

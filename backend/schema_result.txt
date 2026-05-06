@@ -1,0 +1,30 @@
+=== categorias ===
+  id: integer (NO)
+  slug: character varying (NO)
+  nombre: character varying (NO)
+  imagen_url: text (NO)
+  orden_visual: integer (YES)
+  created_at: timestamp with time zone (YES)
+  rows: 0
+
+=== productos ===
+  id: integer (NO)
+  categoria_id: integer (YES)
+  nombre: character varying (NO)
+  precio: numeric (YES)
+  imagen_url: text (NO)
+  colores: text (YES)
+  esta_activo: boolean (YES)
+  created_at: timestamp with time zone (YES)
+  rows: 0
+
+=== contenido_web ===
+  id: integer (NO)
+  seccion: character varying (NO)
+  posicion: character varying (YES)
+  imagen_url: text (NO)
+  titulo: character varying (YES)
+  subtitulo: text (YES)
+  orden: integer (YES)
+  created_at: timestamp with time zone (YES)
+  rows: 0

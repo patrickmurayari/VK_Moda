@@ -1,0 +1,4 @@
+✅ Seed ejecutado exitosamente
+  categorias: 5
+  productos: 42
+  contenido_web: 16
