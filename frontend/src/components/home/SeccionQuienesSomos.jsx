@@ -1,7 +1,40 @@
-import fotoabout from "../../img/fotoabout11.jpg"
-import about from "../../img/about1.jpg"
+import { useEffect, useState } from 'react';
+import { getContenido } from '../../services/api';
+
+// Imports estáticos originales (comentados — datos ahora desde API)
+// import fotoabout from "../../img/fotoabout11.jpg"
+// import about from "../../img/about1.jpg"
 
 function SeccionQuienesSomos() {
+    const [imagenes, setImagenes] = useState({});
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        getContenido('quienes_somos')
+            .then((data) => {
+                const map = {};
+                data.forEach((item) => {
+                    map[item.posicion] = item.imagen_url;
+                });
+                setImagenes(map);
+            })
+            .catch((err) => console.error('Error cargando quiénes somos:', err))
+            .finally(() => setLoading(false));
+    }, []);
+
+    if (loading) {
+        return (
+            <div className="relative mt-16 md:mt-20" id="quienes-somos">
+                <div className="flex items-center justify-center py-20">
+                    <div className="flex items-center gap-3">
+                        <div className="h-2.5 w-2.5 rounded-full bg-accent-600 animate-pulse" aria-hidden="true" />
+                        <p className="text-sm font-body text-neutral-700">Cargando…</p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="relative mt-16 md:mt-20" id="quienes-somos">
             {/* Fondo decorativo */}
@@ -16,7 +49,7 @@ function SeccionQuienesSomos() {
                     <div className="relative h-[50vh] md:h-screen group">
                         <img
                             className="absolute inset-0 w-full h-full object-cover object-[center_20%] md:object-[center_15%] transition-transform duration-700 group-hover:scale-105"
-                            src={fotoabout}
+                            src={imagenes.izquierda}
                             alt="quienes somos"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/20 to-transparent"></div>
@@ -25,7 +58,7 @@ function SeccionQuienesSomos() {
                     <div className="relative h-[50vh] md:h-screen group md:col-start-2 md:row-start-1">
                         <img
                             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                            src={about}
+                            src={imagenes.derecha}
                             alt="Nuestra empresa"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/20 to-transparent"></div>

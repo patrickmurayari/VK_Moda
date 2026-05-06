@@ -1,6 +1,17 @@
 import GaleriaProductos from "../common/GaleriaProductos";
 
-function CategoriaTemplate({ titulo, productos }) {
+function CategoriaTemplate({ titulo, productos, loading }) {
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-white flex items-center justify-center">
+                <div className="flex items-center gap-3">
+                    <div className="h-2.5 w-2.5 rounded-full bg-accent-600 animate-pulse" aria-hidden="true" />
+                    <p className="text-sm font-body text-neutral-700">Cargando productos…</p>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="min-h-screen bg-white">
             {/* Hero Section */}

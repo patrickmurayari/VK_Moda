@@ -1,17 +1,53 @@
 import { Link } from "react-scroll";
+import { useEffect, useState } from 'react';
+import { getContenido } from '../../services/api';
 
-import imgLeft from "../../img/Otros/otro6.jpg";
-import imgRight from "../../img/Otros/otro4.jpg";
+// Imports estáticos originales (comentados — datos ahora desde API)
+// import imgLeft from "../../img/Otros/otro6.jpg";
+// import imgRight from "../../img/Otros/otro4.jpg";
 
 function SeccionInspiracionModa() {
+    const [imagenes, setImagenes] = useState({});
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        getContenido('inspiracion')
+            .then((data) => {
+                const map = {};
+                data.forEach((item) => {
+                    map[item.posicion] = {
+                        image: item.imagen_url,
+                        title: item.titulo,
+                        subtitle: item.subtitulo,
+                    };
+                });
+                setImagenes(map);
+            })
+            .catch((err) => console.error('Error cargando inspiración:', err))
+            .finally(() => setLoading(false));
+    }, []);
+
+    if (loading) {
+        return (
+            <section className="mt-12 md:mt-16 py-14" aria-label="Inspiración V&A">
+                <div className="flex items-center justify-center py-20">
+                    <div className="flex items-center gap-3">
+                        <div className="h-2.5 w-2.5 rounded-full bg-accent-600 animate-pulse" aria-hidden="true" />
+                        <p className="text-sm font-body text-neutral-700">Cargando…</p>
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
     return (
         <section className="mt-12 md:mt-16 py-0 md:py-14" aria-label="Inspiración V&A">
             <div className="px-0 md:px-8 lg:px-0">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-0 md:gap-6 lg:gap-8">
                     <div className="group relative overflow-hidden rounded-none bg-neutral-100 h-screen w-full md:w-auto md:h-auto md:aspect-[4/3] lg:aspect-auto lg:h-[82vh] lg:min-h-[640px] 2xl:h-[88vh] 2xl:min-h-[720px]">
                         <img
-                            src={imgLeft}
-                            alt="Inspiración urbana"
+                            src={imagenes.izquierda?.image}
+                            alt={imagenes.izquierda?.title || "Inspiración urbana"}
                             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-transparent"></div>
@@ -21,10 +57,10 @@ function SeccionInspiracionModa() {
                                 INSPIRACIÓN
                             </p>
                             <h3 className="mt-2 text-white font-display text-xl sm:text-2xl lg:text-4xl font-light leading-tight">
-                                Looks urbanos
+                                {imagenes.izquierda?.title || "Looks urbanos"}
                             </h3>
                             <p className="mt-2 text-white/85 text-xs sm:text-sm lg:text-base font-light max-w-md">
-                                Prendas para todos los días con caída, comodidad y un toque de diseño.
+                                {imagenes.izquierda?.subtitle || "Prendas para todos los días con caída, comodidad y un toque de diseño."}
                             </p>
 
                             <div className="mt-4">
@@ -44,8 +80,8 @@ function SeccionInspiracionModa() {
 
                     <div className="group relative overflow-hidden rounded-none bg-neutral-100 h-screen w-full md:w-auto md:h-auto md:aspect-[4/3] lg:aspect-auto lg:h-[82vh] lg:min-h-[640px] 2xl:h-[88vh] 2xl:min-h-[720px]">
                         <img
-                            src={imgRight}
-                            alt="Inspiración clásica"
+                            src={imagenes.derecha?.image}
+                            alt={imagenes.derecha?.title || "Inspiración clásica"}
                             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-transparent"></div>
@@ -55,10 +91,10 @@ function SeccionInspiracionModa() {
                                 ATELIER
                             </p>
                             <h3 className="mt-2 text-white font-display text-xl sm:text-2xl lg:text-4xl font-light leading-tight">
-                                A medida
+                                {imagenes.derecha?.title || "A medida"}
                             </h3>
                             <p className="mt-2 text-white/85 text-xs sm:text-sm lg:text-base font-light max-w-md">
-                                Ajustes, arreglos y confección para que te quede perfecto.
+                                {imagenes.derecha?.subtitle || "Ajustes, arreglos y confección para que te quede perfecto."}
                             </p>
 
                             <div className="mt-4">

@@ -1,42 +1,44 @@
 import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { getContenido } from '../../services/api';
 
-import foto11 from '../../img/Carrousel/foto111.jpg';
-import foto21 from '../../img/Carrousel/foto311.png';
-import foto3 from '../../img/Carrousel/foto211.jpg';
+// Imports estáticos originales (comentados — datos ahora desde API)
+// import foto11 from '../../img/Carrousel/foto111.jpg';
+// import foto21 from '../../img/Carrousel/foto311.png';
+// import foto3 from '../../img/Carrousel/foto211.jpg';
 
 function HeroSection() {
+    const [slides, setSlides] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [currentSlide, setCurrentSlide] = useState(0);
     const [incomingSlide, setIncomingSlide] = useState(null);
     const [showIncoming, setShowIncoming] = useState(false);
-    
-    const slides = [
-        {
-            title: "Indumentaria y estilo para todos los días",
-            subtitle: "Prendas seleccionadas y confecciones con detalle para que te sientas única",
-            image: foto11
-        },
-        {
-            title: "Arreglos y ajustes de todo tipo de prendas",
-            subtitle: "Dobladillos, entalles, cierres y reparaciones: dejá tu ropa como nueva",
-            image: foto21
-        },
-        {
-            title: "Confección a medida",
-            subtitle: "Diseñamos y confeccionamos según tu idea, tu cuerpo y tu ocasión",
-            image: foto3
-        }
-    ];
 
     useEffect(() => {
-        [foto11, foto21, foto3].forEach((src) => {
-            const img = new Image();
-            img.src = src;
-        });
+        getContenido('hero')
+            .then((data) => {
+                const mapped = data.map((item) => ({
+                    title: item.titulo,
+                    subtitle: item.subtitulo,
+                    image: item.imagen_url,
+                }));
+                setSlides(mapped);
+            })
+            .catch((err) => console.error('Error cargando hero:', err))
+            .finally(() => setLoading(false));
     }, []);
 
+    // Preload images once loaded
+    useEffect(() => {
+        if (slides.length === 0) return;
+        slides.forEach((slide) => {
+            const img = new Image();
+            img.src = slide.image;
+        });
+    }, [slides]);
+
     const goToSlide = (index) => {
-        if (incomingSlide !== null) return;
+        if (incomingSlide !== null || slides.length === 0) return;
 
         setIncomingSlide(index);
         setShowIncoming(false);
@@ -59,6 +61,21 @@ function HeroSection() {
     const prevSlide = () => {
         goToSlide((currentSlide - 1 + slides.length) % slides.length);
     };
+
+    if (loading) {
+        return (
+            <div className="relative w-full h-screen bg-neutral-900 flex items-center justify-center">
+                <div className="w-full max-w-sm rounded-2xl border border-neutral-200 bg-white/70 backdrop-blur-sm p-6 shadow-elegant">
+                    <div className="flex items-center gap-3">
+                        <div className="h-2.5 w-2.5 rounded-full bg-accent-600 animate-pulse" aria-hidden="true" />
+                        <p className="text-sm font-body text-neutral-700">Cargando…</p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (slides.length === 0) return null;
 
     return (
         <div id="hero" className="relative w-full h-screen overflow-hidden">

@@ -1,7 +1,42 @@
+import { useEffect, useState } from 'react';
 import CardProducts from "../common/CardCategoria";
-import { ProductsCategoria } from "../../data/categoriasData";
+import { getCategorias } from "../../services/api";
+
+// Import estático original (comentado — datos ahora desde API)
+// import { ProductsCategoria } from "../../data/categoriasData";
 
 function SeccionCategorias() {
+    const [categories, setCategories] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        getCategorias()
+            .then((data) => {
+                const mapped = data.map((cat) => ({
+                    id: cat.id,
+                    id_name: cat.slug,
+                    image: cat.imagen_url,
+                    name: cat.nombre,
+                }));
+                setCategories(mapped);
+            })
+            .catch((err) => console.error('Error cargando categorías:', err))
+            .finally(() => setLoading(false));
+    }, []);
+
+    if (loading) {
+        return (
+            <section id="categorias" className="md:mt-24 mt-16 px-4 md:px-0">
+                <div className="flex items-center justify-center py-20">
+                    <div className="flex items-center gap-3">
+                        <div className="h-2.5 w-2.5 rounded-full bg-accent-600 animate-pulse" aria-hidden="true" />
+                        <p className="text-sm font-body text-neutral-700">Cargando categorías…</p>
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
     return (
         <section id="categorias" className="md:mt-24 mt-16 px-4 md:px-0">
             <div className="text-center mb-12 md:mb-16">
@@ -20,7 +55,7 @@ function SeccionCategorias() {
                     Descubre nuestras colecciones cuidadosamente seleccionadas, diseñadas para reflejar tu estilo único y personalidad
                 </p>
             </div>
-            <CardProducts products={ProductsCategoria} />
+            <CardProducts products={categories} />
         </section>
     );
 }
