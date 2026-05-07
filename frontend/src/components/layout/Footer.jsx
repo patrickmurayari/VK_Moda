@@ -182,7 +182,7 @@ function Footer() {
           {/* Copyright */}
           <div className="mt-6 flex flex-col items-start gap-2 md:flex-row md:items-center md:justify-between">
             <p className="text-neutral-600 text-xs flex items-center gap-1">
-              Hecho con <FiHeart className="text-accent-600 text-sm" /> por VK Moda &copy; {currentYear}
+              Hecho con <FiHeart className="text-accent-600 text-sm" /> por V&A Taylor Shop &copy; {currentYear}
             </p>
             <p className="text-neutral-500 text-xs">
               Todos los derechos reservados | Diseño y Moda
