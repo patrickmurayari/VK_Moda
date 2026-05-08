@@ -10,12 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.105.3",
     "lucide-react": "^0.561.0",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hot-toast": "^2.6.0",
     "react-icons": "^4.10.1",
-    "react-router-dom": "^6.15.0",
+    "react-router-dom": "^6.30.3",
     "react-scroll": "^1.8.9",
     "swiper": "^10.2.0"
   },

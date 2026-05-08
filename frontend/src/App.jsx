@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
-import { Routes, Route } from "react-router-dom"
+import { Routes, Route, useLocation } from "react-router-dom"
+import { Toaster } from 'react-hot-toast'
 import './App.css'
 
 import Navbar from './components/layout/Navbar'
@@ -9,6 +10,14 @@ import HeroSection from './components/home/HeroSection'
 import SeccionCategorias from './components/home/SeccionCategorias'
 import SeccionColeccion from './components/home/SeccionColeccion'
 import Footer from "./components/layout/Footer"
+
+// Admin imports
+import Login from './pages/Login'
+import ProtectedRoute from './components/admin/ProtectedRoute'
+import DashboardLayout from './components/admin/DashboardLayout'
+import AdminDashboard from './pages/admin/AdminDashboard'
+import AdminProductos from './pages/admin/AdminProductos'
+import ProductoForm from './pages/admin/ProductoForm'
 
 const Bolsos = lazy(() => import("./components/Categorias/Bolsos"))
 const Indumentaria = lazy(() => import("./components/Categorias/Indumentaria"))
@@ -86,9 +95,39 @@ function Home() {
 }
 
 function App() {
+  const location = useLocation();
+  
+  // Condicional: verdadero si la ruta actual incluye '/login' o '/admin'
+  const hideLayout = location.pathname.includes('/login') || location.pathname.includes('/admin');
+
   return (
     <>
-      <Navbar />
+      <Toaster 
+        position="top-right"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: '#333',
+            color: '#fff',
+          },
+          success: {
+            iconTheme: {
+              primary: '#10b981',
+              secondary: '#fff',
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: '#ef4444',
+              secondary: '#fff',
+            },
+          },
+        }}
+      />
+      
+      {/* Se renderiza Navbar solo si hideLayout es false */}
+      {!hideLayout && <Navbar />}
+
       <Suspense
         fallback={
           <div className="min-h-[40vh] flex items-center justify-center px-6">
@@ -102,18 +141,39 @@ function App() {
         }
       >
         <Routes>
+          {/* Rutas públicas */}
           <Route path="/" element={<Home />}></Route>
           <Route path="/bolsos" element={<Bolsos />}></Route>
           <Route path="/indumentaria" element={<Indumentaria />}></Route>
           <Route path="/joyeria" element={<Joyeria />}></Route>
           <Route path="/vestidos" element={<Vestidos />}></Route>
           <Route path="/hombre" element={<Hombre />}></Route>
+          
+          {/* Rutas de autenticación */}
+          <Route path="/login" element={<Login />} />
+          
+          {/* Rutas de administración */}
+          <Route path="/admin" element={
+            <ProtectedRoute>
+              <DashboardLayout />
+            </ProtectedRoute>
+          }>
+            <Route index element={<AdminDashboard />} />
+            <Route path="productos" element={<AdminProductos />} />
+            <Route path="productos/nuevo" element={<ProductoForm />} />
+            <Route path="productos/editar/:id" element={<ProductoForm />} />
+          </Route>
+          
           <Route path="*" element={<NotFound />}></Route>
         </Routes>
       </Suspense>
-      <div className="mt-4">
-        <Footer/>
-      </div>
+
+      {/* Se renderiza Footer solo si hideLayout es false */}
+      {!hideLayout && (
+        <div className="mt-4">
+          <Footer/>
+        </div>
+      )}
     </>
   )
 }
