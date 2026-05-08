@@ -6,6 +6,7 @@ const db = require('./src/config/db');
 const categoriasRoutes = require('./src/routes/categoriasRoutes');
 const productosRoutes = require('./src/routes/productosRoutes');
 const contenidoRoutes = require('./src/routes/contenidoRoutes');
+const adminRoutes = require('./src/routes/adminRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -32,6 +33,7 @@ app.get('/api/db-test', async (req, res) => {
 app.use('/api/categorias', categoriasRoutes);
 app.use('/api/productos', productosRoutes);
 app.use('/api/contenido', contenidoRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Iniciar servidor solo en desarrollo (no en Vercel)
 if (process.env.NODE_ENV !== 'production') {
