@@ -18,6 +18,11 @@ import DashboardLayout from './components/admin/DashboardLayout'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminProductos from './pages/admin/AdminProductos'
 import ProductoForm from './pages/admin/ProductoForm'
+import AdminPedidos from './pages/admin/AdminPedidos'
+import PedidoDetalle from './pages/admin/PedidoDetalle'
+import OrderWizard from './pages/admin/OrderWizard'
+import AdminClientes from './pages/admin/AdminClientes'
+import ClienteHistoria from './pages/admin/ClienteHistoria'
 
 const Bolsos = lazy(() => import("./components/Categorias/Bolsos"))
 const Indumentaria = lazy(() => import("./components/Categorias/Indumentaria"))
@@ -159,6 +164,11 @@ function App() {
             </ProtectedRoute>
           }>
             <Route index element={<AdminDashboard />} />
+            <Route path="pedidos" element={<AdminPedidos />} />
+            <Route path="pedidos/nuevo" element={<OrderWizard />} />
+            <Route path="pedidos/:id" element={<PedidoDetalle />} />
+            <Route path="clientes" element={<AdminClientes />} />
+            <Route path="clientes/:id" element={<ClienteHistoria />} />
             <Route path="productos" element={<AdminProductos />} />
             <Route path="productos/nuevo" element={<ProductoForm />} />
             <Route path="productos/editar/:id" element={<ProductoForm />} />
