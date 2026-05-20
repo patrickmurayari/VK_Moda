@@ -1,6 +1,10 @@
-import { Link } from "react-scroll";
 import { useEffect, useState } from 'react';
 import { getContenido } from '../../services/api';
+
+const scrollTo = (id) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
 
 // Imports estáticos originales (comentados — datos ahora desde API)
 // import imgLeft from "../../img/Otros/otro6.jpg";
@@ -64,16 +68,12 @@ function SeccionInspiracionModa() {
                             </p>
 
                             <div className="mt-4">
-                                <Link
-                                    to="categorias"
-                                    spy={true}
-                                    smooth={true}
-                                    offset={-100}
-                                    duration={500}
+                                <button
+                                    onClick={() => scrollTo('categorias')}
                                     className="inline-flex items-center justify-center rounded-none bg-white/15 px-4 py-2 text-[10px] sm:text-xs font-heading font-semibold tracking-[0.22em] uppercase text-white backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-colors"
                                 >
                                     Ver categorías
-                                </Link>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -98,16 +98,12 @@ function SeccionInspiracionModa() {
                             </p>
 
                             <div className="mt-4">
-                                <Link
-                                    to="contactos"
-                                    spy={true}
-                                    smooth={true}
-                                    offset={-100}
-                                    duration={500}
+                                <button
+                                    onClick={() => scrollTo('contactos')}
                                     className="inline-flex items-center justify-center rounded-none bg-white/15 px-4 py-2 text-[10px] sm:text-xs font-heading font-semibold tracking-[0.22em] uppercase text-white backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-colors"
                                 >
                                     Consultar
-                                </Link>
+                                </button>
                             </div>
                         </div>
                     </div>

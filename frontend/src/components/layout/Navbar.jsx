@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Link } from "react-scroll"
 import { Link as RouterLink, useLocation } from "react-router-dom";
 import { Search, Menu, X } from 'lucide-react';
+
+const scrollTo = (id) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
 
 function Navbar() {
     const location = useLocation();
@@ -81,7 +85,7 @@ function Navbar() {
                                 </div>
                             </RouterLink>
                         ) : (
-                            <Link to="hero" spy={true} smooth={true} offset={-100} duration={500}>
+                            <button onClick={() => scrollTo('hero')} className="cursor-pointer">
                                 <div className="relative">
                                     <div className={`w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center transition-colors duration-300 ${
                                         isScrolled || menuOpen ? 'bg-white shadow-elegant' : 'bg-white/90'
@@ -93,62 +97,42 @@ function Navbar() {
                                         />
                                     </div>
                                 </div>
-                            </Link>
+                            </button>
                         )}
                     </div>
 
                     {!isCategoryPage && (
                         <div className="hidden md:flex items-center gap-8">
-                        <Link 
-                            to="hero" 
-                            spy={true} 
-                            smooth={true} 
-                            offset={-100} 
-                            duration={500} 
+                        <button 
+                            onClick={() => scrollTo('hero')}
                             className={`relative text-base font-normal transition-colors duration-300 ${isScrolled ? 'text-gray-700' : 'text-white'} hover:text-orange-400 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-accent-600 after:scale-x-0 after:origin-center after:transition-transform after:duration-300 after:ease-out hover:after:scale-x-100`}
                         >
                             Inicio
-                        </Link>
-                        <Link 
-                            to="categorias" 
-                            spy={true} 
-                            smooth={true} 
-                            offset={-100} 
-                            duration={500} 
+                        </button>
+                        <button 
+                            onClick={() => scrollTo('categorias')}
                             className={`relative text-base font-normal transition-colors duration-300 ${isScrolled ? 'text-gray-700' : 'text-white'} hover:text-orange-400 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-accent-600 after:scale-x-0 after:origin-center after:transition-transform after:duration-300 after:ease-out hover:after:scale-x-100`}
                         >
                             Categorías
-                        </Link>
-                        <Link 
-                            to="coleccion" 
-                            spy={true} 
-                            smooth={true} 
-                            offset={-100} 
-                            duration={500} 
+                        </button>
+                        <button 
+                            onClick={() => scrollTo('coleccion')}
                             className={`relative text-base font-normal transition-colors duration-300 ${isScrolled ? 'text-gray-700' : 'text-white'} hover:text-orange-400 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-accent-600 after:scale-x-0 after:origin-center after:transition-transform after:duration-300 after:ease-out hover:after:scale-x-100`}
                         >
                             Colección
-                        </Link>
-                        <Link 
-                            to="quienes-somos" 
-                            spy={true} 
-                            smooth={true} 
-                            offset={-100} 
-                            duration={500} 
+                        </button>
+                        <button 
+                            onClick={() => scrollTo('quienes-somos')}
                             className={`relative text-base font-normal transition-colors duration-300 ${isScrolled ? 'text-gray-700' : 'text-white'} hover:text-orange-400 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-accent-600 after:scale-x-0 after:origin-center after:transition-transform after:duration-300 after:ease-out hover:after:scale-x-100`}
                         >
                             Quiénes Somos
-                        </Link>
-                        <Link 
-                            to="contactos" 
-                            spy={true} 
-                            smooth={true} 
-                            offset={-100} 
-                            duration={500} 
+                        </button>
+                        <button 
+                            onClick={() => scrollTo('contactos')}
                             className={`relative text-base font-normal transition-colors duration-300 ${isScrolled ? 'text-gray-700' : 'text-white'} hover:text-orange-400 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-accent-600 after:scale-x-0 after:origin-center after:transition-transform after:duration-300 after:ease-out hover:after:scale-x-100`}
                         >
                             Contáctanos
-                        </Link>
+                        </button>
                         </div>
                     )}
 
@@ -225,91 +209,56 @@ function Navbar() {
 
                         <div className="flex-1 overflow-y-auto px-6 py-4">
                             <div className="flex flex-col">
-                                <Link 
-                                    to="hero" 
-                                    spy={true} 
-                                    smooth={true} 
-                                    onClick={closeMenu} 
-                                    offset={-100} 
-                                    duration={500} 
+                                <button 
+                                    onClick={() => { closeMenu(); scrollTo('hero'); }} 
                                     className="group flex items-center justify-between py-4 border-b border-black/10"
                                 >
                                     <span className="font-heading text-[15px] font-semibold tracking-[0.22em] uppercase text-neutral-900/90 transition-colors duration-300">Inicio</span>
                                     <span className="h-1.5 w-1.5 rounded-full transition-colors duration-300"></span>
-                                </Link>
-                                <Link 
-                                    to="categorias" 
-                                    spy={true} 
-                                    smooth={true} 
-                                    onClick={closeMenu} 
-                                    offset={-100} 
-                                    duration={500} 
+                                </button>
+                                <button 
+                                    onClick={() => { closeMenu(); scrollTo('categorias'); }} 
                                     className="group flex items-center justify-between py-4 border-b border-black/10"
                                 >
                                     <span className="font-heading text-[15px] font-semibold tracking-[0.22em] uppercase text-neutral-900/90 transition-colors duration-300">Categorías</span>
                                     <span className="h-1.5 w-1.5 rounded-full transition-colors duration-300"></span>
-                                </Link>
-                                <Link 
-                                    to="coleccion" 
-                                    spy={true} 
-                                    smooth={true} 
-                                    onClick={closeMenu} 
-                                    offset={-100} 
-                                    duration={500} 
+                                </button>
+                                <button 
+                                    onClick={() => { closeMenu(); scrollTo('coleccion'); }} 
                                     className="group flex items-center justify-between py-4 border-b border-black/10"
                                 >
                                     <span className="font-heading text-[15px] font-semibold tracking-[0.22em] uppercase text-neutral-900/90 transition-colors duration-300">Colección</span>
                                     <span className="h-1.5 w-1.5 rounded-full transition-colors duration-300"></span>
-                                </Link>
-                                <Link 
-                                    to="quienes-somos" 
-                                    spy={true} 
-                                    smooth={true} 
-                                    onClick={closeMenu} 
-                                    offset={-100} 
-                                    duration={500} 
+                                </button>
+                                <button 
+                                    onClick={() => { closeMenu(); scrollTo('quienes-somos'); }} 
                                     className="group flex items-center justify-between py-4 border-b border-black/10"
                                 >
                                     <span className="font-heading text-[15px] font-semibold tracking-[0.22em] uppercase text-neutral-900/90 transition-colors duration-300">Quiénes Somos</span>
                                     <span className="h-1.5 w-1.5 rounded-full  transition-colors duration-300"></span>
-                                </Link>
-                                <Link 
-                                    to="contactos" 
-                                    spy={true} 
-                                    smooth={true} 
-                                    onClick={closeMenu} 
-                                    offset={-100} 
-                                    duration={500} 
+                                </button>
+                                <button 
+                                    onClick={() => { closeMenu(); scrollTo('contactos'); }} 
                                     className="group flex items-center justify-between py-4"
                                 >
                                     <span className="font-heading text-[15px] font-semibold tracking-[0.22em] uppercase text-neutral-900/90 transition-colors duration-300">Contáctanos</span>
                                     <span className="h-1.5 w-1.5 rounded-full  transition-colors duration-300"></span>
-                                </Link>
+                                </button>
                             </div>
 
                             <div className="mt-6 grid grid-cols-1 gap-3">
-                                <Link
-                                    to="categorias"
-                                    spy={true}
-                                    smooth={true}
-                                    onClick={closeMenu}
-                                    offset={-100}
-                                    duration={500}
+                                <button
+                                    onClick={() => { closeMenu(); scrollTo('categorias'); }}
                                     className="w-full rounded-xl bg-orange-600 text-white px-4 py-3 text-center font-heading text-[12px] font-semibold tracking-[0.24em] uppercase hover:bg-orange-600 transition-colors"
                                 >
                                     Ver productos
-                                </Link>
-                                <Link
-                                    to="contactos"
-                                    spy={true}
-                                    smooth={true}
-                                    onClick={closeMenu}
-                                    offset={-100}
-                                    duration={500}
+                                </button>
+                                <button
+                                    onClick={() => { closeMenu(); scrollTo('contactos'); }}
                                     className="w-full rounded-xl border border-black/15 bg-white/60 px-4 py-3 text-center font-heading text-[12px] font-semibold tracking-[0.24em] uppercase text-neutral-900 hover:bg-white transition-colors"
                                 >
                                     Escribinos
-                                </Link>
+                                </button>
                             </div>
                         </div>
                     </div>

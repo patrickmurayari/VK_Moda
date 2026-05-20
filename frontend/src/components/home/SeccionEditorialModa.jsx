@@ -1,6 +1,10 @@
-import { Link } from "react-scroll";
 import { useEffect, useState } from 'react';
 import { getContenido } from '../../services/api';
+
+const scrollTo = (id) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
 
 // Imports estáticos originales (comentados — datos ahora desde API)
 // import editorialImg from "../../img/Otros/otro7.jpg";
@@ -84,27 +88,19 @@ function SeccionEditorialModa() {
                             </p>
 
                             <div className="mt-8 flex flex-col sm:flex-row gap-4">
-                                <Link
-                                    to="coleccion"
-                                    spy={true}
-                                    smooth={true}
-                                    offset={-100}
-                                    duration={500}
+                                <button
+                                    onClick={() => scrollTo('coleccion')}
                                     className="inline-flex items-center justify-center rounded-none bg-primary-900 px-6 py-3 font-heading text-[12px] font-semibold tracking-[0.22em] uppercase text-white hover:bg-accent-600 transition-colors"
                                 >
                                     Ver colección
-                                </Link>
+                                </button>
 
-                                <Link
-                                    to="contactos"
-                                    spy={true}
-                                    smooth={true}
-                                    offset={-100}
-                                    duration={500}
+                                <button
+                                    onClick={() => scrollTo('contactos')}
                                     className="inline-flex items-center justify-center rounded-none border border-black/15 bg-white px-6 py-3 font-heading text-[12px] font-semibold tracking-[0.22em] uppercase text-neutral-900 hover:bg-neutral-50 transition-colors"
                                 >
                                     Consultar arreglos
-                                </Link>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -127,27 +123,19 @@ function SeccionEditorialModa() {
                             </p>
 
                             <div className="mt-8 flex flex-col sm:flex-row gap-4">
-                                <Link
-                                    to="contactos"
-                                    spy={true}
-                                    smooth={true}
-                                    offset={-100}
-                                    duration={500}
+                                <button
+                                    onClick={() => scrollTo('contactos')}
                                     className="inline-flex items-center justify-center rounded-none bg-primary-900 px-6 py-3 font-heading text-[12px] font-semibold tracking-[0.22em] uppercase text-white hover:bg-accent-600 transition-colors"
                                 >
                                     Pedir turno
-                                </Link>
+                                </button>
 
-                                <Link
-                                    to="categorias"
-                                    spy={true}
-                                    smooth={true}
-                                    offset={-100}
-                                    duration={500}
+                                <button
+                                    onClick={() => scrollTo('categorias')}
                                     className="inline-flex items-center justify-center rounded-none border border-black/15 bg-white px-6 py-3 font-heading text-[12px] font-semibold tracking-[0.22em] uppercase text-neutral-900 hover:bg-neutral-50 transition-colors"
                                 >
                                     Ver prendas
-                                </Link>
+                                </button>
                             </div>
                         </div>
                     </div>
