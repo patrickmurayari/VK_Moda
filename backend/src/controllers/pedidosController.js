@@ -66,62 +66,8 @@ const createPedido = async (req, res) => {
     const { cliente_id, estado_global, fecha_entrega_prometida, senia_pagada,
             metodo_pago, observaciones_generales, items } = req.body;
 
-    // Validaciones
-    if (!cliente_id) {
-        return res.status(400).json({ error: 'cliente_id es requerido' });
-    }
-
-    if (!items || !Array.isArray(items) || items.length === 0) {
-        return res.status(400).json({ error: 'El pedido debe tener al menos un ítem' });
-    }
-
-    // Validar cada ítem
-    for (let i = 0; i < items.length; i++) {
-        const item = items[i];
-        if (!item.descripcion_prenda || item.descripcion_prenda.trim().length === 0) {
-            return res.status(400).json({ error: `Ítem ${i + 1}: descripcion_prenda es requerido` });
-        }
-        const precio = parseFloat(item.precio_item);
-        if (isNaN(precio) || precio <= 0) {
-            return res.status(400).json({ error: `Ítem ${i + 1}: precio_item debe ser positivo mayor a cero` });
-        }
-        // Validar item_padre_id si viene
-        if (item.item_padre_id !== undefined && item.item_padre_id !== null) {
-            const padreExists = await db.query('SELECT id FROM items_pedido WHERE id = $1', [item.item_padre_id]);
-            if (padreExists.rows.length === 0) {
-                return res.status(400).json({ error: `Ítem ${i + 1}: item_padre_id ${item.item_padre_id} no existe` });
-            }
-        }
-    }
-
-    // Verificar que el cliente existe
-    const clienteExists = await db.query('SELECT id FROM clientes WHERE id = $1', [cliente_id]);
-    if (clienteExists.rows.length === 0) {
-        return res.status(400).json({ error: 'El cliente no existe' });
-    }
-
-    // Calcular total y validar que coincida si se envía
-    const total_calculado = items.reduce((sum, item) => sum + parseFloat(item.precio_item), 0);
-    if (req.body.total_presupuestado !== undefined) {
-        const total_enviado = parseFloat(req.body.total_presupuestado);
-        const diff = Math.abs(total_calculado - total_enviado);
-        if (diff > 0.01) {
-            return res.status(400).json({
-                error: `Inconsistencia de precios: la suma de ítems ($${total_calculado}) no coincide con total_presupuestado ($${total_enviado})`
-            });
-        }
-    }
-    const total_presupuestado = total_calculado;
-
-    // Validar fecha de entrega no anterior a hoy
-    if (fecha_entrega_prometida) {
-        const hoy = new Date();
-        hoy.setHours(0, 0, 0, 0);
-        const fechaEntrega = new Date(fecha_entrega_prometida + 'T00:00:00');
-        if (fechaEntrega < hoy) {
-            return res.status(400).json({ error: 'La fecha de entrega no puede ser anterior a la fecha actual' });
-        }
-    }
+    // Validaciones realizadas por middleware validatePedido
+    const total_presupuestado = req._total_presupuestado;
 
     const { pool } = db;
     const client = await pool.connect();
@@ -212,33 +158,7 @@ const updatePedido = async (req, res) => {
     const { id } = req.params;
     const { estado_global, fecha_entrega_prometida, total_presupuestado, senia_pagada, metodo_pago, observaciones_generales } = req.body;
 
-    const estadosValidos = ['recibido', 'en_proceso', 'en_prueba', 'terminado', 'entregado', 'cancelado'];
-    if (estado_global && !estadosValidos.includes(estado_global)) {
-        return res.status(400).json({ error: `Estado inválido. Válidos: ${estadosValidos.join(', ')}` });
-    }
-
-    // Validar fecha de entrega no anterior a hoy
-    if (fecha_entrega_prometida) {
-        const hoy = new Date();
-        hoy.setHours(0, 0, 0, 0);
-        const fechaEntrega = new Date(fecha_entrega_prometida + 'T00:00:00');
-        if (fechaEntrega < hoy) {
-            return res.status(400).json({ error: 'La fecha de entrega no puede ser anterior a la fecha actual' });
-        }
-    }
-
-    // Validar consistencia de precios si se actualizan
-    if (total_presupuestado !== undefined) {
-        const total_enviado = parseFloat(total_presupuestado);
-        const itemsSum = await db.query('SELECT COALESCE(SUM(precio_item), 0) as suma FROM items_pedido WHERE pedido_id = $1', [id]);
-        const suma_items = parseFloat(itemsSum.rows[0].suma);
-        const diff = Math.abs(total_enviado - suma_items);
-        if (diff > 0.01) {
-            return res.status(400).json({
-                error: `Inconsistencia de precios: la suma de ítems ($${suma_items}) no coincide con total_presupuestado ($${total_enviado})`
-            });
-        }
-    }
+    // Validaciones realizadas por middleware validatePedidoUpdate
 
     try {
         const updates = [];
@@ -299,17 +219,7 @@ const updateItem = async (req, res) => {
     const { descripcion_prenda, tipo_trabajo, precio_item, estado_item, tela_id,
             usa_medida_existente, trae_tela, notas_especificas, medida_id } = req.body;
 
-    const estadosValidos = ['pendiente', 'cortado', 'en_confeccion', 'en_prueba', 'terminado', 'entregado'];
-    if (estado_item && !estadosValidos.includes(estado_item)) {
-        return res.status(400).json({ error: `Estado inválido. Válidos: ${estadosValidos.join(', ')}` });
-    }
-
-    if (precio_item !== undefined) {
-        const precioNum = parseFloat(precio_item);
-        if (isNaN(precioNum) || precioNum <= 0) {
-            return res.status(400).json({ error: 'El precio debe ser positivo mayor a cero' });
-        }
-    }
+    // Validaciones realizadas por middleware validateItemUpdate
 
     try {
         const updates = [];
@@ -400,10 +310,7 @@ const cambiarEstadoItem = async (req, res) => {
     const { id } = req.params;
     const { estado_nuevo, comentario } = req.body;
 
-    const estadosValidos = ['pendiente', 'cortado', 'en_confeccion', 'en_prueba', 'terminado', 'entregado'];
-    if (!estado_nuevo || !estadosValidos.includes(estado_nuevo)) {
-        return res.status(400).json({ error: `estado_nuevo inválido. Válidos: ${estadosValidos.join(', ')}` });
-    }
+    // Validaciones realizadas por middleware validateEstadoItemChange
 
     const { pool } = db;
     const client = await pool.connect();
@@ -486,10 +393,7 @@ const updateSesionPrueba = async (req, res) => {
     const { id } = req.params;
     const { fecha_planificada, estado_sesion, notas_resultado } = req.body;
 
-    const estadosValidos = ['programada', 'confirmada', 'realizada', 'cancelada'];
-    if (estado_sesion && !estadosValidos.includes(estado_sesion)) {
-        return res.status(400).json({ error: `estado_sesion inválido. Válidos: ${estadosValidos.join(', ')}` });
-    }
+    // Validaciones realizadas por middleware validateSesionPrueba
 
     try {
         const updates = [];

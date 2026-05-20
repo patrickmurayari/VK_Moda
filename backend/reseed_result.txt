@@ -1,1 +1,0 @@
-✅ Re-seed OK: cat=5 prod=42 cont=16

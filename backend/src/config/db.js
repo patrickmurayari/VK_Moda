@@ -11,7 +11,7 @@ const pool = new Pool({
     // Configuración óptima para Data Engineering:
     max: 20, // Máximo de conexiones simultáneas
     idleTimeoutMillis: 30000, // Tiempo antes de cerrar conexiones inactivas
-    connectionTimeoutMillis: 2000, // Tiempo límite para conectar
+    connectionTimeoutMillis: 10000, // Tiempo límite para conectar
 });
 
 // Verificación de conexión inicial
@@ -20,8 +20,8 @@ pool.on('connect', () => {
 });
 
 pool.on('error', (err) => {
-    console.error('❌ Error inesperado en el pool de PostgreSQL', err);
-    process.exit(-1);
+    console.error('❌ Error inesperado en el pool de PostgreSQL:', err.message);
+    // No matamos el proceso — el pool se recupera automáticamente
 });
 
 module.exports = {

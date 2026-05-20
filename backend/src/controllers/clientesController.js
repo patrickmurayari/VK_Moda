@@ -34,16 +34,7 @@ const getClienteById = async (req, res) => {
 const createCliente = async (req, res) => {
     const { nombre, apellido, email, telefono, preferencias_estilo, notas_fisonomia, medidas } = req.body;
 
-    if (!nombre || !apellido) {
-        return res.status(400).json({ error: 'Nombre y apellido son requeridos' });
-    }
-
-    if (email) {
-        const exists = await db.query('SELECT id FROM clientes WHERE email = $1', [email]);
-        if (exists.rows.length > 0) {
-            return res.status(409).json({ error: 'Ya existe un cliente con ese email' });
-        }
-    }
+    // Validaciones realizadas por middleware validateCliente
 
     const { pool } = db;
     const client = await pool.connect();
@@ -83,12 +74,7 @@ const updateCliente = async (req, res) => {
     const { id } = req.params;
     const { nombre, apellido, email, telefono, preferencias_estilo, notas_fisonomia } = req.body;
 
-    if (email) {
-        const exists = await db.query('SELECT id FROM clientes WHERE email = $1 AND id != $2', [email, id]);
-        if (exists.rows.length > 0) {
-            return res.status(409).json({ error: 'Ya existe otro cliente con ese email' });
-        }
-    }
+    // Validaciones realizadas por middleware validateClienteUpdate
 
     try {
         const updates = [];
@@ -176,9 +162,7 @@ const addMedidas = async (req, res) => {
     const { id } = req.params;
     const { medidas, notas_medida, tomada_por } = req.body;
 
-    if (!medidas || Object.keys(medidas).length === 0) {
-        return res.status(400).json({ error: 'El objeto medidas es requerido' });
-    }
+    // Validación realizada por middleware validateMedidas
 
     try {
         const clienteExists = await db.query('SELECT id FROM clientes WHERE id = $1', [id]);
@@ -203,9 +187,7 @@ const addMedidas = async (req, res) => {
 const buscarClientes = async (req, res) => {
     const { q } = req.query;
 
-    if (!q || q.trim().length < 2) {
-        return res.status(400).json({ error: 'La búsqueda debe tener al menos 2 caracteres' });
-    }
+    // Validación realizada por middleware validateBusqueda
 
     try {
         const termino = `%${q.trim().toLowerCase()}%`;

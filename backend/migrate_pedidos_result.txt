@@ -1,1 +1,0 @@
-❌ ERROR: column "creado_en" does not exist

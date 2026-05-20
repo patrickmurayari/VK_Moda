@@ -44,32 +44,14 @@ const getProductoById = async (req, res) => {
 const createProducto = async (req, res) => {
     const { nombre, precio, imagen_url, colores, categoria_id, esta_activo } = req.body;
     
-    // Validaciones
-    if (!nombre || nombre.trim().length === 0) {
-        return res.status(400).json({ error: 'El nombre es requerido' });
-    }
-    
-    const precioNum = parseFloat(precio);
-    if (isNaN(precioNum) || precioNum <= 0) {
-        return res.status(400).json({ error: 'El precio debe ser un número positivo mayor a cero' });
-    }
-    
-    if (!categoria_id) {
-        return res.status(400).json({ error: 'La categoría es requerida' });
-    }
-    
-    // Verificar que la categoría existe
-    const catCheck = await db.query('SELECT id FROM categorias WHERE id = $1', [categoria_id]);
-    if (catCheck.rows.length === 0) {
-        return res.status(400).json({ error: 'La categoría seleccionada no existe' });
-    }
-    
+    // Validaciones realizadas por middleware validateProducto
+
     try {
         const result = await db.query(`
             INSERT INTO productos (nombre, precio, imagen_url, colores, categoria_id, esta_activo)
             VALUES ($1, $2, $3, $4, $5, $6)
             RETURNING *
-        `, [nombre.trim(), precioNum, imagen_url || null, colores || null, categoria_id, esta_activo !== false]);
+        `, [nombre.trim(), parseFloat(precio), imagen_url || null, colores || null, categoria_id, esta_activo !== false]);
         
         res.status(201).json(result.rows[0]);
     } catch (err) {
@@ -83,25 +65,8 @@ const updateProducto = async (req, res) => {
     const { id } = req.params;
     const { nombre, precio, imagen_url, colores, categoria_id, esta_activo } = req.body;
     
-    // Validaciones
-    if (nombre !== undefined && nombre.trim().length === 0) {
-        return res.status(400).json({ error: 'El nombre no puede estar vacío' });
-    }
-    
-    if (precio !== undefined) {
-        const precioNum = parseFloat(precio);
-        if (isNaN(precioNum) || precioNum <= 0) {
-            return res.status(400).json({ error: 'El precio debe ser un número positivo mayor a cero' });
-        }
-    }
-    
-    if (categoria_id !== undefined) {
-        const catCheck = await db.query('SELECT id FROM categorias WHERE id = $1', [categoria_id]);
-        if (catCheck.rows.length === 0) {
-            return res.status(400).json({ error: 'La categoría seleccionada no existe' });
-        }
-    }
-    
+    // Validaciones realizadas por middleware validateProductoUpdate
+
     try {
         // Construir query dinámico
         const updates = [];

@@ -1,3 +1,0 @@
-SUPABASE_URL: https://vdatngjhpompoemllczo.supabase.co
-SUPABASE_SERVICE_KEY: present
-Storage list OK: []
