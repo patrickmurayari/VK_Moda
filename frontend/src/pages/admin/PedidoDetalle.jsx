@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { supabase } from '@/lib/supabase';
-
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+import { getPedidoById, cambiarEstadoItem as cambiarEstadoItemApi } from '@/services/api';
 
 const ESTADO_COLORS = {
     recibido: 'bg-blue-100 text-blue-800',
@@ -38,11 +37,7 @@ export default function PedidoDetalle() {
         setLoading(true);
         try {
             const { data: { session } } = await supabase.auth.getSession();
-            const res = await fetch(`${API_BASE}/admin/pedidos/${id}`, {
-                headers: { Authorization: `Bearer ${session.access_token}` },
-            });
-            if (!res.ok) throw new Error();
-            const data = await res.json();
+            const data = await getPedidoById(id, session.access_token);
             setPedido(data);
         } catch {
             toast.error('Error al cargar pedido');
@@ -56,18 +51,7 @@ export default function PedidoDetalle() {
         setCambiandoEstado(itemId);
         try {
             const { data: { session } } = await supabase.auth.getSession();
-            const res = await fetch(`${API_BASE}/admin/items/${itemId}/estado`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${session.access_token}`,
-                },
-                body: JSON.stringify({ estado_nuevo, comentario: `Cambio a ${estado_nuevo}` }),
-            });
-            if (!res.ok) {
-                const err = await res.json();
-                throw new Error(err.error);
-            }
+            await cambiarEstadoItemApi(itemId, { estado_nuevo, comentario: `Cambio a ${estado_nuevo}` }, session.access_token);
             toast.success(`Estado actualizado a ${estado_nuevo.replace('_', ' ')}`);
             fetchPedido();
         } catch (err) {

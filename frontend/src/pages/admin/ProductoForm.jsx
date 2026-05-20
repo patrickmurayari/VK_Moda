@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { supabase } from '@/lib/supabase';
-
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+import { getCategorias, getProductoById, createProducto, updateProducto } from '@/services/api';
 
 export default function ProductoForm() {
     const { id } = useParams();
@@ -39,8 +38,7 @@ export default function ProductoForm() {
 
     const fetchCategorias = async () => {
         try {
-            const res = await fetch(`${API_BASE}/categorias`);
-            const data = await res.json();
+            const data = await getCategorias();
             setCategorias(data);
         } catch (error) {
             console.error('Error al cargar categorías:', error);
@@ -52,15 +50,7 @@ export default function ProductoForm() {
         setLoading(true);
         try {
             const token = await getAccessToken();
-            const res = await fetch(`${API_BASE}/admin/productos/${id}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            
-            if (!res.ok) throw new Error('Producto no encontrado');
-            
-            const data = await res.json();
+            const data = await getProductoById(id, token);
             setFormData({
                 nombre: data.nombre || '',
                 precio: data.precio?.toString() || '',
@@ -123,32 +113,20 @@ export default function ProductoForm() {
 
         try {
             const token = await getAccessToken();
-            const url = isEdit 
-                ? `${API_BASE}/admin/productos/${id}`
-                : `${API_BASE}/admin/productos`;
-            
             const body = {
                 ...formData,
                 precio: parseFloat(formData.precio),
                 categoria_id: parseInt(formData.categoria_id)
             };
 
-            const res = await fetch(url, {
-                method: isEdit ? 'PUT' : 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(body)
-            });
-
-            if (!res.ok) {
-                const error = await res.json();
-                throw new Error(error.error || 'Error al guardar');
+            if (isEdit) {
+                await updateProducto(id, body, token);
+            } else {
+                await createProducto(body, token);
             }
 
-            toast.success(isEdit 
-                ? '¡Producto actualizado correctamente!' 
+            toast.success(isEdit
+                ? '¡Producto actualizado correctamente!'
                 : '¡Producto creado correctamente!'
             );
             navigate('/admin/productos');

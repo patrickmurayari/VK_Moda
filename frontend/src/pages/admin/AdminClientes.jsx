@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { supabase } from '@/lib/supabase';
-
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+import { getClientes, buscarClientes } from '@/services/api';
 
 export default function AdminClientes() {
     const [clientes, setClientes] = useState([]);
@@ -19,11 +18,7 @@ export default function AdminClientes() {
         setLoading(true);
         try {
             const { data: { session } } = await supabase.auth.getSession();
-            const res = await fetch(`${API_BASE}/admin/clientes`, {
-                headers: { Authorization: `Bearer ${session.access_token}` },
-            });
-            if (!res.ok) throw new Error();
-            const data = await res.json();
+            const data = await getClientes(session.access_token);
             setClientes(data);
         } catch {
             toast.error('Error al cargar clientes');
@@ -42,13 +37,8 @@ export default function AdminClientes() {
             setSearching(true);
             try {
                 const { data: { session } } = await supabase.auth.getSession();
-                const res = await fetch(`${API_BASE}/admin/clientes/buscar?q=${encodeURIComponent(busqueda)}`, {
-                    headers: { Authorization: `Bearer ${session.access_token}` },
-                });
-                if (res.ok) {
-                    const data = await res.json();
-                    setClientes(data.resultados || []);
-                }
+                const data = await buscarClientes(busqueda, session.access_token);
+                setClientes(data.resultados || []);
             } catch { /* ignore */ }
             setSearching(false);
         }, 300);

@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { supabase } from '@/lib/supabase';
-
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+import { getPedidos } from '@/services/api';
 
 const ESTADOS = [
     { value: '', label: 'Todos' },
@@ -38,11 +37,7 @@ export default function AdminPedidos() {
         setLoading(true);
         try {
             const { data: { session } } = await supabase.auth.getSession();
-            const res = await fetch(`${API_BASE}/admin/pedidos`, {
-                headers: { Authorization: `Bearer ${session.access_token}` },
-            });
-            if (!res.ok) throw new Error('Error al obtener pedidos');
-            const data = await res.json();
+            const data = await getPedidos(session.access_token);
             setPedidos(data);
         } catch (err) {
             toast.error('Error al cargar pedidos');

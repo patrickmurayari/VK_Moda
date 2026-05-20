@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { supabase } from '@/lib/supabase';
-
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+import { getClienteById, getHistorialMedidas, getPedidos, addMedidas } from '@/services/api';
 
 const MEDIDAS_LABELS = {
     busto: 'Busto',
@@ -41,20 +40,17 @@ export default function ClienteHistoria() {
         setLoading(true);
         try {
             const { data: { session } } = await supabase.auth.getSession();
-            const headers = { Authorization: `Bearer ${session.access_token}` };
+            const token = session.access_token;
 
-            const [clienteRes, medidasRes, pedidosRes] = await Promise.all([
-                fetch(`${API_BASE}/admin/clientes/${id}`, { headers }),
-                fetch(`${API_BASE}/admin/clientes/${id}/medidas`, { headers }),
-                fetch(`${API_BASE}/admin/pedidos`, { headers }),
+            const [clienteData, medidasData, pedidosData] = await Promise.all([
+                getClienteById(id, token),
+                getHistorialMedidas(id, token).catch(() => null),
+                getPedidos(token),
             ]);
 
-            if (clienteRes.ok) setCliente(await clienteRes.json());
-            if (medidasRes.ok) setHistorial(await medidasRes.json());
-            if (pedidosRes.ok) {
-                const allPedidos = await pedidosRes.json();
-                setPedidos(allPedidos.filter((p) => p.cliente_id === parseInt(id)));
-            }
+            setCliente(clienteData);
+            setHistorial(medidasData);
+            setPedidos(pedidosData.filter((p) => p.cliente_id === parseInt(id)));
         } catch {
             toast.error('Error al cargar datos del cliente');
         } finally {
@@ -74,19 +70,11 @@ export default function ClienteHistoria() {
         setSaving(true);
         try {
             const { data: { session } } = await supabase.auth.getSession();
-            const res = await fetch(`${API_BASE}/admin/clientes/${id}/medidas`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${session.access_token}`,
-                },
-                body: JSON.stringify({
-                    medidas: medidasLimpias,
-                    notas_medida: notasMedida || null,
-                    tomada_por: tomadaPor || null,
-                }),
-            });
-            if (!res.ok) throw new Error();
+            await addMedidas(id, {
+                medidas: medidasLimpias,
+                notas_medida: notasMedida || null,
+                tomada_por: tomadaPor || null,
+            }, session.access_token);
             toast.success('Medidas guardadas correctamente');
             setShowAddMedidas(false);
             setNuevasMedidas({});

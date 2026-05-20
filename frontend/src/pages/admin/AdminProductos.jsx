@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { supabase } from '@/lib/supabase';
-
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+import { getProductos, deleteProducto } from '@/services/api';
 
 // Componente de esqueleto de carga adaptado a mobile
 function ProductSkeleton() {
@@ -35,15 +34,7 @@ export default function AdminProductos() {
     const fetchProductos = async () => {
         try {
             const token = await getAccessToken();
-            const res = await fetch(`${API_BASE}/admin/productos`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            
-            if (!res.ok) throw new Error('Error al obtener productos');
-            
-            const data = await res.json();
+            const data = await getProductos(token);
             setProductos(data);
         } catch (error) {
             console.error('Error:', error);
@@ -59,18 +50,7 @@ export default function AdminProductos() {
         setDeleteId(id);
         try {
             const token = await getAccessToken();
-            const res = await fetch(`${API_BASE}/admin/productos/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            
-            if (!res.ok) {
-                const error = await res.json();
-                throw new Error(error.error || 'Error al eliminar');
-            }
-            
+            await deleteProducto(id, token);
             toast.success('Producto eliminado correctamente');
             setProductos(productos.filter(p => p.id !== id));
         } catch (error) {

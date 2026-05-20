@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { supabase } from '@/lib/supabase';
-
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+import { buscarClientes, createCliente, getHistorialMedidas, createPedido } from '@/services/api';
 
 const MEDIDAS_FIELDS = [
     { key: 'busto', label: 'Busto' },
@@ -64,14 +63,9 @@ export default function OrderWizard() {
             setSearching(true);
             try {
                 const { data: { session } } = await supabase.auth.getSession();
-                const res = await fetch(`${API_BASE}/admin/clientes/buscar?q=${encodeURIComponent(clienteSearch)}`, {
-                    headers: { Authorization: `Bearer ${session.access_token}` },
-                });
-                if (res.ok) {
-                    const data = await res.json();
-                    setClientes(data.resultados || []);
-                    setSearchPerformed(true);
-                }
+                const data = await buscarClientes(clienteSearch, session.access_token);
+                setClientes(data.resultados || []);
+                setSearchPerformed(true);
             } catch { /* ignore */ }
             setSearching(false);
         }, 300);
@@ -99,21 +93,12 @@ export default function OrderWizard() {
         setCreatingCliente(true);
         try {
             const { data: { session } } = await supabase.auth.getSession();
-            const res = await fetch(`${API_BASE}/admin/clientes`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${session.access_token}`,
-                },
-                body: JSON.stringify({
-                    nombre: nombre.trim(),
-                    apellido: apellido.trim(),
-                    telefono: nuevoCliente.telefono.trim() || null,
-                    email: nuevoCliente.email.trim() || null,
-                }),
-            });
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.error || 'Error al crear cliente');
+            const data = await createCliente({
+                nombre: nombre.trim(),
+                apellido: apellido.trim(),
+                telefono: nuevoCliente.telefono.trim() || null,
+                email: nuevoCliente.email.trim() || null,
+            }, session.access_token);
 
             // Auto-seleccionar el cliente recién creado
             setClienteId(data.id);
@@ -153,11 +138,7 @@ export default function OrderWizard() {
         }
         try {
             const { data: { session } } = await supabase.auth.getSession();
-            const res = await fetch(`${API_BASE}/admin/clientes/${clienteId}/medidas`, {
-                headers: { Authorization: `Bearer ${session.access_token}` },
-            });
-            if (!res.ok) throw new Error();
-            const data = await res.json();
+            const data = await getHistorialMedidas(clienteId, session.access_token);
             if (data.medidas_recientes?.medidas_json) {
                 const updated = [...items];
                 updated[index] = { ...updated[index], medidas: data.medidas_recientes.medidas_json };
@@ -209,17 +190,7 @@ export default function OrderWizard() {
             };
 
             const { data: { session } } = await supabase.auth.getSession();
-            const res = await fetch(`${API_BASE}/admin/pedidos`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${session.access_token}`,
-                },
-                body: JSON.stringify(payload),
-            });
-
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.error || 'Error al crear pedido');
+            const data = await createPedido(payload, session.access_token);
 
             toast.success(`Pedido #${data.id} creado correctamente`);
             navigate(`/admin/pedidos/${data.id}`);

@@ -2,7 +2,6 @@ import { FiMail, FiPhone, FiMapPin, FiHeart } from 'react-icons/fi';
 import { FaCcMastercard, FaCcVisa } from 'react-icons/fa';
 import { SiMercadopago } from 'react-icons/si';
 import { Link as RouterLink } from 'react-router-dom';
-import { Link as ScrollLink } from 'react-scroll';
 import SocialIcons from '../common/SocialIcons';
 
 function Footer() {
@@ -54,56 +53,21 @@ function Footer() {
               Navegación
             </h3>
             <div className="mt-5 grid gap-3 text-sm text-neutral-700">
-              <ScrollLink
-                to="hero"
-                spy={true}
-                smooth={true}
-                offset={-100}
-                duration={500}
-                className="cursor-pointer hover:text-primary-900 transition-colors"
-              >
+              <a href="#hero" className="cursor-pointer hover:text-primary-900 transition-colors">
                 Inicio
-              </ScrollLink>
-              <ScrollLink
-                to="categorias"
-                spy={true}
-                smooth={true}
-                offset={-100}
-                duration={500}
-                className="cursor-pointer hover:text-primary-900 transition-colors"
-              >
+              </a>
+              <a href="#categorias" className="cursor-pointer hover:text-primary-900 transition-colors">
                 Categorías
-              </ScrollLink>
-              <ScrollLink
-                to="coleccion"
-                spy={true}
-                smooth={true}
-                offset={-100}
-                duration={500}
-                className="cursor-pointer hover:text-primary-900 transition-colors"
-              >
+              </a>
+              <a href="#coleccion" className="cursor-pointer hover:text-primary-900 transition-colors">
                 Colección
-              </ScrollLink>
-              <ScrollLink
-                to="quienes-somos"
-                spy={true}
-                smooth={true}
-                offset={-100}
-                duration={500}
-                className="cursor-pointer hover:text-primary-900 transition-colors"
-              >
+              </a>
+              <a href="#quienes-somos" className="cursor-pointer hover:text-primary-900 transition-colors">
                 Quiénes Somos
-              </ScrollLink>
-              <ScrollLink
-                to="contactos"
-                spy={true}
-                smooth={true}
-                offset={-100}
-                duration={500}
-                className="cursor-pointer hover:text-primary-900 transition-colors"
-              >
+              </a>
+              <a href="#contactos" className="cursor-pointer hover:text-primary-900 transition-colors">
                 Contáctanos
-              </ScrollLink>
+              </a>
             </div>
           </div>
 

@@ -7,12 +7,10 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        montserrat_alternates: ['Montserrat Alternates', 'sans-serif'],
         elegant: ['Playfair Display', 'serif'],
         display: ['Cormorant Garamond', 'serif'],
         body: ['Inter', 'sans-serif'],
         heading: ['Syne', 'sans-serif'],
-        luxury: ['Cormorant Garamond', 'serif'],
       },
       colors: {
         // Paleta elegante para moda
@@ -52,9 +50,6 @@ export default {
           800: '#292524',
           900: '#1c1917',
         },
-      },
-      brightness: {
-        '55': 'brightness(0.55)',
       },
       boxShadow: {
         'elegant': '0 4px 20px rgba(0, 0, 0, 0.08)',
