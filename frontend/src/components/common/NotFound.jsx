@@ -18,7 +18,7 @@ function NotFound() {
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link 
             to="/" 
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary-900 text-white font-medium rounded-lg transition-all duration-300 hover:bg-accent-600 hover:shadow-elegant-lg transform hover:scale-105"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary-900 text-white font-medium rounded-lg transition-colors duration-300 hover:bg-accent-600 hover:shadow-elegant-lg"
           >
             <FiHome className="text-lg" />
             Ir al Inicio

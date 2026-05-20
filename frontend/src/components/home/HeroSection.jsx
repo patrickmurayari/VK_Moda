@@ -105,7 +105,7 @@ function HeroSection() {
             {/* Navigation Arrows */}
             <button 
                 onClick={prevSlide}
-                className={`absolute left-6 top-[24%] md:top-1/2 -translate-y-1/2 z-20 text-white/90 hover:text-white transition-all duration-300 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 ${incomingSlide !== null ? 'opacity-50 pointer-events-none' : ''}`}
+                className={`absolute left-6 top-[24%] md:top-1/2 -translate-y-1/2 z-20 text-white/90 hover:text-white transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 ${incomingSlide !== null ? 'opacity-50 pointer-events-none' : ''}`}
                 aria-label="Previous slide"
             >
                 <ChevronLeft className="w-14 h-14" strokeWidth={1.25} />
@@ -113,7 +113,7 @@ function HeroSection() {
             
             <button 
                 onClick={nextSlide}
-                className={`absolute right-6 top-[74%] md:top-1/2 -translate-y-1/2 z-20 text-white/90 hover:text-white transition-all duration-300 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 ${incomingSlide !== null ? 'opacity-50 pointer-events-none' : ''}`}
+                className={`absolute right-6 top-[74%] md:top-1/2 -translate-y-1/2 z-20 text-white/90 hover:text-white transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 ${incomingSlide !== null ? 'opacity-50 pointer-events-none' : ''}`}
                 aria-label="Next slide"
             >
                 <ChevronRight className="w-14 h-14" strokeWidth={1.25} />

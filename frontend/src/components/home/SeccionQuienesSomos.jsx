@@ -48,7 +48,7 @@ function SeccionQuienesSomos() {
                 <div className="grid grid-cols-1 md:grid-cols-2">
                     <div className="relative h-[50vh] md:h-screen group">
                         <img
-                            className="absolute inset-0 w-full h-full object-cover object-[center_20%] md:object-[center_15%] transition-transform duration-700 group-hover:scale-105"
+                            className="absolute inset-0 w-full h-full object-cover object-[center_20%] md:object-[center_15%]"
                             src={imagenes.izquierda}
                             alt="quienes somos"
                         />
@@ -57,7 +57,7 @@ function SeccionQuienesSomos() {
 
                     <div className="relative h-[50vh] md:h-screen group md:col-start-2 md:row-start-1">
                         <img
-                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                            className="absolute inset-0 w-full h-full object-cover"
                             src={imagenes.derecha}
                             alt="Nuestra empresa"
                         />

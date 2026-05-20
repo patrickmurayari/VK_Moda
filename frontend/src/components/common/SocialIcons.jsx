@@ -33,7 +33,7 @@ function SocialIcons({ variant = 'default', size = 'md' }) {
               href={social.url}
               target="_blank"
               rel="noopener noreferrer"
-              className={`${sizeClasses[size]} text-neutral-600 hover:text-accent-600 transition-all duration-300 hover:scale-110 transform`}
+              className={`${sizeClasses[size]} text-neutral-600 hover:text-accent-600 transition-colors duration-300`}
               aria-label={social.name}
               title={social.name}
             >
@@ -56,7 +56,7 @@ function SocialIcons({ variant = 'default', size = 'md' }) {
               href={social.url}
               target="_blank"
               rel="noopener noreferrer"
-              className={`${sizeClasses[size]} rounded-full flex items-center justify-center bg-gradient-to-br ${social.color} text-white shadow-elegant hover:shadow-elegant-lg transition-all duration-300 hover:scale-110 transform`}
+              className={`${sizeClasses[size]} rounded-full flex items-center justify-center bg-gradient-to-br ${social.color} text-white shadow-elegant hover:shadow-elegant-lg transition-all duration-300`}
               aria-label={social.name}
               title={social.name}
             >
@@ -79,7 +79,7 @@ function SocialIcons({ variant = 'default', size = 'md' }) {
               href={social.url}
               target="_blank"
               rel="noopener noreferrer"
-              className={`${sizeClasses[size]} rounded-full flex items-center justify-center border-2 border-accent-600 text-accent-600 hover:bg-accent-600 hover:text-white transition-all duration-300 hover:scale-110 transform`}
+              className={`${sizeClasses[size]} rounded-full flex items-center justify-center border-2 border-accent-600 text-accent-600 hover:bg-accent-600 hover:text-white transition-all duration-300`}
               aria-label={social.name}
               title={social.name}
             >
@@ -102,7 +102,7 @@ function SocialIcons({ variant = 'default', size = 'md' }) {
             href={social.url}
             target="_blank"
             rel="noopener noreferrer"
-            className={`${sizeClasses[size]} rounded-full flex items-center justify-center bg-white border-2 border-accent-600 text-accent-600 shadow-elegant hover:bg-accent-600 hover:text-white hover:shadow-elegant-lg transition-all duration-300 hover:scale-110 transform`}
+            className={`${sizeClasses[size]} rounded-full flex items-center justify-center bg-white border-2 border-accent-600 text-accent-600 shadow-elegant hover:bg-accent-600 hover:text-white hover:shadow-elegant-lg transition-all duration-300`}
             aria-label={social.name}
             title={social.name}
           >

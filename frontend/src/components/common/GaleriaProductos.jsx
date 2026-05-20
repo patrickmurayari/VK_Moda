@@ -39,11 +39,11 @@ function GaleriaProductos({ productos, mostrarPrecio = true }) {
                             className="group relative w-full lg:px-6"
                         >
                             {/* Contenedor de imagen */}
-                            <div className="relative overflow-hidden rounded-none bg-neutral-50 ring-1 ring-black/5 shadow-sm transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:shadow-xl">
+                            <div className="relative overflow-hidden rounded-none bg-neutral-50 ring-1 ring-black/5 shadow-sm transition-shadow duration-300 group-hover:shadow-xl">
                                 <img
                                     src={producto.image}
                                     alt={producto.name}
-                                    className="w-full object-cover h-[78vh] sm:h-auto sm:aspect-[3/4] lg:h-[72vh] lg:aspect-auto transition-transform duration-700 group-hover:scale-[1.02]"
+                                    className="w-full object-cover h-[78vh] sm:h-auto sm:aspect-[3/4] lg:h-[72vh] lg:aspect-auto"
                                 />
 
                                 {!mostrarPrecio && (

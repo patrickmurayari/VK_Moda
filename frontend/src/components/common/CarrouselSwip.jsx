@@ -84,7 +84,7 @@ function CarrouselSwip() {
                 dynamicBullets: true,
                 el: '.swiper-pagination-custom',
                 renderBullet: (index, className) => {
-                  return `<span class="${className} w-2.5 h-2.5 bg-neutral-400 rounded-full cursor-pointer transition-all duration-300 hover:bg-accent-600 hover:scale-125"></span>`;
+                  return `<span class="${className} w-2.5 h-2.5 bg-neutral-400 rounded-full cursor-pointer transition-colors duration-300 hover:bg-accent-600"></span>`;
                 },
               }}
               breakpoints={{
@@ -100,7 +100,7 @@ function CarrouselSwip() {
                 <SwiperSlide key={index}>
                   <div className="relative overflow-hidden group h-[78vh] min-h-[480px] md:h-[72vh] md:min-h-[520px] lg:h-[75vh] lg:min-h-[620px] bg-primary-900">
                     <img 
-                      className='w-full h-full object-cover lg:object-contain transition-transform duration-700 group-hover:scale-105 lg:group-hover:scale-100' 
+                      className='w-full h-full object-cover lg:object-contain' 
                       src={slide.image} 
                       alt={slide.title || `Colección ${index + 1}`}
                       loading="eager"

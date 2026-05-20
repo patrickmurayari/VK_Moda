@@ -52,7 +52,7 @@ function SeccionInspiracionModa() {
                         <img
                             src={imagenes.izquierda?.image}
                             alt={imagenes.izquierda?.title || "Inspiración urbana"}
-                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                            className="absolute inset-0 w-full h-full object-cover"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-transparent"></div>
 
@@ -82,7 +82,7 @@ function SeccionInspiracionModa() {
                         <img
                             src={imagenes.derecha?.image}
                             alt={imagenes.derecha?.title || "Inspiración clásica"}
-                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                            className="absolute inset-0 w-full h-full object-cover"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-transparent"></div>
 
