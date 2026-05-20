@@ -59,16 +59,6 @@ function SeccionEditorialModa() {
                                 className="w-full h-[520px] sm:h-[600px] lg:h-[760px] xl:h-[860px] object-cover"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent"></div>
-
-                            <div className="hidden lg:block absolute bottom-6 left-6">
-                                <div className="bg-white shadow-elegant-lg p-3">
-                                    <img
-                                        src={imagenes['detalle-izquierda']}
-                                        alt="Inspiración de moda"
-                                        className="w-44 h-44 object-cover"
-                                    />
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -148,16 +138,6 @@ function SeccionEditorialModa() {
                                 className="w-full h-[520px] sm:h-[600px] lg:h-[760px] xl:h-[860px] object-cover"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent"></div>
-
-                            <div className="hidden lg:block absolute bottom-6 right-6">
-                                <div className="bg-white shadow-elegant-lg p-3">
-                                    <img
-                                        src={imagenes['detalle-derecha']}
-                                        alt="Detalle de confección"
-                                        className="w-44 h-44 object-cover"
-                                    />
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>

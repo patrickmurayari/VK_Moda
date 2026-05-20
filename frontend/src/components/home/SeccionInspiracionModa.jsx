@@ -63,10 +63,6 @@ function SeccionInspiracionModa() {
                             <h3 className="mt-2 text-white font-display text-xl sm:text-2xl lg:text-4xl font-light leading-tight">
                                 {imagenes.izquierda?.title || "Looks urbanos"}
                             </h3>
-                            <p className="mt-2 text-white/85 text-xs sm:text-sm lg:text-base font-light max-w-md">
-                                {imagenes.izquierda?.subtitle || "Prendas para todos los días con caída, comodidad y un toque de diseño."}
-                            </p>
-
                             <div className="mt-4">
                                 <button
                                     onClick={() => scrollTo('categorias')}
@@ -93,10 +89,6 @@ function SeccionInspiracionModa() {
                             <h3 className="mt-2 text-white font-display text-xl sm:text-2xl lg:text-4xl font-light leading-tight">
                                 {imagenes.derecha?.title || "A medida"}
                             </h3>
-                            <p className="mt-2 text-white/85 text-xs sm:text-sm lg:text-base font-light max-w-md">
-                                {imagenes.derecha?.subtitle || "Ajustes, arreglos y confección para que te quede perfecto."}
-                            </p>
-
                             <div className="mt-4">
                                 <button
                                     onClick={() => scrollTo('contactos')}
