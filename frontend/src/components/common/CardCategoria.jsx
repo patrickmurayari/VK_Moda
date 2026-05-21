@@ -35,7 +35,7 @@ const CardProducts = ({ products }) => {
 
     return (
         <div className="w-full">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-[1px] bg-neutral-200/50">
+            <div className="grid grid-cols-2 lg:grid-cols-4 bg-neutral-200/50">
                 {products && products.map((elem, index) => renderCard(elem, elem.id ?? index))}
             </div>
         </div>
