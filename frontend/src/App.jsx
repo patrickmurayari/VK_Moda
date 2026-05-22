@@ -24,11 +24,7 @@ import OrderWizard from './pages/admin/OrderWizard'
 import AdminClientes from './pages/admin/AdminClientes'
 import ClienteHistoria from './pages/admin/ClienteHistoria'
 
-const Bolsos = lazy(() => import("./components/Categorias/Bolsos"))
-const Indumentaria = lazy(() => import("./components/Categorias/Indumentaria"))
-const Joyeria = lazy(() => import("./components/Categorias/Joyeria"))
-const Vestidos = lazy(() => import("./components/Categorias/Vestidos"))
-const Hombre = lazy(() => import("./components/Categorias/Hombre"))
+const CategoriaTemplate = lazy(() => import("./components/Categorias/CategoriaTemplate"))
 
 const SeccionEditorialModa = lazy(() => import('./components/home/SeccionEditorialModa'))
 const SeccionInspiracionModa = lazy(() => import('./components/home/SeccionInspiracionModa'))
@@ -148,11 +144,7 @@ function App() {
         <Routes>
           {/* Rutas públicas */}
           <Route path="/" element={<Home />}></Route>
-          <Route path="/bolsos" element={<Bolsos />}></Route>
-          <Route path="/indumentaria" element={<Indumentaria />}></Route>
-          <Route path="/joyeria" element={<Joyeria />}></Route>
-          <Route path="/vestidos" element={<Vestidos />}></Route>
-          <Route path="/hombre" element={<Hombre />}></Route>
+          <Route path="/categoria/:slug" element={<CategoriaTemplate />}></Route>
           
           {/* Rutas de autenticación */}
           <Route path="/login" element={<Login />} />

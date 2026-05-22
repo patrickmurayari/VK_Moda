@@ -5,6 +5,8 @@ import { getCategorias } from "../../services/api";
 // Import estático original (comentado — datos ahora desde API)
 // import { ProductsCategoria } from "../../data/categoriasData";
 
+const ACTIVE_SLUGS = ['buzos-mujer', 'camperas-hombre'];
+
 function SeccionCategorias() {
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -12,12 +14,14 @@ function SeccionCategorias() {
     useEffect(() => {
         getCategorias()
             .then((data) => {
-                const mapped = data.map((cat) => ({
-                    id: cat.id,
-                    id_name: cat.slug,
-                    image: cat.imagen_url,
-                    name: cat.nombre,
-                }));
+                const mapped = data
+                    .filter((cat) => ACTIVE_SLUGS.includes(cat.slug))
+                    .map((cat) => ({
+                        id: cat.id,
+                        id_name: cat.slug,
+                        image: cat.imagen_url,
+                        name: cat.nombre,
+                    }));
                 setCategories(mapped);
             })
             .catch((err) => console.error('Error cargando categorías:', err))

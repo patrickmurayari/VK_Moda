@@ -10,13 +10,13 @@ const CardProducts = ({ products }) => {
     const renderCard = (elem, key) => (
         <Link
             key={key}
-            to={elem.id_name}
+            to={`/categoria/${elem.id_name}`}
             onClick={scrollToTop}
             className="group block focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20 focus-visible:ring-offset-2"
             aria-label={`Ver productos de ${elem.name}`}
         >
             <div className="overflow-hidden">
-                <div className="aspect-[3/4] overflow-hidden">
+                <div className="aspect-[3/4] overflow-hidden bg-neutral-100">
                     <img
                         className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                         src={elem.image}

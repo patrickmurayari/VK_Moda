@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { FiChevronLeft, FiChevronRight, FiX, FiShoppingBag } from 'react-icons/fi';
+import { FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi';
 
 function GaleriaProductos({ productos, mostrarPrecio = true }) {
     const [modalAbierto, setModalAbierto] = useState(false);
@@ -8,7 +8,6 @@ function GaleriaProductos({ productos, mostrarPrecio = true }) {
 
     const productoSeleccionado = indiceSeleccionado !== null ? productos[indiceSeleccionado] : null;
 
-    
     const cerrarModal = () => {
         setModalAbierto(false);
         setIndiceSeleccionado(null);
@@ -31,65 +30,43 @@ function GaleriaProductos({ productos, mostrarPrecio = true }) {
     return (
         <>
             {/* Grid de Productos */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10 lg:gap-0 lg:[&>*:not(:first-child)]:border-l lg:[&>*:not(:first-child)]:border-neutral-200">
-                {productos.map((producto, index) => {
-                    return (
-                        <div
-                            key={producto.id ?? index}
-                            className="group relative w-full lg:px-6"
-                        >
-                            {/* Contenedor de imagen */}
-                            <div className="relative overflow-hidden rounded-none bg-neutral-50 ring-1 ring-black/5 shadow-sm transition-shadow duration-300 group-hover:shadow-xl">
-                                <img
-                                    src={producto.image}
-                                    alt={producto.name}
-                                    className="w-full object-cover h-[78vh] sm:h-auto sm:aspect-[3/4] lg:h-[72vh] lg:aspect-auto"
-                                />
-
-                                {!mostrarPrecio && (
-                                    <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[5] bg-gradient-to-t from-black/75 via-black/15 to-transparent p-4">
-                                        <h3 className="text-sm md:text-base font-semibold tracking-wide text-white line-clamp-2">
-                                            {producto.name}
-                                        </h3>
-                                        {producto.colores && (
-                                            <p className="mt-1 text-xs md:text-sm text-white/80">
-                                                + {producto.colores} colores
-                                            </p>
-                                        )}
-                                    </div>
-                                )}
-
-                                {/* Wishlist button */}
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        setIndiceSeleccionado(index);
-                                        setModalAbierto(true);
-                                    }}
-                                    className="absolute left-1/2 bottom-5 -translate-x-1/2 flex items-center justify-center w-12 h-12 rounded-full bg-white/80 backdrop-blur-sm border border-white shadow-md transition-colors z-10 hover:bg-white"
-                                    aria-label="Ver producto"
-                                >
-                                    <FiShoppingBag className="w-5 h-5 text-neutral-700" />
-                                </button>
-                            </div>
-
-                            {/* Información del producto */}
-                            {mostrarPrecio && (
-                                <div className="pt-7 pb-6 text-center">
-                                    <h3 className="text-[15px] md:text-sm font-body font-medium tracking-wide text-accent-600 mb-1 line-clamp-2 transition-all duration-300 ease-out group-hover:-translate-y-0.5 group-hover:text-accent-700">
-                                        {producto.name}
-                                    </h3>
-
-                                    {producto.colores && (
-                                        <p className="mt-2 text-xs md:text-sm text-neutral-600">
-                                            + {producto.colores} colores
-                                        </p>
-                                    )}
-                                </div>
-                            )}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-[1px]">
+                {productos.map((producto, index) => (
+                    <button
+                        key={producto.id ?? index}
+                        type="button"
+                        onClick={() => {
+                            setIndiceSeleccionado(index);
+                            setModalAbierto(true);
+                        }}
+                        className="group text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20 focus-visible:ring-offset-2"
+                        aria-label={producto.name}
+                    >
+                        {/* Imagen */}
+                        <div className="aspect-[3/4] overflow-hidden bg-neutral-50">
+                            <img
+                                src={producto.image}
+                                alt={producto.name}
+                                className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                                loading="lazy"
+                            />
                         </div>
-                    );
-                })}
+
+                        {/* Información */}
+                        {mostrarPrecio && (
+                            <div className="px-2 md:px-4 pt-3 pb-2">
+                                <h3 className="font-display text-[10px] md:text-sm font-normal tracking-wide text-black line-clamp-1">
+                                    {producto.name}
+                                </h3>
+                                {producto.precio && (
+                                    <p className="font-body text-[9px] md:text-xs text-neutral-500 mt-0.5 md:mt-1">
+                                        ${producto.precio}
+                                    </p>
+                                )}
+                            </div>
+                        )}
+                    </button>
+                ))}
             </div>
 
             {/* Modal Fullscreen */}
@@ -98,10 +75,10 @@ function GaleriaProductos({ productos, mostrarPrecio = true }) {
                     {/* Botón Cerrar */}
                     <button
                         onClick={cerrarModal}
-                        className="absolute top-6 right-6 text-white hover:text-accent-600 transition-colors z-60"
+                        className="absolute top-6 right-6 text-white hover:opacity-60 transition-opacity z-[60]"
                         aria-label="Cerrar modal"
                     >
-                        <FiX className="text-4xl" />
+                        <FiX className="w-6 h-6" strokeWidth={1} />
                     </button>
 
                     {/* Contenedor Principal */}
@@ -109,10 +86,10 @@ function GaleriaProductos({ productos, mostrarPrecio = true }) {
                         {/* Botón Anterior */}
                         <button
                             onClick={irAnterior}
-                            className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-accent-600 text-white hover:bg-primary-900 transition-colors"
+                            className="hidden md:flex items-center justify-center text-white hover:opacity-60 transition-opacity"
                             aria-label="Imagen anterior"
                         >
-                            <FiChevronLeft className="text-2xl" />
+                            <FiChevronLeft className="w-8 h-8" strokeWidth={1} />
                         </button>
 
                         {/* Imagen Principal */}
@@ -120,42 +97,42 @@ function GaleriaProductos({ productos, mostrarPrecio = true }) {
                             <img
                                 src={productoSeleccionado.image}
                                 alt={productoSeleccionado.name}
-                                className="max-w-full max-h-[80vh] object-contain rounded-lg"
+                                className="max-w-full max-h-[80vh] object-contain"
                             />
                         </div>
 
                         {/* Botón Siguiente */}
                         <button
                             onClick={irSiguiente}
-                            className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-accent-600 text-white hover:bg-primary-900 transition-colors"
+                            className="hidden md:flex items-center justify-center text-white hover:opacity-60 transition-opacity"
                             aria-label="Imagen siguiente"
                         >
-                            <FiChevronRight className="text-2xl" />
+                            <FiChevronRight className="w-8 h-8" strokeWidth={1} />
                         </button>
                     </div>
 
                     {/* Información del Producto */}
-                    <div className="absolute bottom-6 left-6 right-6 bg-white/95 rounded-lg p-6 backdrop-blur-sm">
-                        <h2 className="text-2xl font-bold text-primary-900 mb-2">
+                    <div className="absolute bottom-8 left-6 right-6 text-center">
+                        <h2 className="font-display text-lg tracking-[0.2em] font-light uppercase text-white">
                             {productoSeleccionado.name}
                         </h2>
                     </div>
 
                     {/* Controles Móvil */}
-                    <div className="md:hidden absolute bottom-32 left-0 right-0 flex justify-center gap-4 px-4">
+                    <div className="md:hidden absolute bottom-20 left-0 right-0 flex justify-center gap-8 px-4">
                         <button
                             onClick={irAnterior}
-                            className="flex items-center justify-center w-12 h-12 rounded-full bg-accent-600 text-white hover:bg-primary-900 transition-colors"
+                            className="text-white hover:opacity-60 transition-opacity"
                             aria-label="Imagen anterior"
                         >
-                            <FiChevronLeft className="text-2xl" />
+                            <FiChevronLeft className="w-6 h-6" strokeWidth={1} />
                         </button>
                         <button
                             onClick={irSiguiente}
-                            className="flex items-center justify-center w-12 h-12 rounded-full bg-accent-600 text-white hover:bg-primary-900 transition-colors"
+                            className="text-white hover:opacity-60 transition-opacity"
                             aria-label="Imagen siguiente"
                         >
-                            <FiChevronRight className="text-2xl" />
+                            <FiChevronRight className="w-6 h-6" strokeWidth={1} />
                         </button>
                     </div>
                 </div>
