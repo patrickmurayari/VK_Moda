@@ -26,6 +26,14 @@ export async function getCategorias() {
     return fetchJSON(`${API_BASE}/categorias`);
 }
 
+export async function getCategoryTree() {
+    return fetchJSON(`${API_BASE}/categorias/tree`);
+}
+
+export async function getCategoryContext(slug) {
+    return fetchJSON(`${API_BASE}/categorias/contexto/${encodeURIComponent(slug)}`);
+}
+
 // ── Públicas: Productos por categoría ──
 
 export async function getProductosByCategoria(slug) {

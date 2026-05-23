@@ -1,8 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
-import { navigationConfig } from '../../data/navigationConfig';
+import { getCategoryTree } from '../../services/api';
+
+const NAV_EXTRAS = [
+    { id: 'colecciones', label: 'Colecciones', slug: '/coleccion' },
+    { id: 'contacto', label: 'Contacto', action: 'scroll', target: 'contactos' },
+];
 
 const scrollTo = (id) => {
     const el = document.getElementById(id);
@@ -11,20 +16,34 @@ const scrollTo = (id) => {
 
 function MobileMenu({ isOpen, onClose }) {
     const navigate = useNavigate();
-    const [viewStack, setViewStack] = useState([{ items: navigationConfig, title: null }]);
+    const [rootItems, setRootItems] = useState([]);
+    const [viewStack, setViewStack] = useState(null);
 
-    const isRoot = viewStack.length === 1;
+    useEffect(() => {
+        getCategoryTree()
+            .then((tree) => {
+                const items = [...tree, ...NAV_EXTRAS];
+                setRootItems(items);
+                setViewStack([{ items, title: null }]);
+            })
+            .catch((err) => {
+                console.error('Error cargando árbol de navegación:', err);
+                setViewStack([{ items: NAV_EXTRAS, title: null }]);
+            });
+    }, []);
 
-    const resetStack = () => setViewStack([{ items: navigationConfig, title: null }]);
+    const isRoot = !viewStack || viewStack.length === 1;
+
+    const resetStack = () => setViewStack([{ items: rootItems, title: null }]);
 
     const pushView = (item) => {
-        if (item.children) {
+        if (item.children && viewStack) {
             setViewStack([...viewStack, { items: item.children, title: item.label }]);
         }
     };
 
     const popView = () => {
-        if (viewStack.length > 1) {
+        if (viewStack && viewStack.length > 1) {
             setViewStack(viewStack.slice(0, -1));
         }
     };
@@ -53,7 +72,7 @@ function MobileMenu({ isOpen, onClose }) {
         setTimeout(resetStack, 500);
     };
 
-    const depth = viewStack.length - 1;
+    const depth = viewStack ? viewStack.length - 1 : 0;
 
     return (
         <>
@@ -88,6 +107,13 @@ function MobileMenu({ isOpen, onClose }) {
 
                 {/* Sliding strip */}
                 <div className="flex-1 overflow-hidden">
+                    {!viewStack ? (
+                        <div className="px-6 md:px-8 py-8 space-y-5">
+                            {[1, 2, 3, 4].map((i) => (
+                                <div key={i} className="h-[1px] bg-neutral-100 w-full" />
+                            ))}
+                        </div>
+                    ) : (
                     <div
                         className="flex h-full transition-transform duration-500 ease-in-out"
                         style={{ transform: `translateX(-${depth * 100}%)` }}
@@ -129,6 +155,7 @@ function MobileMenu({ isOpen, onClose }) {
                             </div>
                         ))}
                     </div>
+                    )}
                 </div>
 
                 {/* Bottom accent — fixed */}
