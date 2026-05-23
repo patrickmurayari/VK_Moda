@@ -1,5 +1,50 @@
 import { useEffect, useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { getContenido } from '../../services/api';
+
+SlideImage.propTypes = {
+    slide: PropTypes.shape({
+        image: PropTypes.string.isRequired,
+        imageDesktop: PropTypes.string.isRequired,
+        alt: PropTypes.string,
+    }).isRequired,
+    extraClass: PropTypes.string,
+};
+
+function SlideImage({ slide, extraClass = '' }) {
+    return (
+        <div className={`absolute inset-0 w-full h-full ${extraClass}`}>
+            {/* Mobile: full-cover */}
+            <img
+                src={slide.image}
+                alt={slide.alt}
+                className="lg:hidden absolute inset-0 w-full h-full object-cover object-top"
+                loading="eager"
+                decoding="async"
+            />
+            {/* Desktop: blurred backdrop + centered sharp image */}
+            <div className="hidden lg:block absolute inset-0">
+                <img
+                    src={slide.imageDesktop}
+                    alt=""
+                    aria-hidden="true"
+                    className="absolute inset-0 w-full h-full object-cover scale-110 blur-3xl opacity-40"
+                    loading="eager"
+                    decoding="async"
+                />
+                <div className="absolute inset-0 flex items-center justify-center">
+                    <img
+                        src={slide.imageDesktop}
+                        alt={slide.alt}
+                        className="h-full w-auto object-contain"
+                        loading="eager"
+                        decoding="async"
+                    />
+                </div>
+            </div>
+        </div>
+    );
+}
 
 function HeroSection() {
     const [slides, setSlides] = useState([]);
@@ -13,6 +58,8 @@ function HeroSection() {
             .then((data) => {
                 const mapped = data.map((item) => ({
                     image: item.imagen_url,
+                    imageDesktop: item.imagen_url_desktop || item.imagen_url,
+                    alt: item.alt_text || '',
                 }));
                 setSlides(mapped);
             })
@@ -25,6 +72,10 @@ function HeroSection() {
         slides.forEach((slide) => {
             const img = new Image();
             img.src = slide.image;
+            if (slide.imageDesktop !== slide.image) {
+                const imgD = new Image();
+                imgD.src = slide.imageDesktop;
+            }
         });
     }, [slides]);
 
@@ -68,20 +119,11 @@ function HeroSection() {
         <div id="hero" className="relative w-full h-screen max-h-[73vh] md:max-h-none overflow-hidden group">
             {/* Images */}
             <div className="absolute inset-0">
-                <img
-                    src={slides[currentSlide].image}
-                    alt=""
-                    className="absolute inset-0 w-full h-full object-cover"
-                    loading="eager"
-                    decoding="async"
-                />
+                <SlideImage slide={slides[currentSlide]} />
                 {incomingSlide !== null && (
-                    <img
-                        src={slides[incomingSlide].image}
-                        alt=""
-                        className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-out will-change-transform ${showIncoming ? 'opacity-100 scale-100' : 'opacity-0 scale-105'}`}
-                        loading="eager"
-                        decoding="async"
+                    <SlideImage
+                        slide={slides[incomingSlide]}
+                        extraClass={`transition-all duration-700 ease-out will-change-transform ${showIncoming ? 'opacity-100 scale-100' : 'opacity-0 scale-105'}`}
                     />
                 )}
             </div>

@@ -4,6 +4,16 @@ export const navigationConfig = [
         label: 'Mujer',
         children: [
             { id: 'buzos-mujer', label: 'Buzos', slug: '/categoria/buzos-mujer' },
+            { id: 'blusas-mujer', label: 'Blusas', slug: '/categoria/blusas-mujer' },
+            {
+                id: 'pantalones-mujer',
+                label: 'Pantalones',
+                children: [
+                    { id: 'joggings-mujer', label: 'Joggings', slug: '/categoria/joggings-mujer' },
+                    { id: 'pantalones-de-vestir-mujer', label: 'Pantalones de Vestir', slug: '/categoria/pantalones-de-vestir-mujer' },
+                    { id: 'jeans-mujer', label: 'Jeans', slug: '/categoria/jeans-mujer' },
+                ],
+            },
         ],
     },
     {
