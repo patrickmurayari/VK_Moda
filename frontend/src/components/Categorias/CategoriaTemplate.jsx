@@ -1,26 +1,30 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import GaleriaProductos from "../common/GaleriaProductos";
-import { getCategorias, getProductosByCategoria } from "../../services/api";
+import { getCategoryContext, getProductosByCategoria } from "../../services/api";
 
 function CategoriaTemplate() {
     const { slug } = useParams();
     const [titulo, setTitulo] = useState('');
     const [productos, setProductos] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [contexto, setContexto] = useState(null);
 
     useEffect(() => {
         if (!slug) return;
         setLoading(true);
+        setContexto(null);
 
         const fetchCategoria = async () => {
             try {
-                const categorias = await getCategorias();
-                const cat = categorias.find(c => c.slug === slug);
-                const nombre = cat?.nombre || slug.replace(/-/g, ' ').toUpperCase();
-                setTitulo(nombre);
+                const [ctx, data] = await Promise.all([
+                    getCategoryContext(slug),
+                    getProductosByCategoria(slug),
+                ]);
 
-                const data = await getProductosByCategoria(slug);
+                setContexto(ctx);
+                setTitulo(ctx.actual?.nombre || slug.replace(/-/g, ' ').toUpperCase());
+
                 const mapped = (data.productos || []).map((p) => ({
                     id: p.id,
                     image: p.imagen_url,
@@ -32,6 +36,7 @@ function CategoriaTemplate() {
                 setProductos(mapped);
             } catch (err) {
                 console.error('Error cargando categoría:', err);
+                setTitulo(slug.replace(/-/g, ' ').toUpperCase());
             } finally {
                 setLoading(false);
             }
@@ -51,20 +56,57 @@ function CategoriaTemplate() {
         );
     }
 
+    const padre = contexto?.padre;
+    const hermanas = contexto?.hermanas || [];
+    const actualId = contexto?.actual?.id;
+
     return (
         <div className="min-h-screen bg-white pt-20 md:pt-24">
             {/* Header */}
-            <div className="px-6 md:px-8 lg:px-12 pt-8 pb-6">
+            <div className="px-6 md:px-8 lg:px-12 pt-8 pb-4">
+                {/* Breadcrumb — padre */}
+                {padre && (
+                    <p className="font-body text-[10px] tracking-[0.2em] uppercase text-neutral-400 mb-2">
+                        {padre.nombre}
+                    </p>
+                )}
+
+                {/* Título */}
                 <h1 className="font-display text-3xl md:text-4xl tracking-[0.3em] font-light uppercase text-black">
                     {titulo}
                 </h1>
+
                 <p className="font-body text-[10px] tracking-[0.2em] uppercase text-neutral-400 mt-3">
                     {productos.length} ARTÍCULO{productos.length !== 1 ? 'S' : ''}
                 </p>
             </div>
 
+            {/* Sister category nav */}
+            {hermanas.length > 1 && (
+                <div className="px-6 md:px-8 lg:px-12 mt-4">
+                    <div className="flex flex-row overflow-x-auto whitespace-nowrap gap-x-6 md:gap-x-8 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+                        {hermanas.map((hermana) => {
+                            const isActive = hermana.id === actualId;
+                            return (
+                                <Link
+                                    key={hermana.id}
+                                    to={`/categoria/${hermana.slug}`}
+                                    className={`font-body text-xs uppercase tracking-widest transition-colors duration-300 pb-2 ${
+                                        isActive
+                                            ? 'text-black font-medium border-b border-black'
+                                            : 'text-neutral-400 hover:text-black'
+                                    }`}
+                                >
+                                    {hermana.nombre}
+                                </Link>
+                            );
+                        })}
+                    </div>
+                </div>
+            )}
+
             {/* Filter / Sort Bar */}
-            <div className="border-b-[0.5px] border-neutral-100 px-6 md:px-8 lg:px-12 py-4 flex items-center justify-between">
+            <div className="border-b-[0.5px] border-neutral-100 px-6 md:px-8 lg:px-12 py-4 mt-4 flex items-center justify-between">
                 <span className="font-body text-[10px] tracking-[0.2em] uppercase text-neutral-400 cursor-pointer hover:text-black transition-colors duration-300">
                     Ordenar por
                 </span>
