@@ -21,12 +21,12 @@
 
 /* Selección de texto */
 ::selection {
-  background-color: #e67e22;
+  background-color: #000000;
   color: white;
 }
 
 ::-moz-selection {
-  background-color: #e67e22;
+  background-color: #000000;
   color: white;
 }
 
@@ -38,12 +38,12 @@ textarea::placeholder {
 
 /* Accesibilidad */
 button:focus-visible {
-  outline: 2px solid #e67e22;
+  outline: 2px solid #000000;
   outline-offset: 2px;
 }
 
 a:focus-visible {
-  outline: 2px solid #e67e22;
+  outline: 2px solid #000000;
   outline-offset: 2px;
   border-radius: 2px;
 }

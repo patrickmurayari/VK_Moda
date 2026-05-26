@@ -45,8 +45,8 @@ function SeccionEditorialModa() {
     return (
         <section id="editorial" className="relative mt-10 md:mt-14 py-20">
             <div className="absolute inset-0 -z-10 overflow-hidden">
-                <div className="absolute top-0 left-0 w-96 h-96 bg-accent-600/5 rounded-full -ml-48 -mt-48"></div>
-                <div className="absolute bottom-0 right-0 w-80 h-80 bg-primary-900/5 rounded-full -mr-40 -mb-40"></div>
+                <div className="absolute top-0 left-0 w-96 h-96 bg-neutral-200/30 rounded-full -ml-48 -mt-48"></div>
+                <div className="absolute bottom-0 right-0 w-80 h-80 bg-neutral-200/20 rounded-full -mr-40 -mb-40"></div>
             </div>
 
             <div className="w-full">
@@ -64,7 +64,7 @@ function SeccionEditorialModa() {
 
                     <div className="w-full px-4 md:px-8 lg:pl-14">
                         <div className="max-w-xl">
-                            <p className="text-accent-600 font-heading text-xs sm:text-sm tracking-[0.28em] uppercase">
+                            <p className="text-slate-950 font-heading text-xs sm:text-sm tracking-[0.28em] uppercase">
                                 V&A DISEÑO Y MODA
                             </p>
 
@@ -80,7 +80,7 @@ function SeccionEditorialModa() {
                             <div className="mt-8 flex flex-col sm:flex-row gap-4">
                                 <button
                                     onClick={() => scrollTo('coleccion')}
-                                    className="inline-flex items-center justify-center rounded-none bg-primary-900 px-6 py-3 font-heading text-[12px] font-semibold tracking-[0.22em] uppercase text-white hover:bg-accent-600 transition-colors"
+                                    className="inline-flex items-center justify-center rounded-none bg-primary-900 px-6 py-3 font-heading text-[12px] font-semibold tracking-[0.22em] uppercase text-white hover:bg-neutral-700 transition-colors"
                                 >
                                     Ver colección
                                 </button>
@@ -99,7 +99,7 @@ function SeccionEditorialModa() {
                 <div className="mt-16 md:mt-20 lg:mt-0 grid lg:grid-cols-2 gap-10 lg:gap-0 items-center">
                     <div className="w-full px-4 md:px-8 lg:pr-14">
                         <div className="max-w-xl">
-                            <p className="text-accent-600 font-heading text-xs sm:text-sm tracking-[0.28em] uppercase">
+                            <p className="text-slate-950 font-heading text-xs sm:text-sm tracking-[0.28em] uppercase">
                                 ATELIER & DETALLES
                             </p>
 
@@ -115,7 +115,7 @@ function SeccionEditorialModa() {
                             <div className="mt-8 flex flex-col sm:flex-row gap-4">
                                 <button
                                     onClick={() => scrollTo('contactos')}
-                                    className="inline-flex items-center justify-center rounded-none bg-primary-900 px-6 py-3 font-heading text-[12px] font-semibold tracking-[0.22em] uppercase text-white hover:bg-accent-600 transition-colors"
+                                    className="inline-flex items-center justify-center rounded-none bg-primary-900 px-6 py-3 font-heading text-[12px] font-semibold tracking-[0.22em] uppercase text-white hover:bg-neutral-700 transition-colors"
                                 >
                                     Pedir turno
                                 </button>

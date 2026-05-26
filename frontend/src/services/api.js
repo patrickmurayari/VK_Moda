@@ -34,6 +34,10 @@ export async function getCategoryContext(slug) {
     return fetchJSON(`${API_BASE}/categorias/contexto/${encodeURIComponent(slug)}`);
 }
 
+export async function getCategoriasSelectOptions() {
+    return fetchJSON(`${API_BASE}/categorias/select-options`);
+}
+
 // ── Públicas: Productos por categoría ──
 
 export async function getProductosByCategoria(slug) {

@@ -100,7 +100,7 @@ export default function ClienteHistoria() {
 
     const ESTADO_COLORS = {
         recibido: 'bg-blue-100 text-blue-800',
-        en_proceso: 'bg-amber-100 text-amber-800',
+        en_proceso: 'bg-stone-100 text-stone-700',
         en_prueba: 'bg-purple-100 text-purple-800',
         terminado: 'bg-green-100 text-green-800',
         entregado: 'bg-stone-100 text-stone-800',
@@ -110,7 +110,7 @@ export default function ClienteHistoria() {
     if (loading) {
         return (
             <div className="flex items-center justify-center py-20">
-                <div className="w-8 h-8 border-4 border-amber-600 border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-8 h-8 border-4 border-stone-600 border-t-transparent rounded-full animate-spin"></div>
             </div>
         );
     }
@@ -168,7 +168,7 @@ export default function ClienteHistoria() {
                     <h3 className="text-sm font-heading text-stone-700">Evolución de Medidas</h3>
                     <button
                         onClick={() => setShowAddMedidas(!showAddMedidas)}
-                        className="text-xs text-amber-600 hover:text-amber-700 font-medium"
+                        className="text-xs text-stone-600 hover:text-stone-900 font-medium"
                     >
                         {showAddMedidas ? 'Cancelar' : '+ Nueva toma'}
                     </button>
@@ -176,7 +176,7 @@ export default function ClienteHistoria() {
 
                 {/* Formulario nueva toma */}
                 {showAddMedidas && (
-                    <div className="p-4 border-b border-stone-200 bg-amber-50/50">
+                    <div className="p-4 border-b border-stone-200 bg-stone-50">
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-3">
                             {Object.entries(MEDIDAS_LABELS).map(([key, label]) => (
                                 <div key={key}>
@@ -186,7 +186,7 @@ export default function ClienteHistoria() {
                                         placeholder="cm"
                                         value={nuevasMedidas[key] || ''}
                                         onChange={(e) => setNuevasMedidas({ ...nuevasMedidas, [key]: e.target.value })}
-                                        className="w-full px-2 py-1.5 border border-stone-300 rounded text-sm focus:ring-1 focus:ring-amber-500 outline-none"
+                                        className="w-full px-2 py-1.5 border border-stone-300 rounded text-sm focus:ring-1 focus:ring-stone-400 outline-none"
                                     />
                                 </div>
                             ))}
@@ -199,7 +199,7 @@ export default function ClienteHistoria() {
                                     placeholder="Ej: Ajuste post prueba"
                                     value={notasMedida}
                                     onChange={(e) => setNotasMedida(e.target.value)}
-                                    className="w-full px-2 py-1.5 border border-stone-300 rounded text-sm focus:ring-1 focus:ring-amber-500 outline-none"
+                                    className="w-full px-2 py-1.5 border border-stone-300 rounded text-sm focus:ring-1 focus:ring-stone-400 outline-none"
                                 />
                             </div>
                             <div>
@@ -209,14 +209,14 @@ export default function ClienteHistoria() {
                                     placeholder="Nombre"
                                     value={tomadaPor}
                                     onChange={(e) => setTomadaPor(e.target.value)}
-                                    className="w-full px-2 py-1.5 border border-stone-300 rounded text-sm focus:ring-1 focus:ring-amber-500 outline-none"
+                                    className="w-full px-2 py-1.5 border border-stone-300 rounded text-sm focus:ring-1 focus:ring-stone-400 outline-none"
                                 />
                             </div>
                         </div>
                         <button
                             onClick={handleAddMedidas}
                             disabled={saving}
-                            className="w-full py-2 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-700 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
+                            className="w-full py-2 bg-stone-800 text-white rounded-lg text-sm font-medium hover:bg-stone-700 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
                         >
                             {saving && <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>}
                             {saving ? 'Guardando...' : 'Guardar Medidas'}
@@ -230,14 +230,14 @@ export default function ClienteHistoria() {
                         historial.historial_completo.map((registro, idx) => {
                             const medidas = registro.medidas_json || {};
                             return (
-                                <div key={registro.id} className={`p-4 ${idx === 0 ? 'bg-amber-50/30' : ''}`}>
+                                <div key={registro.id} className={`p-4 ${idx === 0 ? 'bg-stone-50' : ''}`}>
                                     <div className="flex items-center justify-between mb-2">
                                         <div className="flex items-center gap-2">
                                             <span className="text-xs font-medium text-stone-800">
                                                 {formatDate(registro.fecha_toma || registro.created_at)}
                                             </span>
                                             {idx === 0 && (
-                                                <span className="px-1.5 py-0.5 bg-amber-100 text-amber-700 text-xs rounded font-medium">Más reciente</span>
+                                                <span className="px-1.5 py-0.5 bg-stone-200 text-stone-700 text-xs rounded font-medium">Más reciente</span>
                                             )}
                                         </div>
                                         {registro.tomada_por && (
@@ -280,7 +280,7 @@ export default function ClienteHistoria() {
                                 className="flex items-center justify-between p-4 hover:bg-stone-50 transition-colors"
                             >
                                 <div>
-                                    <p className="text-sm font-medium text-amber-600">#{p.id}</p>
+                                    <p className="text-sm font-medium text-stone-700">#{p.id}</p>
                                     <p className="text-xs text-stone-500">{formatDate(p.created_at)}</p>
                                 </div>
                                 <div className="flex items-center gap-3">

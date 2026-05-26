@@ -226,7 +226,7 @@ export default function OrderWizard() {
                         <button
                             onClick={() => s.n < step && setStep(s.n)}
                             className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
-                                step >= s.n ? 'bg-amber-600 text-white' : 'bg-stone-200 text-stone-500'
+                                step >= s.n ? 'bg-stone-800 text-white' : 'bg-stone-200 text-stone-500'
                             }`}
                         >
                             {s.n}
@@ -234,7 +234,7 @@ export default function OrderWizard() {
                         <span className={`text-xs sm:text-sm hidden sm:inline ${step >= s.n ? 'text-stone-800 font-medium' : 'text-stone-400'}`}>
                             {s.label}
                         </span>
-                        {i < 2 && <div className={`flex-1 h-0.5 ${step > s.n ? 'bg-amber-600' : 'bg-stone-200'}`}></div>}
+                        {i < 2 && <div className={`flex-1 h-0.5 ${step > s.n ? 'bg-stone-600' : 'bg-stone-200'}`}></div>}
                     </div>
                 ))}
             </div>
@@ -245,9 +245,9 @@ export default function OrderWizard() {
                     <h3 className="font-heading text-stone-800">Seleccionar Cliente</h3>
 
                     {clienteId ? (
-                        <div className="flex items-center justify-between bg-amber-50 border border-amber-200 rounded-lg p-3">
+                        <div className="flex items-center justify-between bg-stone-50 border border-stone-200 rounded-lg p-3">
                             <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-amber-200 flex items-center justify-center text-amber-700 font-heading font-bold text-sm">
+                                <div className="w-10 h-10 rounded-full bg-stone-200 flex items-center justify-center text-stone-700 font-heading font-bold text-sm">
                                     {clienteNombre.charAt(0)}
                                 </div>
                                 <div>
@@ -269,11 +269,11 @@ export default function OrderWizard() {
                                     placeholder="Buscar por nombre, apellido o teléfono..."
                                     value={clienteSearch}
                                     onChange={(e) => { setClienteSearch(e.target.value); setShowNuevoCliente(false); }}
-                                    className="w-full pl-10 pr-4 py-3 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none"
+                                    className="w-full pl-10 pr-4 py-3 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 focus:border-stone-400 outline-none"
                                 />
                                 {searching && (
                                     <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                                        <div className="w-4 h-4 border-2 border-amber-600 border-t-transparent rounded-full animate-spin"></div>
+                                        <div className="w-4 h-4 border-2 border-stone-600 border-t-transparent rounded-full animate-spin"></div>
                                     </div>
                                 )}
                                 {/* Dropdown resultados */}
@@ -308,7 +308,7 @@ export default function OrderWizard() {
                                                 apellido: parts.slice(1).join(' ') || '',
                                             }));
                                         }}
-                                        className="inline-flex items-center gap-2 px-5 py-3 bg-amber-600 text-white rounded-lg font-medium hover:bg-amber-700 transition-colors active:scale-[0.98] text-sm"
+                                        className="inline-flex items-center gap-2 px-5 py-3 bg-stone-800 text-white rounded-lg font-medium hover:bg-stone-700 transition-colors active:scale-[0.98] text-sm"
                                     >
                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -320,7 +320,7 @@ export default function OrderWizard() {
 
                             {/* Formulario inline nuevo cliente */}
                             {showNuevoCliente && (
-                                <div className="bg-amber-50/50 border border-amber-200 rounded-lg p-4 space-y-3">
+                                <div className="bg-stone-50 border border-stone-200 rounded-lg p-4 space-y-3">
                                     <div className="flex items-center justify-between">
                                         <h4 className="text-sm font-heading text-stone-800">Nuevo Cliente</h4>
                                         <button
@@ -338,7 +338,7 @@ export default function OrderWizard() {
                                                 placeholder="Nombre"
                                                 value={nuevoCliente.nombre}
                                                 onChange={(e) => setNuevoCliente({ ...nuevoCliente, nombre: e.target.value })}
-                                                className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none bg-white"
+                                                className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 outline-none bg-white"
                                             />
                                         </div>
                                         <div>
@@ -348,7 +348,7 @@ export default function OrderWizard() {
                                                 placeholder="Apellido"
                                                 value={nuevoCliente.apellido}
                                                 onChange={(e) => setNuevoCliente({ ...nuevoCliente, apellido: e.target.value })}
-                                                className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none bg-white"
+                                                className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 outline-none bg-white"
                                             />
                                         </div>
                                         <div>
@@ -358,7 +358,7 @@ export default function OrderWizard() {
                                                 placeholder="11-1234-5678"
                                                 value={nuevoCliente.telefono}
                                                 onChange={(e) => setNuevoCliente({ ...nuevoCliente, telefono: e.target.value })}
-                                                className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none bg-white"
+                                                className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 outline-none bg-white"
                                             />
                                         </div>
                                         <div>
@@ -368,14 +368,14 @@ export default function OrderWizard() {
                                                 placeholder="correo@ejemplo.com"
                                                 value={nuevoCliente.email}
                                                 onChange={(e) => setNuevoCliente({ ...nuevoCliente, email: e.target.value })}
-                                                className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none bg-white"
+                                                className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 outline-none bg-white"
                                             />
                                         </div>
                                     </div>
                                     <button
                                         onClick={handleCrearCliente}
                                         disabled={creatingCliente}
-                                        className="w-full py-3 bg-amber-600 text-white rounded-lg font-medium hover:bg-amber-700 disabled:opacity-50 transition-colors flex items-center justify-center gap-2 active:scale-[0.98]"
+                                        className="w-full py-3 bg-stone-800 text-white rounded-lg font-medium hover:bg-stone-700 disabled:opacity-50 transition-colors flex items-center justify-center gap-2 active:scale-[0.98]"
                                     >
                                         {creatingCliente ? (
                                             <>
@@ -405,7 +405,7 @@ export default function OrderWizard() {
                                 value={fechaEntrega}
                                 onChange={(e) => setFechaEntrega(e.target.value)}
                                 min={new Date().toISOString().split('T')[0]}
-                                className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none"
+                                className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 outline-none"
                             />
                         </div>
                         <div>
@@ -413,7 +413,7 @@ export default function OrderWizard() {
                             <select
                                 value={metodoPago}
                                 onChange={(e) => setMetodoPago(e.target.value)}
-                                className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-amber-500 outline-none"
+                                className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-stone-400 outline-none"
                             >
                                 <option value="">Seleccionar</option>
                                 <option value="efectivo">Efectivo</option>
@@ -429,7 +429,7 @@ export default function OrderWizard() {
                                 placeholder="0"
                                 value={seniaPagada}
                                 onChange={(e) => setSeniaPagada(e.target.value)}
-                                className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none"
+                                className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 outline-none"
                             />
                         </div>
                     </div>
@@ -440,14 +440,14 @@ export default function OrderWizard() {
                             value={observaciones}
                             onChange={(e) => setObservaciones(e.target.value)}
                             rows={2}
-                            className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none resize-none"
+                            className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 outline-none resize-none"
                         />
                     </div>
 
                     <button
                         onClick={() => canProceedStep1 ? setStep(2) : toast.error('Seleccione un cliente')}
                         disabled={!canProceedStep1}
-                        className="w-full py-3 bg-amber-600 text-white rounded-lg font-medium hover:bg-amber-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        className="w-full py-3 bg-stone-800 text-white rounded-lg font-medium hover:bg-stone-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
                         Siguiente: Agregar Prendas
                     </button>
@@ -474,7 +474,7 @@ export default function OrderWizard() {
                                         placeholder="Ej: Vestido largo de seda"
                                         value={item.descripcion_prenda}
                                         onChange={(e) => updateItem(idx, 'descripcion_prenda', e.target.value)}
-                                        className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none"
+                                        className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 outline-none"
                                     />
                                 </div>
                                 <div>
@@ -482,7 +482,7 @@ export default function OrderWizard() {
                                     <select
                                         value={item.tipo_trabajo}
                                         onChange={(e) => updateItem(idx, 'tipo_trabajo', e.target.value)}
-                                        className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-amber-500 outline-none"
+                                        className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-stone-400 outline-none"
                                     >
                                         <option value="confeccion">Confección</option>
                                         <option value="retrabajo">Re-trabajo</option>
@@ -497,7 +497,7 @@ export default function OrderWizard() {
                                         placeholder="0"
                                         value={item.precio_item}
                                         onChange={(e) => updateItem(idx, 'precio_item', e.target.value)}
-                                        className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none"
+                                        className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 outline-none"
                                     />
                                 </div>
                                 <div className="flex items-center gap-4">
@@ -506,7 +506,7 @@ export default function OrderWizard() {
                                             type="checkbox"
                                             checked={item.trae_tela}
                                             onChange={(e) => updateItem(idx, 'trae_tela', e.target.checked)}
-                                            className="w-4 h-4 text-amber-600 rounded border-stone-300 focus:ring-amber-500"
+                                            className="w-4 h-4 text-stone-700 rounded border-stone-300 focus:ring-stone-400"
                                         />
                                         <span className="text-sm text-stone-700">Trae tela</span>
                                     </label>
@@ -515,7 +515,7 @@ export default function OrderWizard() {
                                             type="checkbox"
                                             checked={item.usa_medida_existente}
                                             onChange={(e) => updateItem(idx, 'usa_medida_existente', e.target.checked)}
-                                            className="w-4 h-4 text-amber-600 rounded border-stone-300 focus:ring-amber-500"
+                                            className="w-4 h-4 text-stone-700 rounded border-stone-300 focus:ring-stone-400"
                                         />
                                         <span className="text-sm text-stone-700">Usa medida existente</span>
                                     </label>
@@ -529,7 +529,7 @@ export default function OrderWizard() {
                                     placeholder="Detalle adicional..."
                                     value={item.notas_especificas}
                                     onChange={(e) => updateItem(idx, 'notas_especificas', e.target.value)}
-                                    className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none"
+                                    className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 outline-none"
                                 />
                             </div>
 
@@ -540,7 +540,7 @@ export default function OrderWizard() {
                                         <h5 className="text-xs font-medium text-stone-700 uppercase">Medidas</h5>
                                         <button
                                             onClick={() => loadLastMedidas(idx)}
-                                            className="text-xs text-amber-600 hover:text-amber-700 font-medium"
+                                            className="text-xs text-stone-600 hover:text-stone-900 font-medium"
                                         >
                                             Cargar últimas medidas
                                         </button>
@@ -554,7 +554,7 @@ export default function OrderWizard() {
                                                     placeholder="cm"
                                                     value={item.medidas[m.key] || ''}
                                                     onChange={(e) => updateMedida(idx, m.key, e.target.value)}
-                                                    className="w-full px-2 py-1.5 border border-stone-300 rounded text-sm focus:ring-1 focus:ring-amber-500 outline-none"
+                                                    className="w-full px-2 py-1.5 border border-stone-300 rounded text-sm focus:ring-1 focus:ring-stone-400 outline-none"
                                                 />
                                             </div>
                                         ))}
@@ -566,7 +566,7 @@ export default function OrderWizard() {
 
                     <button
                         onClick={addItem}
-                        className="w-full py-3 border-2 border-dashed border-stone-300 rounded-xl text-sm text-stone-600 hover:border-amber-400 hover:text-amber-600 transition-colors"
+                        className="w-full py-3 border-2 border-dashed border-stone-300 rounded-xl text-sm text-stone-600 hover:border-stone-400 hover:text-stone-700 transition-colors"
                     >
                         + Agregar otra prenda
                     </button>
@@ -587,7 +587,7 @@ export default function OrderWizard() {
                         <button
                             onClick={() => canProceedStep2 ? setStep(3) : toast.error('Complete descripción y precio en todas las prendas')}
                             disabled={!canProceedStep2}
-                            className="flex-1 py-3 bg-amber-600 text-white rounded-lg font-medium hover:bg-amber-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            className="flex-1 py-3 bg-stone-800 text-white rounded-lg font-medium hover:bg-stone-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                         >
                             Siguiente: Confirmar
                         </button>
@@ -616,7 +616,7 @@ export default function OrderWizard() {
                             </div>
                             <div>
                                 <p className="text-stone-500">Seña</p>
-                                <p className="font-medium text-amber-700">{formatCurrency(parseFloat(seniaPagada) || 0)}</p>
+                                <p className="font-medium text-stone-600">{formatCurrency(parseFloat(seniaPagada) || 0)}</p>
                             </div>
                         </div>
 
@@ -678,7 +678,7 @@ export default function OrderWizard() {
                         <button
                             onClick={handleSubmit}
                             disabled={saving}
-                            className="flex-1 py-3 bg-amber-600 text-white rounded-lg font-medium hover:bg-amber-700 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
+                            className="flex-1 py-3 bg-stone-800 text-white rounded-lg font-medium hover:bg-stone-700 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
                         >
                             {saving ? (
                                 <>

@@ -66,7 +66,7 @@ function CategoriaTemplate() {
             <div className="px-6 md:px-8 lg:px-12 pt-8 pb-4">
                 {/* Breadcrumb — padre */}
                 {padre && (
-                    <p className="font-body text-[10px] tracking-[0.2em] uppercase text-neutral-400 mb-2">
+                    <p className="font-body text-[10px] tracking-[0.2em] uppercase text-black underline underline-offset-4 mb-2">
                         {padre.nombre}
                     </p>
                 )}

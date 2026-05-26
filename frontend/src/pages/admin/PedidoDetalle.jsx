@@ -6,7 +6,7 @@ import { getPedidoById, cambiarEstadoItem as cambiarEstadoItemApi } from '@/serv
 
 const ESTADO_COLORS = {
     recibido: 'bg-blue-100 text-blue-800',
-    en_proceso: 'bg-amber-100 text-amber-800',
+    en_proceso: 'bg-stone-100 text-stone-700',
     en_prueba: 'bg-purple-100 text-purple-800',
     terminado: 'bg-green-100 text-green-800',
     entregado: 'bg-stone-100 text-stone-800',
@@ -16,7 +16,7 @@ const ESTADO_COLORS = {
 const ITEM_ESTADO_COLORS = {
     pendiente: 'bg-stone-100 text-stone-700',
     cortado: 'bg-sky-100 text-sky-800',
-    en_confeccion: 'bg-amber-100 text-amber-800',
+    en_confeccion: 'bg-stone-100 text-stone-700',
     en_prueba: 'bg-purple-100 text-purple-800',
     terminado: 'bg-green-100 text-green-800',
     entregado: 'bg-stone-200 text-stone-800',
@@ -74,7 +74,7 @@ export default function PedidoDetalle() {
     if (loading) {
         return (
             <div className="flex items-center justify-center py-20">
-                <div className="w-8 h-8 border-4 border-amber-600 border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-8 h-8 border-4 border-stone-600 border-t-transparent rounded-full animate-spin"></div>
             </div>
         );
     }
@@ -117,14 +117,14 @@ export default function PedidoDetalle() {
                 </div>
                 <div className="bg-white rounded-lg p-3 border border-stone-200">
                     <p className="text-xs text-stone-500 mb-1">Seña pagada</p>
-                    <p className="text-sm font-medium text-amber-700">{formatCurrency(pedido.senia_pagada)}</p>
+                    <p className="text-sm font-medium text-stone-700">{formatCurrency(pedido.senia_pagada)}</p>
                 </div>
             </div>
 
             {pedido.observaciones_generales && (
-                <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
-                    <p className="text-xs text-amber-600 font-medium mb-1">Observaciones</p>
-                    <p className="text-sm text-amber-900">{pedido.observaciones_generales}</p>
+                <div className="bg-stone-50 border border-stone-200 rounded-lg p-3">
+                    <p className="text-xs text-stone-500 font-medium mb-1">Observaciones</p>
+                    <p className="text-sm text-stone-700">{pedido.observaciones_generales}</p>
                 </div>
             )}
 
@@ -175,12 +175,12 @@ export default function PedidoDetalle() {
                                 <div className="flex items-center gap-3">
                                     <span className="text-sm font-bold text-stone-800">{formatCurrency(item.precio_item)}</span>
                                     {cambiandoEstado === item.id ? (
-                                        <div className="w-5 h-5 border-2 border-amber-600 border-t-transparent rounded-full animate-spin"></div>
+                                        <div className="w-5 h-5 border-2 border-stone-600 border-t-transparent rounded-full animate-spin"></div>
                                     ) : (
                                         <select
                                             value={item.estado_item}
                                             onChange={(e) => cambiarEstadoItem(item.id, e.target.value)}
-                                            className="text-xs border border-stone-300 rounded px-2 py-1 bg-white focus:ring-1 focus:ring-amber-500 outline-none"
+                                            className="text-xs border border-stone-300 rounded px-2 py-1 bg-white focus:ring-1 focus:ring-stone-400 outline-none"
                                         >
                                             <option value="pendiente">Pendiente</option>
                                             <option value="cortado">Cortado</option>

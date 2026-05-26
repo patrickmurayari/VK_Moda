@@ -136,7 +136,7 @@ export default function DashboardLayout() {
                             className={({ isActive }) =>
                                 `flex items-center gap-3 px-4 py-3 rounded-lg mb-1 transition-colors ${
                                     isActive
-                                        ? 'bg-amber-600 text-white'
+                                        ? 'bg-stone-600 text-white'
                                         : 'text-stone-400 hover:bg-stone-700 hover:text-white'
                                 }`
                             }
@@ -190,7 +190,7 @@ export default function DashboardLayout() {
                             href="/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-sm text-stone-600 hover:text-amber-600 transition-colors hidden sm:inline-block"
+                            className="text-sm text-stone-600 hover:text-stone-900 transition-colors hidden sm:inline-block"
                         >
                             Ver sitio →
                         </a>
@@ -199,7 +199,7 @@ export default function DashboardLayout() {
                             href="/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-stone-600 hover:text-amber-600 transition-colors sm:hidden"
+                            className="text-stone-600 hover:text-stone-900 transition-colors sm:hidden"
                         >
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />

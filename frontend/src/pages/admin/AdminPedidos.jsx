@@ -16,7 +16,7 @@ const ESTADOS = [
 
 const ESTADO_COLORS = {
     recibido: 'bg-blue-100 text-blue-800',
-    en_proceso: 'bg-amber-100 text-amber-800',
+    en_proceso: 'bg-stone-100 text-stone-700',
     en_prueba: 'bg-purple-100 text-purple-800',
     terminado: 'bg-green-100 text-green-800',
     entregado: 'bg-stone-100 text-stone-800',
@@ -67,7 +67,7 @@ export default function AdminPedidos() {
     if (loading) {
         return (
             <div className="flex items-center justify-center py-20">
-                <div className="w-8 h-8 border-4 border-amber-600 border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-8 h-8 border-4 border-stone-600 border-t-transparent rounded-full animate-spin"></div>
             </div>
         );
     }
@@ -79,7 +79,7 @@ export default function AdminPedidos() {
                 <h2 className="text-xl sm:text-2xl font-heading text-stone-800">Gestión de Pedidos</h2>
                 <Link
                     to="/admin/pedidos/nuevo"
-                    className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors text-sm font-medium active:scale-[0.98]"
+                    className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-stone-800 text-white rounded-lg hover:bg-stone-700 transition-colors text-sm font-medium active:scale-[0.98]"
                 >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -99,13 +99,13 @@ export default function AdminPedidos() {
                         placeholder="Buscar por cliente o #pedido..."
                         value={busqueda}
                         onChange={(e) => setBusqueda(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none"
+                        className="w-full pl-10 pr-4 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 focus:border-stone-400 outline-none"
                     />
                 </div>
                 <select
                     value={filtroEstado}
                     onChange={(e) => setFiltroEstado(e.target.value)}
-                    className="px-4 py-2.5 border border-stone-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none"
+                    className="px-4 py-2.5 border border-stone-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-stone-400 focus:border-stone-400 outline-none"
                 >
                     {ESTADOS.map((e) => (
                         <option key={e.value} value={e.value}>{e.label}</option>
@@ -172,7 +172,7 @@ export default function AdminPedidos() {
                                 pedidosFiltrados.map((p) => (
                                     <tr key={p.id} className="hover:bg-stone-50 transition-colors">
                                         <td className="px-4 py-3">
-                                            <Link to={`/admin/pedidos/${p.id}`} className="text-amber-600 hover:text-amber-700 font-medium">
+                                            <Link to={`/admin/pedidos/${p.id}`} className="text-stone-700 hover:text-stone-900 font-medium">
                                                 #{p.id}
                                             </Link>
                                         </td>

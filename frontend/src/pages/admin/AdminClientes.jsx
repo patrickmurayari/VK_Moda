@@ -48,7 +48,7 @@ export default function AdminClientes() {
     if (loading) {
         return (
             <div className="flex items-center justify-center py-20">
-                <div className="w-8 h-8 border-4 border-amber-600 border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-8 h-8 border-4 border-stone-600 border-t-transparent rounded-full animate-spin"></div>
             </div>
         );
     }
@@ -69,11 +69,11 @@ export default function AdminClientes() {
                     placeholder="Buscar por nombre, apellido o teléfono..."
                     value={busqueda}
                     onChange={(e) => setBusqueda(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none"
+                    className="w-full pl-10 pr-4 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 focus:border-stone-400 outline-none"
                 />
                 {searching && (
                     <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                        <div className="w-4 h-4 border-2 border-amber-600 border-t-transparent rounded-full animate-spin"></div>
+                        <div className="w-4 h-4 border-2 border-stone-600 border-t-transparent rounded-full animate-spin"></div>
                     </div>
                 )}
             </div>
@@ -121,7 +121,7 @@ export default function AdminClientes() {
                                 clientes.map((c) => (
                                     <tr key={c.id} className="hover:bg-stone-50 transition-colors">
                                         <td className="px-4 py-3">
-                                            <Link to={`/admin/clientes/${c.id}`} className="text-amber-600 hover:text-amber-700 font-medium text-sm">
+                                            <Link to={`/admin/clientes/${c.id}`} className="text-stone-700 hover:text-stone-900 font-medium text-sm">
                                                 {c.apellido}, {c.nombre}
                                             </Link>
                                         </td>

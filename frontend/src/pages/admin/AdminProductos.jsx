@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { supabase } from '@/lib/supabase';
 import { getProductos, deleteProducto } from '@/services/api';
+import { formatPrecio } from '@/utils/format';
 
 // Componente de esqueleto de carga adaptado a mobile
 function ProductSkeleton() {
@@ -61,14 +62,6 @@ export default function AdminProductos() {
         }
     };
 
-    const formatPrice = (price) => {
-        return new Intl.NumberFormat('es-AR', {
-            style: 'currency',
-            currency: 'ARS',
-            minimumFractionDigits: 0
-        }).format(price);
-    };
-
     return (
         <div className="space-y-6">
             {/* Header: Apilado en mobile, en línea en sm+ */}
@@ -79,7 +72,7 @@ export default function AdminProductos() {
                 </div>
                 <Link
                     to="/admin/productos/nuevo"
-                    className="w-full sm:w-auto flex items-center justify-center gap-2 bg-amber-600 hover:bg-amber-700 text-white px-4 py-2.5 sm:py-2 rounded-lg transition-colors active:scale-[0.98]"
+                    className="w-full sm:w-auto flex items-center justify-center gap-2 bg-stone-800 hover:bg-stone-700 text-white px-4 py-2.5 sm:py-2 rounded-lg transition-colors active:scale-[0.98]"
                 >
                     <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -130,7 +123,7 @@ export default function AdminProductos() {
                                             </div>
                                         </td>
                                         <td className="px-4 py-3 text-stone-600 whitespace-nowrap">
-                                            {formatPrice(producto.precio)}
+                                            {formatPrecio(producto.precio)}
                                         </td>
                                         <td className="px-4 py-3 whitespace-nowrap">
                                             <span className="px-2 py-1 bg-stone-100 text-stone-600 rounded text-xs sm:text-sm">
@@ -150,7 +143,7 @@ export default function AdminProductos() {
                                             <div className="flex justify-end gap-1 sm:gap-2">
                                                 <Link
                                                     to={`/admin/productos/editar/${producto.id}`}
-                                                    className="p-2 text-stone-500 hover:text-amber-600 hover:bg-amber-50 rounded transition-colors"
+                                                    className="p-2 text-stone-500 hover:text-stone-800 hover:bg-stone-100 rounded transition-colors"
                                                     title="Editar"
                                                 >
                                                     <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

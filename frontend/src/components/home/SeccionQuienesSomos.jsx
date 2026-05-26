@@ -39,8 +39,8 @@ function SeccionQuienesSomos() {
         <div className="relative mt-16 md:mt-20" id="quienes-somos">
             {/* Fondo decorativo */}
             <div className="absolute inset-0 -z-10 overflow-hidden">
-                <div className="absolute top-0 right-0 w-96 h-96 bg-accent-600/5 rounded-full -mr-48 -mt-48"></div>
-                <div className="absolute bottom-0 left-0 w-80 h-80 bg-primary-900/5 rounded-full -ml-40 -mb-40"></div>
+                <div className="absolute top-0 right-0 w-96 h-96 bg-neutral-200/30 rounded-full -mr-48 -mt-48"></div>
+                <div className="absolute bottom-0 left-0 w-80 h-80 bg-neutral-200/20 rounded-full -ml-40 -mb-40"></div>
             </div>
 
             {/* Primera sección - Quiénes Somos */}
@@ -71,16 +71,16 @@ function SeccionQuienesSomos() {
                             <div className="space-y-6">
                                 <div>
                                     <div className="flex items-center gap-4 mb-6">
-                                        <div className="h-px w-12 bg-accent-600"></div>
-                                        <span className="text-accent-600 font-semibold tracking-widest text-sm uppercase">Nuestra Historia</span>
+                                        <div className="h-px w-12 bg-neutral-300"></div>
+                                        <span className="text-neutral-500 font-semibold tracking-widest text-sm uppercase">Nuestra Historia</span>
                                     </div>
                                     <h2 className="text-primary-900 font-elegant text-3xl sm:text-4xl md:text-4xl font-bold tracking-wider mb-6">
                                         Quiénes Somos
                                     </h2>
                                     <div className="flex items-center gap-4">
-                                        <div className="h-px w-16 bg-accent-600"></div>
-                                        <div className="w-2 h-2 bg-accent-600 rounded-full"></div>
-                                        <div className="h-px w-16 bg-accent-600"></div>
+                                        <div className="h-px w-16 bg-neutral-200"></div>
+                                        <div className="w-1.5 h-1.5 bg-neutral-300 rounded-full"></div>
+                                        <div className="h-px w-16 bg-neutral-200"></div>
                                     </div>
                                 </div>
 
@@ -92,16 +92,16 @@ function SeccionQuienesSomos() {
                             <div className="space-y-6 pt-8 border-t border-primary-900/10">
                                 <div>
                                     <div className="flex items-center gap-4 mb-6">
-                                        <div className="h-px w-12 bg-accent-600"></div>
-                                        <span className="text-accent-600 font-semibold tracking-widest text-sm uppercase">Nuestro Valor</span>
+                                        <div className="h-px w-12 bg-neutral-300"></div>
+                                        <span className="text-neutral-500 font-semibold tracking-widest text-sm uppercase">Nuestro Valor</span>
                                     </div>
                                     <h2 className="text-primary-900 font-elegant text-3xl sm:text-4xl md:text-4xl font-bold tracking-wider mb-6">
                                         Por Qué Elegirnos
                                     </h2>
                                     <div className="flex items-center gap-4">
-                                        <div className="h-px w-16 bg-accent-600"></div>
-                                        <div className="w-2 h-2 bg-accent-600 rounded-full"></div>
-                                        <div className="h-px w-16 bg-accent-600"></div>
+                                        <div className="h-px w-16 bg-neutral-200"></div>
+                                        <div className="w-1.5 h-1.5 bg-neutral-300 rounded-full"></div>
+                                        <div className="h-px w-16 bg-neutral-200"></div>
                                     </div>
                                 </div>
 

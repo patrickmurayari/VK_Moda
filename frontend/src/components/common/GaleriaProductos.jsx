@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi';
+import { formatPrecio } from '../../utils/format';
 
 function GaleriaProductos({ productos, mostrarPrecio = true }) {
     const [modalAbierto, setModalAbierto] = useState(false);
@@ -60,7 +61,7 @@ function GaleriaProductos({ productos, mostrarPrecio = true }) {
                                 </h3>
                                 {producto.precio && (
                                     <p className="font-body text-[9px] md:text-xs text-neutral-500 mt-0.5 md:mt-1">
-                                        ${producto.precio}
+                                        {formatPrecio(producto.precio)}
                                     </p>
                                 )}
                             </div>

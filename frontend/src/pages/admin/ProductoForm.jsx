@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { supabase } from '@/lib/supabase';
-import { getCategorias, getProductoById, createProducto, updateProducto } from '@/services/api';
+import { getCategoriasSelectOptions, getProductoById, createProducto, updateProducto } from '@/services/api';
 
 export default function ProductoForm() {
     const { id } = useParams();
@@ -38,7 +38,7 @@ export default function ProductoForm() {
 
     const fetchCategorias = async () => {
         try {
-            const data = await getCategorias();
+            const data = await getCategoriasSelectOptions();
             setCategorias(data);
         } catch (error) {
             console.error('Error al cargar categorías:', error);
@@ -141,7 +141,7 @@ export default function ProductoForm() {
     if (loading) {
         return (
             <div className="flex items-center justify-center py-12">
-                <svg className="animate-spin h-8 w-8 text-amber-600" viewBox="0 0 24 24">
+                <svg className="animate-spin h-8 w-8 text-stone-600" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                 </svg>
@@ -174,7 +174,7 @@ export default function ProductoForm() {
                         name="nombre"
                         value={formData.nombre}
                         onChange={handleChange}
-                        className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all outline-none ${
+                        className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-stone-400 focus:border-transparent transition-all outline-none ${
                             errors.nombre ? 'border-red-500' : 'border-stone-300'
                         }`}
                         placeholder="Ej: Vestido rojo de seda"
@@ -199,7 +199,7 @@ export default function ProductoForm() {
                             onChange={handleChange}
                             step="0.01"
                             min="0"
-                            className={`w-full pl-8 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all outline-none ${
+                            className={`w-full pl-8 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-stone-400 focus:border-transparent transition-all outline-none ${
                                 errors.precio ? 'border-red-500' : 'border-stone-300'
                             }`}
                             placeholder="0.00"
@@ -220,14 +220,14 @@ export default function ProductoForm() {
                         name="categoria_id"
                         value={formData.categoria_id}
                         onChange={handleChange}
-                        className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all outline-none bg-white ${
+                        className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-stone-400 focus:border-transparent transition-all outline-none bg-white ${
                             errors.categoria_id ? 'border-red-500' : 'border-stone-300'
                         }`}
                     >
                         <option value="">Seleccionar categoría</option>
                         {categorias.map(cat => (
                             <option key={cat.id} value={cat.id}>
-                                {cat.nombre}
+                                {cat.label}
                             </option>
                         ))}
                     </select>
@@ -247,7 +247,7 @@ export default function ProductoForm() {
                         name="imagen_url"
                         value={formData.imagen_url}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all outline-none"
+                        className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-stone-400 focus:border-transparent transition-all outline-none"
                         placeholder="https://..."
                     />
                     <p className="mt-1 text-xs sm:text-sm text-stone-500">
@@ -276,7 +276,7 @@ export default function ProductoForm() {
                         name="colores"
                         value={formData.colores}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all outline-none"
+                        className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-stone-400 focus:border-transparent transition-all outline-none"
                         placeholder="Rojo, Azul, Negro"
                     />
                 </div>
@@ -289,7 +289,7 @@ export default function ProductoForm() {
                         name="esta_activo"
                         checked={formData.esta_activo}
                         onChange={handleChange}
-                        className="w-5 h-5 text-amber-600 border-stone-300 rounded focus:ring-amber-500"
+                        className="w-5 h-5 text-stone-700 border-stone-300 rounded focus:ring-stone-400"
                     />
                     <label htmlFor="esta_activo" className="text-sm font-medium text-stone-700 select-none cursor-pointer">
                         Producto activo (visible en la tienda)
@@ -308,7 +308,7 @@ export default function ProductoForm() {
                     <button
                         type="submit"
                         disabled={saving}
-                        className="w-full sm:flex-1 bg-amber-600 hover:bg-amber-700 text-white font-medium py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 active:scale-[0.98]"
+                        className="w-full sm:flex-1 bg-black hover:bg-neutral-800 text-white font-medium py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 active:scale-[0.98]"
                     >
                         {saving ? (
                             <>

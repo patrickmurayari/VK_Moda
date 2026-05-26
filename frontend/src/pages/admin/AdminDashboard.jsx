@@ -20,8 +20,8 @@ export default function AdminDashboard() {
                     className="bg-white rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-shadow border border-stone-200 group"
                 >
                     <div className="flex items-center gap-3">
-                        <div className="p-2.5 bg-amber-100 rounded-lg group-hover:bg-amber-200 transition-colors">
-                            <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="p-2.5 bg-stone-100 rounded-lg group-hover:bg-stone-200 transition-colors">
+                            <svg className="w-5 h-5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
                             </svg>
                         </div>
@@ -92,7 +92,7 @@ export default function AdminDashboard() {
                         className="flex items-center gap-3 p-3 sm:p-4 bg-stone-50 rounded-lg hover:bg-stone-100 transition-colors active:scale-[0.98]"
                     >
                         <div className="p-2 bg-white rounded shadow-sm">
-                            <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-5 h-5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                             </svg>
                         </div>
@@ -103,7 +103,7 @@ export default function AdminDashboard() {
                         className="flex items-center gap-3 p-3 sm:p-4 bg-stone-50 rounded-lg hover:bg-stone-100 transition-colors active:scale-[0.98]"
                     >
                         <div className="p-2 bg-white rounded shadow-sm">
-                            <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-5 h-5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                             </svg>
                         </div>
