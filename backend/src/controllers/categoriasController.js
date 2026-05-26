@@ -102,4 +102,28 @@ const getCategoryContext = async (req, res) => {
     }
 };
 
-module.exports = { getCategorias, getCategoryTree, getCategoryContext };
+const getCategoriasSelectOptions = async (req, res) => {
+    try {
+        const result = await db.query(`
+            SELECT c.id, c.nombre, p.nombre AS padre_nombre
+            FROM categorias c
+            LEFT JOIN categorias p ON c.parent_id = p.id
+        `);
+
+        const options = result.rows
+            .map((row) => ({
+                id: row.id,
+                label: row.padre_nombre
+                    ? `${row.padre_nombre} > ${row.nombre}`
+                    : row.nombre,
+            }))
+            .sort((a, b) => a.label.localeCompare(b.label, 'es'));
+
+        res.json(options);
+    } catch (err) {
+        console.error('Error al obtener opciones de categorías:', err);
+        res.status(500).json({ error: 'Error al obtener opciones de categorías' });
+    }
+};
+
+module.exports = { getCategorias, getCategoryTree, getCategoryContext, getCategoriasSelectOptions };
