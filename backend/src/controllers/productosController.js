@@ -34,4 +34,18 @@ const getProductosByCategoria = async (req, res) => {
     }
 };
 
-module.exports = { getProductosByCategoria };
+const getProductosDestacados = async (req, res) => {
+    const limit = parseInt(req.query.limit) || 4;
+    try {
+        const result = await db.query(
+            'SELECT id, nombre, precio, imagen_url, colores FROM productos WHERE esta_activo = true ORDER BY id DESC LIMIT $1',
+            [limit]
+        );
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Error al obtener productos destacados:', err);
+        res.status(500).json({ error: 'Error al obtener productos destacados' });
+    }
+};
+
+module.exports = { getProductosByCategoria, getProductosDestacados };
