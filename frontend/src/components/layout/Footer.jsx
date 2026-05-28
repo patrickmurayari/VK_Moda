@@ -49,9 +49,9 @@ function Footer() {
               <a href="#coleccion" className="block font-body font-normal text-xs text-white underline underline-offset-4 decoration-[0.5px] decoration-neutral-500 hover:decoration-white transition-colors duration-300">
                 Colección
               </a>
-              <a href="#quienes-somos" className="block font-body font-normal text-xs text-white underline underline-offset-4 decoration-[0.5px] decoration-neutral-500 hover:decoration-white transition-colors duration-300">
+              <RouterLink to="/quienes-somos" onClick={() => window.scrollTo(0, 0)} className="block font-body font-normal text-xs text-white underline underline-offset-4 decoration-[0.5px] decoration-neutral-500 hover:decoration-white transition-colors duration-300">
                 Quiénes Somos
-              </a>
+              </RouterLink>
               <a href="#contactos" className="block font-body font-normal text-xs text-white underline underline-offset-4 decoration-[0.5px] decoration-neutral-500 hover:decoration-white transition-colors duration-300">
                 Contáctanos
               </a>

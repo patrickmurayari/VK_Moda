@@ -5,6 +5,7 @@ import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { getCategoryTree } from '../../services/api';
 
 const NAV_EXTRAS = [
+    { id: 'quienes-somos', label: 'Quiénes Somos', slug: '/quienes-somos' },
     { id: 'colecciones', label: 'Colecciones', slug: '/coleccion' },
     { id: 'contacto', label: 'Contacto', action: 'scroll', target: 'contactos' },
 ];
@@ -62,6 +63,7 @@ function MobileMenu({ isOpen, onClose }) {
         } else if (item.slug) {
             setTimeout(() => {
                 navigate(item.slug);
+                window.scrollTo(0, 0);
                 resetStack();
             }, 300);
         }

@@ -27,9 +27,7 @@ import ClienteHistoria from './pages/admin/ClienteHistoria'
 const CategoriaTemplate = lazy(() => import("./components/Categorias/CategoriaTemplate"))
 
 const SeccionEditorialModa = lazy(() => import('./components/home/SeccionEditorialModa'))
-const SeccionInspiracionModa = lazy(() => import('./components/home/SeccionInspiracionModa'))
-const SeccionQuienesSomos = lazy(() => import('./components/home/SeccionQuienesSomos'))
-const SeccionContacto = lazy(() => import('./components/home/SeccionContacto'))
+const QuienesSomos = lazy(() => import('./pages/QuienesSomos'))
 
 function DeferredSection({ id, Component, placeholderClassName = 'min-h-[240px]' }) {
   const ref = useRef(null);
@@ -88,9 +86,6 @@ function Home() {
             <SeccionCategorias />
             <SeccionColeccion />
             <DeferredSection id="editorial" Component={SeccionEditorialModa} placeholderClassName="min-h-[520px]" />
-            <DeferredSection Component={SeccionInspiracionModa} placeholderClassName="min-h-[320px]" />
-            <DeferredSection id="quienes-somos" Component={SeccionQuienesSomos} placeholderClassName="min-h-[520px]" />
-            <DeferredSection id="contactos" Component={SeccionContacto} placeholderClassName="min-h-[520px]" />
         </div>
     );
 }
@@ -145,6 +140,7 @@ function App() {
           {/* Rutas públicas */}
           <Route path="/" element={<Home />}></Route>
           <Route path="/categoria/:slug" element={<CategoriaTemplate />}></Route>
+          <Route path="/quienes-somos" element={<QuienesSomos />} />
           
           {/* Rutas de autenticación */}
           <Route path="/login" element={<Login />} />
