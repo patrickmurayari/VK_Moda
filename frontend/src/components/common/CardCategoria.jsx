@@ -25,7 +25,7 @@ const CardProducts = ({ products }) => {
                     />
                 </div>
                 <div className="py-8 text-center">
-                    <span className="font-display text-sm md:text-base font-light tracking-[0.3em] uppercase text-neutral-900">
+                    <span className="font-display text-sm md:text-base font-light tracking-[0.3em] uppercase text-black">
                         {elem.name}
                     </span>
                 </div>
@@ -35,7 +35,7 @@ const CardProducts = ({ products }) => {
 
     return (
         <div className="w-full">
-            <div className="grid grid-cols-2 lg:grid-cols-4 bg-neutral-200/50">
+            <div className="grid grid-cols-2 lg:grid-cols-4 bg-white">
                 {products && products.map((elem, index) => renderCard(elem, elem.id ?? index))}
             </div>
         </div>
