@@ -6,8 +6,8 @@ const { processProductImage } = require('../utils/imageProcessor');
 // Bucket de Supabase Storage donde se guardan las imágenes de productos
 const STORAGE_BUCKET = 'productos';
 
-async function uploadProcessedImage(fileBuffer) {
-    const processed = await processProductImage(fileBuffer);
+async function uploadProcessedImage(fileBuffer, mimetype) {
+    const processed = await processProductImage(fileBuffer, mimetype);
     const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.webp`;
     const storagePath = `productos/${fileName}`;
 
@@ -77,7 +77,7 @@ const createProducto = async (req, res) => {
 
     try {
         if (req.file) {
-            imagen_url = await uploadProcessedImage(req.file.buffer);
+            imagen_url = await uploadProcessedImage(req.file.buffer, req.file.mimetype);
         }
 
         const result = await db.query(`
@@ -102,7 +102,7 @@ const updateProducto = async (req, res) => {
 
     try {
         if (req.file) {
-            imagen_url = await uploadProcessedImage(req.file.buffer);
+            imagen_url = await uploadProcessedImage(req.file.buffer, req.file.mimetype);
         }
 
         // Construir query dinámico

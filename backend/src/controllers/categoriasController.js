@@ -3,7 +3,11 @@ const db = require('../config/db');
 const getCategorias = async (req, res) => {
     try {
         const result = await db.query(
-            'SELECT id, slug, nombre, imagen_url, orden_visual FROM categorias ORDER BY orden_visual ASC'
+            `SELECT c.id, c.slug, c.nombre, c.imagen_url, c.parent_id, c.orden_visual,
+                    p.nombre AS padre_nombre
+             FROM categorias c
+             LEFT JOIN categorias p ON c.parent_id = p.id
+             ORDER BY c.orden_visual ASC`
         );
         res.json(result.rows);
     } catch (err) {
@@ -127,7 +131,7 @@ const getCategoriasSelectOptions = async (req, res) => {
 };
 
 const createCategoria = async (req, res) => {
-    const { nombre, slug, parent_id, orden_visual } = req.body;
+    const { nombre, slug, parent_id, orden_visual, imagen_url } = req.body;
 
     if (!nombre || !nombre.trim()) {
         return res.status(400).json({ error: 'El nombre es requerido' });
@@ -151,11 +155,21 @@ const createCategoria = async (req, res) => {
             return res.status(409).json({ error: 'Ya existe una categoría con ese slug' });
         }
 
+        // Solo incluir imagen_url si viene con valor real
+        const cleanImagenUrl = imagen_url && imagen_url.trim() ? imagen_url.trim() : null;
+        const cols = ['nombre', 'slug', 'parent_id', 'orden_visual'];
+        const vals = [nombre.trim(), slug.trim(), parent_id || null, orden_visual || 0];
+
+        if (cleanImagenUrl) {
+            cols.push('imagen_url');
+            vals.push(cleanImagenUrl);
+        }
+
+        const placeholders = cols.map((_, i) => `$${i + 1}`).join(', ');
+
         const result = await db.query(
-            `INSERT INTO categorias (nombre, slug, parent_id, orden_visual)
-             VALUES ($1, $2, $3, $4)
-             RETURNING *`,
-            [nombre.trim(), slug.trim(), parent_id || null, orden_visual || 0]
+            `INSERT INTO categorias (${cols.join(', ')}) VALUES (${placeholders}) RETURNING *`,
+            vals
         );
 
         res.status(201).json(result.rows[0]);
@@ -167,7 +181,7 @@ const createCategoria = async (req, res) => {
 
 const updateCategoria = async (req, res) => {
     const { id } = req.params;
-    const { nombre, slug, parent_id, orden_visual } = req.body;
+    const { nombre, slug, parent_id, orden_visual, imagen_url } = req.body;
 
     try {
         // Verificar que la categoría existe
@@ -218,6 +232,10 @@ const updateCategoria = async (req, res) => {
             updates.push(`orden_visual = $${paramCount++}`);
             values.push(orden_visual);
         }
+        if (imagen_url !== undefined) {
+            updates.push(`imagen_url = $${paramCount++}`);
+            values.push(imagen_url && imagen_url.trim() ? imagen_url.trim() : null);
+        }
 
         if (updates.length === 0) {
             return res.status(400).json({ error: 'No hay campos para actualizar' });
@@ -237,4 +255,34 @@ const updateCategoria = async (req, res) => {
     }
 };
 
-module.exports = { getCategorias, getCategoryTree, getCategoryContext, getCategoriasSelectOptions, createCategoria, updateCategoria };
+const deleteCategoria = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        // Verificar que la categoría existe
+        const existing = await db.query('SELECT id FROM categorias WHERE id = $1', [id]);
+        if (existing.rows.length === 0) {
+            return res.status(404).json({ error: 'Categoría no encontrada' });
+        }
+
+        // Impedir borrado si tiene subcategorías
+        const children = await db.query('SELECT id FROM categorias WHERE parent_id = $1', [id]);
+        if (children.rows.length > 0) {
+            return res.status(400).json({ error: 'No se puede eliminar una categoría con subcategorías asociadas' });
+        }
+
+        // Impedir borrado si tiene productos vinculados
+        const products = await db.query('SELECT id FROM productos WHERE categoria_id = $1', [id]);
+        if (products.rows.length > 0) {
+            return res.status(400).json({ error: 'No se puede eliminar una categoría con productos asociados' });
+        }
+
+        await db.query('DELETE FROM categorias WHERE id = $1', [id]);
+        res.json({ message: 'Categoría eliminada correctamente' });
+    } catch (err) {
+        console.error('Error al eliminar categoría:', err);
+        res.status(500).json({ error: 'Error al eliminar categoría' });
+    }
+};
+
+module.exports = { getCategorias, getCategoryTree, getCategoryContext, getCategoriasSelectOptions, createCategoria, updateCategoria, deleteCategoria };

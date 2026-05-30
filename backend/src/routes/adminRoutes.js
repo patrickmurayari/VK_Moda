@@ -15,6 +15,7 @@ router.use(authMiddleware);
 router.get('/categorias', categoriasController.getCategorias);
 router.post('/categorias', categoriasController.createCategoria);
 router.put('/categorias/:id', categoriasController.updateCategoria);
+router.delete('/categorias/:id', categoriasController.deleteCategoria);
 
 // CRUD Productos
 router.get('/productos', adminProductosController.getProductos);
