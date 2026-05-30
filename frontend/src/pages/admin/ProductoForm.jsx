@@ -13,6 +13,9 @@ export default function ProductoForm() {
     const [saving, setSaving] = useState(false);
     const [categorias, setCategorias] = useState([]);
 
+    const [imageFile, setImageFile] = useState(null);
+    const [previewUrl, setPreviewUrl] = useState('');
+
     const [formData, setFormData] = useState({
         nombre: '',
         precio: '',
@@ -59,6 +62,7 @@ export default function ProductoForm() {
                 categoria_id: data.categoria_id?.toString() || '',
                 esta_activo: data.esta_activo ?? true
             });
+            setPreviewUrl(data.imagen_url || '');
         } catch (error) {
             console.error('Error:', error);
             toast.error('Error al cargar producto');
@@ -88,6 +92,14 @@ export default function ProductoForm() {
         return Object.keys(newErrors).length === 0;
     };
 
+    const handleFileChange = (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        setImageFile(file);
+        setPreviewUrl(URL.createObjectURL(file));
+        setFormData(prev => ({ ...prev, imagen_url: '' }));
+    };
+
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         setFormData(prev => ({
@@ -113,22 +125,31 @@ export default function ProductoForm() {
 
         try {
             const token = await getAccessToken();
-            const body = {
-                ...formData,
-                precio: parseFloat(formData.precio),
-                categoria_id: parseInt(formData.categoria_id)
-            };
+
+            const fd = new FormData();
+            fd.append('nombre', formData.nombre.trim());
+            fd.append('precio', String(parseFloat(formData.precio)));
+            fd.append('colores', formData.colores || '');
+            fd.append('categoria_id', String(parseInt(formData.categoria_id)));
+            fd.append('esta_activo', String(formData.esta_activo));
+            if (imageFile) {
+                fd.append('imagen', imageFile);
+            } else if (formData.imagen_url) {
+                fd.append('imagen_url', formData.imagen_url);
+            }
 
             if (isEdit) {
-                await updateProducto(id, body, token);
+                await updateProducto(id, fd, token);
             } else {
-                await createProducto(body, token);
+                await createProducto(fd, token);
             }
 
             toast.success(isEdit
                 ? '¡Producto actualizado correctamente!'
                 : '¡Producto creado correctamente!'
             );
+            setImageFile(null);
+            setPreviewUrl('');
             navigate('/admin/productos');
         } catch (error) {
             console.error('Error:', error);
@@ -174,7 +195,8 @@ export default function ProductoForm() {
                         name="nombre"
                         value={formData.nombre}
                         onChange={handleChange}
-                        className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-stone-400 focus:border-transparent transition-all outline-none ${
+                        disabled={saving}
+                        className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-stone-400 focus:border-transparent transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed ${
                             errors.nombre ? 'border-red-500' : 'border-stone-300'
                         }`}
                         placeholder="Ej: Vestido rojo de seda"
@@ -199,7 +221,8 @@ export default function ProductoForm() {
                             onChange={handleChange}
                             step="0.01"
                             min="0"
-                            className={`w-full pl-8 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-stone-400 focus:border-transparent transition-all outline-none ${
+                            disabled={saving}
+                            className={`w-full pl-8 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-stone-400 focus:border-transparent transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed ${
                                 errors.precio ? 'border-red-500' : 'border-stone-300'
                             }`}
                             placeholder="0.00"
@@ -220,7 +243,8 @@ export default function ProductoForm() {
                         name="categoria_id"
                         value={formData.categoria_id}
                         onChange={handleChange}
-                        className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-stone-400 focus:border-transparent transition-all outline-none bg-white ${
+                        disabled={saving}
+                        className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-stone-400 focus:border-transparent transition-all outline-none bg-white disabled:opacity-50 disabled:cursor-not-allowed ${
                             errors.categoria_id ? 'border-red-500' : 'border-stone-300'
                         }`}
                     >
@@ -236,31 +260,74 @@ export default function ProductoForm() {
                     )}
                 </div>
 
-                {/* Imagen URL */}
+                {/* Imagen */}
                 <div>
-                    <label htmlFor="imagen_url" className="block text-sm font-medium text-stone-700 mb-2">
-                        URL de imagen
+                    <label className="block text-sm font-medium text-stone-700 mb-2">
+                        Imagen del producto
+                    </label>
+
+                    {/* File picker */}
+                    <label
+                        htmlFor="imagen_file"
+                        className={`flex flex-col items-center justify-center w-full h-28 border-2 border-dashed rounded-lg transition-colors bg-stone-50 ${
+                            saving
+                                ? 'border-stone-200 opacity-50 cursor-not-allowed pointer-events-none'
+                                : 'border-stone-300 cursor-pointer hover:border-stone-400'
+                        }`}
+                    >
+                        <span className="text-xs text-stone-500 text-center px-4">
+                            {imageFile
+                                ? imageFile.name
+                                : 'Haz clic para subir archivo (JPG, PNG, WEBP — máx. 10 MB)'}
+                        </span>
+                        <span className="mt-1 text-[10px] text-stone-400">
+                            El fondo se eliminará automáticamente y se convertirá a .webp
+                        </span>
                     </label>
                     <input
-                        type="url"
-                        id="imagen_url"
-                        name="imagen_url"
-                        value={formData.imagen_url}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-stone-400 focus:border-transparent transition-all outline-none"
-                        placeholder="https://..."
+                        type="file"
+                        id="imagen_file"
+                        accept="image/*"
+                        disabled={saving}
+                        className="sr-only"
+                        onChange={handleFileChange}
                     />
-                    <p className="mt-1 text-xs sm:text-sm text-stone-500">
-                        Pega aquí la URL de la imagen desde Supabase Storage
-                    </p>
-                    {formData.imagen_url && (
+
+                    {/* Fallback: URL manual */}
+                    {!imageFile && (
                         <div className="mt-3">
+                            <p className="text-[11px] text-stone-400 mb-1">O bien, pega una URL directa:</p>
+                            <input
+                                type="url"
+                                id="imagen_url"
+                                name="imagen_url"
+                                value={formData.imagen_url}
+                                onChange={handleChange}
+                                disabled={saving}
+                                className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-stone-400 focus:border-transparent transition-all outline-none text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                                placeholder="https://..."
+                            />
+                        </div>
+                    )}
+
+                    {/* Preview */}
+                    {previewUrl && (
+                        <div className="mt-3 flex items-start gap-3">
                             <img
-                                src={formData.imagen_url}
+                                src={previewUrl}
                                 alt="Preview"
                                 className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-lg border border-stone-200"
                                 onError={(e) => e.target.style.display = 'none'}
                             />
+                            {imageFile && (
+                                <button
+                                    type="button"
+                                    onClick={() => { setImageFile(null); setPreviewUrl(formData.imagen_url); }}
+                                    className="text-xs text-stone-400 hover:text-red-500 transition-colors mt-1"
+                                >
+                                    Quitar archivo
+                                </button>
+                            )}
                         </div>
                     )}
                 </div>
@@ -276,7 +343,8 @@ export default function ProductoForm() {
                         name="colores"
                         value={formData.colores}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-stone-400 focus:border-transparent transition-all outline-none"
+                        disabled={saving}
+                        className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-stone-400 focus:border-transparent transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                         placeholder="Rojo, Azul, Negro"
                     />
                 </div>
@@ -289,7 +357,8 @@ export default function ProductoForm() {
                         name="esta_activo"
                         checked={formData.esta_activo}
                         onChange={handleChange}
-                        className="w-5 h-5 text-stone-700 border-stone-300 rounded focus:ring-stone-400"
+                        disabled={saving}
+                        className="w-5 h-5 text-stone-700 border-stone-300 rounded focus:ring-stone-400 disabled:opacity-50 disabled:cursor-not-allowed"
                     />
                     <label htmlFor="esta_activo" className="text-sm font-medium text-stone-700 select-none cursor-pointer">
                         Producto activo (visible en la tienda)
@@ -300,27 +369,25 @@ export default function ProductoForm() {
                 <div className="flex flex-col-reverse sm:flex-row gap-3 sm:gap-4 pt-4 sm:pt-6 border-t border-stone-200">
                     <button
                         type="button"
+                        disabled={saving}
                         onClick={() => navigate('/admin/productos')}
-                        className="w-full sm:flex-1 px-4 py-3 border border-stone-300 text-stone-700 rounded-lg hover:bg-stone-50 transition-colors active:scale-[0.98]"
+                        className="w-full sm:flex-1 px-4 py-3 border border-stone-300 text-stone-700 rounded-lg hover:bg-stone-50 transition-colors active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                         Cancelar
                     </button>
                     <button
                         type="submit"
                         disabled={saving}
-                        className="w-full sm:flex-1 bg-black hover:bg-neutral-800 text-white font-medium py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 active:scale-[0.98]"
+                        className={`w-full sm:flex-1 text-white font-medium py-3 px-4 rounded-lg transition-all disabled:cursor-not-allowed flex items-center justify-center tracking-widest text-xs uppercase ${
+                            saving
+                                ? 'bg-neutral-800 animate-pulse'
+                                : 'bg-black hover:bg-neutral-800 active:scale-[0.98]'
+                        }`}
                     >
-                        {saving ? (
-                            <>
-                                <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                                </svg>
-                                Guardando...
-                            </>
-                        ) : (
-                            isEdit ? 'Guardar Cambios' : 'Crear Producto'
-                        )}
+                        {saving
+                            ? (imageFile ? 'Procesando imagen con IA...' : 'Guardando...')
+                            : (isEdit ? 'Guardar Cambios' : 'Crear Producto')
+                        }
                     </button>
                 </div>
             </form>

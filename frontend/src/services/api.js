@@ -194,18 +194,20 @@ export async function getProductoById(id, token) {
 }
 
 export async function createProducto(data, token) {
+    const isFormData = data instanceof FormData;
     return authFetchJSON(adminURL('/productos'), token, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
+        ...(isFormData ? {} : { headers: { 'Content-Type': 'application/json' } }),
+        body: isFormData ? data : JSON.stringify(data),
     });
 }
 
 export async function updateProducto(id, data, token) {
+    const isFormData = data instanceof FormData;
     return authFetchJSON(adminURL(`/productos/${id}`), token, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
+        ...(isFormData ? {} : { headers: { 'Content-Type': 'application/json' } }),
+        body: isFormData ? data : JSON.stringify(data),
     });
 }
 
