@@ -3,7 +3,7 @@
 const multer = require('multer');
 
 const ALLOWED_MIMES = new Set([
-    'image/jpeg', 'image/png', 'image/webp',
+    'image/jpeg', 'image/jpg', 'image/png', 'image/webp',
     'image/heic', 'image/heif', 'image/heic-sequence', 'image/heif-sequence',
 ]);
 
@@ -20,6 +20,11 @@ const upload = multer({
         // Móviles a veces envían HEIC como application/octet-stream
         if (file.mimetype === 'application/octet-stream' && HEIC_EXTS.has(ext)) {
             file.mimetype = 'image/heic';
+        }
+
+        // Normalizar image/jpg → image/jpeg
+        if (file.mimetype === 'image/jpg') {
+            file.mimetype = 'image/jpeg';
         }
 
         if (ALLOWED_MIMES.has(file.mimetype) || ALLOWED_EXTS.has(ext)) {

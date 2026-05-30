@@ -9,16 +9,15 @@ const HEIC_TYPES = new Set(['image/heic', 'image/heif', 'image/heic-sequence', '
 
 const HEIC_EXTS = new Set(['.heic', '.heif']);
 
-async function convertHeicToJpg(buffer) {
+async function convertHeicToBuffer(buffer) {
     const result = await convert({ buffer, format: 'JPEG', quality: 0.92 });
     return Buffer.from(result);
 }
 
-async function normalizeToJpeg(buffer) {
+async function normalizeToPng(buffer) {
     return sharp(buffer)
         .rotate()
-        .withMetadata({ orientation: 1 })
-        .jpeg({ quality: 95 })
+        .png()
         .toBuffer();
 }
 
@@ -27,14 +26,23 @@ async function removeBackground(inputBuffer) {
     if (!apiKey) throw new Error('REMOVE_BG_API_KEY no está definida en .env');
 
     const form = new FormData();
-    form.append('image_file', new Blob([inputBuffer]), 'product.jpg');
+    form.append('image_file', new Blob([inputBuffer]), 'product.png');
     form.append('size', 'auto');
 
-    const response = await fetch(REMOVE_BG_URL, {
-        method: 'POST',
-        headers: { 'X-Api-Key': apiKey },
-        body: form,
-    });
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 60000);
+
+    let response;
+    try {
+        response = await fetch(REMOVE_BG_URL, {
+            method: 'POST',
+            headers: { 'X-Api-Key': apiKey },
+            body: form,
+            signal: controller.signal,
+        });
+    } finally {
+        clearTimeout(timeout);
+    }
 
     if (!response.ok) {
         const errText = await response.text().catch(() => response.statusText);
@@ -60,20 +68,20 @@ async function processProductImage(buffer, mimetype, originalname) {
 
     let stepBuffer = buffer;
 
-    // 2. Convertir HEIC/HEIF a JPEG crudo
+    // 2. Convertir HEIC/HEIF a buffer intermedio
     if (isHeic) {
-        console.log('[imageProcessor] Convirtiendo HEIC/HEIF a JPEG...');
-        stepBuffer = await convertHeicToJpg(stepBuffer);
+        console.log('[imageProcessor] Convirtiendo HEIC/HEIF a buffer intermedio...');
+        stepBuffer = await convertHeicToBuffer(stepBuffer);
     }
 
-    // 3. Normalizar con Sharp: corregir rotación EXIF, limpiar metadatos, generar JPEG estándar
-    console.log('[imageProcessor] Normalizando imagen (rotación + JPEG limpio)...');
-    const normalizedBuffer = await normalizeToJpeg(stepBuffer);
+    // 3. Normalizar TODO a PNG limpio (formato más estable para Remove.bg)
+    console.log('[imageProcessor] Normalizando imagen a PNG...');
+    const pngBuffer = await normalizeToPng(stepBuffer);
 
-    // 4. Enviar buffer normalizado a Remove.bg
+    // 4. Enviar buffer PNG a Remove.bg
     try {
-        console.log('[imageProcessor] Enviando a Remove.bg...');
-        const noBgBuffer = await removeBackground(normalizedBuffer);
+        console.log(`[imageProcessor] Enviando buffer de tipo [${mimetype || ext}] a la IA convertido a PNG...`);
+        const noBgBuffer = await removeBackground(pngBuffer);
         // 5. Fondo blanco + WebP final
         return await toWhiteWebp(noBgBuffer);
     } catch (err) {
@@ -82,9 +90,9 @@ async function processProductImage(buffer, mimetype, originalname) {
         console.error('  Mimetype recibido:', mimetype);
         console.error('  Extensión:', ext);
         console.error('  Buffer size (bytes):', buffer.length);
-        console.error('  Normalized size (bytes):', normalizedBuffer.length);
+        console.error('  PNG size (bytes):', pngBuffer.length);
         console.error('[imageProcessor] Usando fallback (sharp solo, sin remoción de fondo)');
-        return await toWhiteWebp(normalizedBuffer);
+        return await toWhiteWebp(pngBuffer);
     }
 }
 
