@@ -7,9 +7,19 @@ const REMOVE_BG_URL = 'https://api.remove.bg/v1.0/removebg';
 
 const HEIC_TYPES = new Set(['image/heic', 'image/heif', 'image/heic-sequence', 'image/heif-sequence']);
 
+const HEIC_EXTS = new Set(['.heic', '.heif']);
+
 async function convertHeicToJpg(buffer) {
     const result = await convert({ buffer, format: 'JPEG', quality: 0.92 });
     return Buffer.from(result);
+}
+
+async function normalizeToJpeg(buffer) {
+    return sharp(buffer)
+        .rotate()
+        .withMetadata({ orientation: 1 })
+        .jpeg({ quality: 95 })
+        .toBuffer();
 }
 
 async function removeBackground(inputBuffer) {
@@ -36,34 +46,45 @@ async function removeBackground(inputBuffer) {
 
 async function toWhiteWebp(inputBuffer) {
     return sharp(inputBuffer)
-        .rotate()
-        .withMetadata({ orientation: 1 })
         .flatten({ background: '#ffffff' })
         .webp({ quality: 80 })
         .toBuffer();
 }
 
-async function processProductImage(buffer, mimetype) {
-    // Convertir HEIC/HEIF a JPEG antes de cualquier procesamiento
-    let processedBuffer = buffer;
-    if (mimetype && HEIC_TYPES.has(mimetype.toLowerCase())) {
+async function processProductImage(buffer, mimetype, originalname) {
+    // 1. Detectar si es HEIC/HEIF por mimetype o extensión
+    const ext = originalname
+        ? '.' + originalname.split('.').pop().toLowerCase()
+        : '';
+    const isHeic = (mimetype && HEIC_TYPES.has(mimetype.toLowerCase())) || HEIC_EXTS.has(ext);
+
+    let stepBuffer = buffer;
+
+    // 2. Convertir HEIC/HEIF a JPEG crudo
+    if (isHeic) {
         console.log('[imageProcessor] Convirtiendo HEIC/HEIF a JPEG...');
-        processedBuffer = await convertHeicToJpg(buffer);
+        stepBuffer = await convertHeicToJpg(stepBuffer);
     }
 
-    // Corregir rotación EXIF y enderezar la imagen
-    const rotatedBuffer = await sharp(processedBuffer)
-        .rotate()
-        .withMetadata({ orientation: 1 })
-        .jpeg({ quality: 95 })
-        .toBuffer();
+    // 3. Normalizar con Sharp: corregir rotación EXIF, limpiar metadatos, generar JPEG estándar
+    console.log('[imageProcessor] Normalizando imagen (rotación + JPEG limpio)...');
+    const normalizedBuffer = await normalizeToJpeg(stepBuffer);
 
+    // 4. Enviar buffer normalizado a Remove.bg
     try {
-        const noBgPng = await removeBackground(rotatedBuffer);
-        return await toWhiteWebp(noBgPng);
+        console.log('[imageProcessor] Enviando a Remove.bg...');
+        const noBgBuffer = await removeBackground(normalizedBuffer);
+        // 5. Fondo blanco + WebP final
+        return await toWhiteWebp(noBgBuffer);
     } catch (err) {
-        console.warn('[imageProcessor] Remove.bg falló — usando fallback (sharp solo):', err.message);
-        return await toWhiteWebp(rotatedBuffer);
+        console.error('[imageProcessor] Remove.bg falló — detalle completo:');
+        console.error('  Mensaje:', err.message);
+        console.error('  Mimetype recibido:', mimetype);
+        console.error('  Extensión:', ext);
+        console.error('  Buffer size (bytes):', buffer.length);
+        console.error('  Normalized size (bytes):', normalizedBuffer.length);
+        console.error('[imageProcessor] Usando fallback (sharp solo, sin remoción de fondo)');
+        return await toWhiteWebp(normalizedBuffer);
     }
 }
 
