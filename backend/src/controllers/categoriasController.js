@@ -126,4 +126,115 @@ const getCategoriasSelectOptions = async (req, res) => {
     }
 };
 
-module.exports = { getCategorias, getCategoryTree, getCategoryContext, getCategoriasSelectOptions };
+const createCategoria = async (req, res) => {
+    const { nombre, slug, parent_id, orden_visual } = req.body;
+
+    if (!nombre || !nombre.trim()) {
+        return res.status(400).json({ error: 'El nombre es requerido' });
+    }
+    if (!slug || !slug.trim()) {
+        return res.status(400).json({ error: 'El slug es requerido' });
+    }
+
+    try {
+        // Validar que parent_id exista si se proporciona
+        if (parent_id) {
+            const parentResult = await db.query('SELECT id FROM categorias WHERE id = $1', [parent_id]);
+            if (parentResult.rows.length === 0) {
+                return res.status(400).json({ error: 'La categoría padre no existe' });
+            }
+        }
+
+        // Verificar slug único
+        const existing = await db.query('SELECT id FROM categorias WHERE slug = $1', [slug.trim()]);
+        if (existing.rows.length > 0) {
+            return res.status(409).json({ error: 'Ya existe una categoría con ese slug' });
+        }
+
+        const result = await db.query(
+            `INSERT INTO categorias (nombre, slug, parent_id, orden_visual)
+             VALUES ($1, $2, $3, $4)
+             RETURNING *`,
+            [nombre.trim(), slug.trim(), parent_id || null, orden_visual || 0]
+        );
+
+        res.status(201).json(result.rows[0]);
+    } catch (err) {
+        console.error('Error al crear categoría:', err);
+        res.status(500).json({ error: 'Error al crear categoría' });
+    }
+};
+
+const updateCategoria = async (req, res) => {
+    const { id } = req.params;
+    const { nombre, slug, parent_id, orden_visual } = req.body;
+
+    try {
+        // Verificar que la categoría existe
+        const existing = await db.query('SELECT id FROM categorias WHERE id = $1', [id]);
+        if (existing.rows.length === 0) {
+            return res.status(404).json({ error: 'Categoría no encontrada' });
+        }
+
+        // No permitir que una categoría sea padre de sí misma
+        if (parent_id && parseInt(parent_id) === parseInt(id)) {
+            return res.status(400).json({ error: 'Una categoría no puede ser padre de sí misma' });
+        }
+
+        // Validar que parent_id exista si se proporciona
+        if (parent_id) {
+            const parentResult = await db.query('SELECT id FROM categorias WHERE id = $1', [parent_id]);
+            if (parentResult.rows.length === 0) {
+                return res.status(400).json({ error: 'La categoría padre no existe' });
+            }
+        }
+
+        // Verificar slug único (excluyendo la categoría actual)
+        if (slug) {
+            const slugCheck = await db.query('SELECT id FROM categorias WHERE slug = $1 AND id != $2', [slug.trim(), id]);
+            if (slugCheck.rows.length > 0) {
+                return res.status(409).json({ error: 'Ya existe otra categoría con ese slug' });
+            }
+        }
+
+        // Construir query dinámico
+        const updates = [];
+        const values = [];
+        let paramCount = 1;
+
+        if (nombre !== undefined) {
+            updates.push(`nombre = $${paramCount++}`);
+            values.push(nombre.trim());
+        }
+        if (slug !== undefined) {
+            updates.push(`slug = $${paramCount++}`);
+            values.push(slug.trim());
+        }
+        if (parent_id !== undefined) {
+            updates.push(`parent_id = $${paramCount++}`);
+            values.push(parent_id || null);
+        }
+        if (orden_visual !== undefined) {
+            updates.push(`orden_visual = $${paramCount++}`);
+            values.push(orden_visual);
+        }
+
+        if (updates.length === 0) {
+            return res.status(400).json({ error: 'No hay campos para actualizar' });
+        }
+
+        values.push(id);
+
+        const result = await db.query(
+            `UPDATE categorias SET ${updates.join(', ')} WHERE id = $${paramCount} RETURNING *`,
+            values
+        );
+
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error('Error al actualizar categoría:', err);
+        res.status(500).json({ error: 'Error al actualizar categoría' });
+    }
+};
+
+module.exports = { getCategorias, getCategoryTree, getCategoryContext, getCategoriasSelectOptions, createCategoria, updateCategoria };

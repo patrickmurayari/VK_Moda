@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const adminProductosController = require('../controllers/adminProductosController');
+const categoriasController = require('../controllers/categoriasController');
 const clientesController = require('../controllers/clientesController');
 const pedidosController = require('../controllers/pedidosController');
 const { authMiddleware } = require('../middleware/auth');
@@ -9,6 +10,11 @@ const upload = require('../middleware/upload');
 
 // Todas las rutas requieren autenticación
 router.use(authMiddleware);
+
+// CRUD Categorías
+router.get('/categorias', categoriasController.getCategorias);
+router.post('/categorias', categoriasController.createCategoria);
+router.put('/categorias/:id', categoriasController.updateCategoria);
 
 // CRUD Productos
 router.get('/productos', adminProductosController.getProductos);
