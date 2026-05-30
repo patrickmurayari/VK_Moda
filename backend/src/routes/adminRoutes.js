@@ -5,6 +5,7 @@ const clientesController = require('../controllers/clientesController');
 const pedidosController = require('../controllers/pedidosController');
 const { authMiddleware } = require('../middleware/auth');
 const validators = require('../middleware/validators');
+const upload = require('../middleware/upload');
 
 // Todas las rutas requieren autenticación
 router.use(authMiddleware);
@@ -12,8 +13,8 @@ router.use(authMiddleware);
 // CRUD Productos
 router.get('/productos', adminProductosController.getProductos);
 router.get('/productos/:id', adminProductosController.getProductoById);
-router.post('/productos', validators.validateProducto, adminProductosController.createProducto);
-router.put('/productos/:id', validators.validateProductoUpdate, adminProductosController.updateProducto);
+router.post('/productos', upload.single('imagen'), validators.validateProducto, adminProductosController.createProducto);
+router.put('/productos/:id', upload.single('imagen'), validators.validateProductoUpdate, adminProductosController.updateProducto);
 router.delete('/productos/:id', adminProductosController.deleteProducto);
 
 // Búsqueda rápida de clientes (DEBE ir antes de /clientes/:id)
