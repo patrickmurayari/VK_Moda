@@ -183,6 +183,28 @@ export async function addMedidas(clienteId, data, token) {
     });
 }
 
+// ── Admin: Categorías ──
+
+export async function getAdminCategorias(token) {
+    return authFetchJSON(adminURL('/categorias'), token);
+}
+
+export async function createCategoria(data, token) {
+    return authFetchJSON(adminURL('/categorias'), token, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+    });
+}
+
+export async function updateCategoria(id, data, token) {
+    return authFetchJSON(adminURL(`/categorias/${id}`), token, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+    });
+}
+
 // ── Admin: Productos ──
 
 export async function getProductos(token) {
