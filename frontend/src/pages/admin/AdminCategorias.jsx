@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { supabase } from '@/lib/supabase';
-import { getAdminCategorias, getCategoriasSelectOptions, createCategoria, updateCategoria } from '@/services/api';
+import { getAdminCategorias, getCategoriasSelectOptions, createCategoria, updateCategoria, deleteCategoria } from '@/services/api';
 
 function slugify(text) {
     return text
@@ -19,6 +19,7 @@ export default function AdminCategorias() {
     const [selectOptions, setSelectOptions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
+    const [deleteId, setDeleteId] = useState(null);
     const [editingId, setEditingId] = useState(null);
     const [showForm, setShowForm] = useState(false);
     const [form, setForm] = useState(emptyForm);
@@ -124,9 +125,30 @@ export default function AdminCategorias() {
         }
     };
 
-    // Map parent_id → label for display
-    const parentMap = {};
-    categorias.forEach((c) => { parentMap[c.id] = c.nombre; });
+    // Derive which categories have children (for UX: disable delete button)
+    const childParentIds = new Set(categorias.filter((c) => c.parent_id).map((c) => c.parent_id));
+
+    const handleDelete = async (cat) => {
+        const hasChildren = childParentIds.has(cat.id);
+        const msg = hasChildren
+            ? `"${cat.nombre}" tiene subcategorías. Debes eliminarlas o reasignarlas primero.`
+            : `¿Estás seguro de eliminar la categoría "${cat.nombre}"? Esta acción no se puede deshacer.`;
+
+        if (!window.confirm(msg)) return;
+
+        setDeleteId(cat.id);
+        try {
+            const token = await getAccessToken();
+            await deleteCategoria(cat.id, token);
+            toast.success('Categoría eliminada correctamente');
+            fetchData();
+        } catch (error) {
+            console.error('Error:', error);
+            toast.error(error.message || 'Error al eliminar categoría');
+        } finally {
+            setDeleteId(null);
+        }
+    };
 
     // Filter out current category from parent select (prevent self-reference)
     const filteredOptions = editingId
@@ -304,9 +326,9 @@ export default function AdminCategorias() {
                                             {cat.slug}
                                         </td>
                                         <td className="px-4 py-3 whitespace-nowrap">
-                                            {cat.parent_id ? (
+                                            {cat.padre_nombre ? (
                                                 <span className="px-2 py-1 bg-stone-100 text-stone-600 rounded text-xs sm:text-sm">
-                                                    {parentMap[cat.parent_id] || `ID ${cat.parent_id}`}
+                                                    {cat.padre_nombre}
                                                 </span>
                                             ) : (
                                                 <span className="text-stone-400 text-xs">Raíz</span>
@@ -316,7 +338,7 @@ export default function AdminCategorias() {
                                             {cat.orden_visual}
                                         </td>
                                         <td className="px-4 py-3 whitespace-nowrap">
-                                            <div className="flex justify-end">
+                                            <div className="flex justify-end gap-1 sm:gap-2">
                                                 <button
                                                     onClick={() => openEdit(cat)}
                                                     className="p-2 text-stone-500 hover:text-stone-800 hover:bg-stone-100 rounded transition-colors"
@@ -325,6 +347,27 @@ export default function AdminCategorias() {
                                                     <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                                     </svg>
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDelete(cat)}
+                                                    disabled={deleteId === cat.id || childParentIds.has(cat.id)}
+                                                    className={`p-2 rounded transition-colors ${
+                                                        childParentIds.has(cat.id)
+                                                            ? 'text-stone-300 cursor-not-allowed'
+                                                            : 'text-stone-500 hover:text-red-600 hover:bg-red-50'
+                                                    } disabled:opacity-50`}
+                                                    title={childParentIds.has(cat.id) ? 'Tiene subcategorías' : 'Eliminar'}
+                                                >
+                                                    {deleteId === cat.id ? (
+                                                        <svg className="w-5 h-5 sm:w-6 sm:h-6 animate-spin" viewBox="0 0 24 24">
+                                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                                                        </svg>
+                                                    ) : (
+                                                        <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                        </svg>
+                                                    )}
                                                 </button>
                                             </div>
                                         </td>

@@ -205,6 +205,10 @@ export async function updateCategoria(id, data, token) {
     });
 }
 
+export async function deleteCategoria(id, token) {
+    return authFetchJSON(adminURL(`/categorias/${id}`), token, { method: 'DELETE' });
+}
+
 // ── Admin: Productos ──
 
 export async function getProductos(token) {
