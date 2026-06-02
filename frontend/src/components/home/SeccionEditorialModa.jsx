@@ -38,7 +38,7 @@ function SeccionEditorialModa() {
     }
 
     return (
-        <section id="editorial" className="mt-0 md:mt-14">
+        <section id="editorial" className="">
             <div className="grid grid-cols-1 md:grid-cols-2">
                 <div className="relative overflow-hidden">
                     <img

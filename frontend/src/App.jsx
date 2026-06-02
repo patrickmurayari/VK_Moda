@@ -170,9 +170,7 @@ function App() {
 
       {/* Se renderiza Footer solo si hideLayout es false */}
       {!hideLayout && (
-        <div className="mt-4">
-          <Footer/>
-        </div>
+        <Footer/>
       )}
     </>
   )

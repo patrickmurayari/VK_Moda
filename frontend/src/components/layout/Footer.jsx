@@ -138,9 +138,9 @@ function Footer() {
       </div>
 
       {/* Monumental Watermark */}
-      <div className="py-6 md:py-16 text-center overflow-hidden">
-        <span className="font-display  font-light text-[27vw] md:text-[10vw] tracking-[0.4em] text-white/[0.80] select-none leading-none">
-          V&A
+      <div className="w-full flex justify-center items-center py-6 md:py-16 overflow-hidden">
+        <span className="font-display font-light text-[28vw] md:text-[10vw] tracking-[0.4em] text-white select-none leading-none">
+          V&amp;A
         </span>
       </div>
     </footer>
