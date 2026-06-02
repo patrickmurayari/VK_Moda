@@ -27,11 +27,11 @@ function SeccionColeccion() {
                 <div className="w-full grid grid-cols-2 lg:grid-cols-4 gap-[1px] bg-neutral-200">
                     {productos.slice(0, 4).map((producto) => (
                         <div key={producto.id} className="group bg-white">
-                            <div className="aspect-[3/4] overflow-hidden bg-neutral-100">
+                            <div className="aspect-[3/4] overflow-hidden bg-white p-2 md:p-4">
                                 <img
                                     src={producto.imagen_url}
                                     alt={producto.nombre}
-                                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                                    className="w-full h-full object-contain transition-transform duration-700 ease-out group-hover:scale-105"
                                     loading="lazy"
                                 />
                             </div>

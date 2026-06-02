@@ -44,11 +44,11 @@ function GaleriaProductos({ productos, mostrarPrecio = true }) {
                         aria-label={producto.name}
                     >
                         {/* Imagen */}
-                        <div className="aspect-[3/4] overflow-hidden bg-neutral-50">
+                        <div className="aspect-[3/4] overflow-hidden bg-white p-2 md:p-4">
                             <img
                                 src={producto.image}
                                 alt={producto.name}
-                                className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                                className="w-full h-full object-contain transition-transform duration-700 ease-out group-hover:scale-105"
                                 loading="lazy"
                             />
                         </div>
