@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -13,6 +13,78 @@ const NAV_EXTRAS = [
 const scrollTo = (id) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+
+function MobileMenuView({ view, handleItemClick }) {
+    const [showGradient, setShowGradient] = useState(false);
+    const containerRef = useRef(null);
+
+    const checkScroll = () => {
+        const el = containerRef.current;
+        if (!el) return;
+        const hasMoreToScroll = el.scrollHeight > el.clientHeight && (el.scrollTop + el.clientHeight < el.scrollHeight - 10);
+        setShowGradient(hasMoreToScroll);
+    };
+
+    useEffect(() => {
+        checkScroll();
+        if (typeof ResizeObserver !== 'undefined' && containerRef.current) {
+            const observer = new ResizeObserver(checkScroll);
+            observer.observe(containerRef.current);
+            return () => observer.disconnect();
+        }
+    }, [view.items]);
+
+    return (
+        <div className="min-w-full h-full flex flex-col relative overflow-hidden">
+            <div 
+                ref={containerRef}
+                onScroll={checkScroll}
+                className="flex-1 overflow-y-auto"
+            >
+                {/* Panel title */}
+                {view.title && (
+                    <div className="px-6 md:px-8 pt-8 pb-4 flex-shrink-0">
+                        <h2 className="font-serif text-2xl tracking-[0.3em] font-light uppercase text-black">
+                            {view.title}
+                        </h2>
+                    </div>
+                )}
+
+                {/* Panel items */}
+                <nav className="px-6 md:px-8">
+                    <div className="py-4 pb-20">
+                        {view.items.map((item) => (
+                            <button
+                                key={item.id}
+                                onClick={() => handleItemClick(item)}
+                                className="w-full group flex items-center justify-between py-5 border-b-[0.5px] border-neutral-100 text-left animate-fade-in"
+                            >
+                                <span className="tracking-widest uppercase font-serif font-light text-sm text-black group-hover:text-black/60 transition-colors duration-300">
+                                    {item.label}
+                                </span>
+                                {item.children && (
+                                    <ChevronRight className="w-4 h-4 text-black group-hover:text-black/60 transition-colors duration-300" strokeWidth={1} />
+                                )}
+                            </button>
+                        ))}
+                    </div>
+                </nav>
+            </div>
+
+            {/* Gradient shadow hint */}
+            <div 
+                className={`absolute bottom-0 left-0 w-full h-20 bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none z-10 transition-opacity duration-500 ${
+                    showGradient ? 'opacity-100' : 'opacity-0'
+                }`}
+            />
+        </div>
+    );
+}
+
+MobileMenuView.propTypes = {
+    view: PropTypes.object.isRequired,
+    handleItemClick: PropTypes.func.isRequired,
 };
 
 function MobileMenu({ isOpen, onClose }) {
@@ -88,7 +160,7 @@ function MobileMenu({ isOpen, onClose }) {
             <div className={`fixed inset-y-0 right-0 z-[100] flex flex-col bg-white transition-transform duration-500 ease-in-out w-full md:max-w-md md:w-[450px] ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
 
                 {/* Header — fixed, never slides */}
-                <div className="flex-shrink-0 flex items-center justify-between px-6 md:px-8 h-16 border-b-[0.5px] border-neutral-100">
+                <div className="flex-shrink-0 flex items-center justify-between px-6 md:px-8 h-16 border-b-[0.5px] border-neutral-100 bg-white z-20">
                     <button
                         onClick={popView}
                         className={`flex items-center gap-1.5 transition-opacity duration-300 ${isRoot ? 'opacity-0 pointer-events-none' : 'opacity-100 hover:opacity-60'}`}
@@ -108,7 +180,7 @@ function MobileMenu({ isOpen, onClose }) {
                 </div>
 
                 {/* Sliding strip */}
-                <div className="flex-1 overflow-hidden">
+                <div className="flex-1 overflow-hidden relative">
                     {!viewStack ? (
                         <div className="px-6 md:px-8 py-8 space-y-5">
                             {[1, 2, 3, 4].map((i) => (
@@ -121,48 +193,14 @@ function MobileMenu({ isOpen, onClose }) {
                         style={{ transform: `translateX(-${depth * 100}%)` }}
                     >
                         {viewStack.map((view, stackIdx) => (
-                            <div key={stackIdx} className="min-w-full h-full flex flex-col overflow-y-auto">
-                                {/* Panel title */}
-                                {view.title && (
-                                    <div className="px-6 md:px-8 pt-8 pb-4 flex-shrink-0">
-                                        <h2 className="font-serif text-2xl tracking-[0.3em] font-light uppercase text-black">
-                                            {view.title}
-                                        </h2>
-                                    </div>
-                                )}
-
-                                {/* Panel items */}
-                                <nav className="px-6 md:px-8">
-                                    <div className="py-4">
-                                        {view.items.map((item) => (
-                                            <button
-                                                key={item.id}
-                                                onClick={() => handleItemClick(item)}
-                                                className="w-full group flex items-center justify-between py-5 border-b-[0.5px] border-neutral-100 text-left"
-                                            >
-                                                <span className={`tracking-wide uppercase font-serif font-light transition-colors duration-300 ${
-                                                    item.children
-                                                        ? 'text-sm md:text-xl tracking-[0.2em] text-black group-hover:text-black/60'
-                                                        : 'text-sm tracking-[0.2em] text-black group-hover:text-black/60'
-                                                }`}>
-                                                    {item.label}
-                                                </span>
-                                                {item.children && (
-                                                    <ChevronRight className="w-4 h-4 text-black group-hover:text-black/60 transition-colors duration-300" strokeWidth={1} />
-                                                )}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </nav>
-                            </div>
+                            <MobileMenuView 
+                                key={stackIdx} 
+                                view={view} 
+                                handleItemClick={handleItemClick} 
+                            />
                         ))}
                     </div>
                     )}
-                </div>
-
-                {/* Bottom accent — fixed */}
-                <div className="flex-shrink-0 px-6 md:px-8 py-8 border-t-[0.5px] border-neutral-100">
-                    <span className="font-serif text-xs tracking-[0.4em] uppercase text-black">Indumentaria & Confecciones</span>
                 </div>
             </div>
         </>
