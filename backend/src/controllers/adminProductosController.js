@@ -159,16 +159,58 @@ const updateProducto = async (req, res) => {
     }
 };
 
+// Extrae el path relativo del archivo dentro del bucket a partir de la URL pública
+// Ej: https://xxx.supabase.co/storage/v1/object/public/productos/productos/123-abc.webp → productos/123-abc.webp
+function extractStoragePath(publicUrl) {
+    if (!publicUrl) return null;
+    try {
+        const url = new URL(publicUrl);
+        const parts = url.pathname.split('/');
+        const bucketIdx = parts.indexOf(STORAGE_BUCKET);
+        if (bucketIdx === -1) return null;
+        // +2 para saltar "object/public"
+        const filePath = parts.slice(bucketIdx + 2).join('/');
+        return filePath || null;
+    } catch {
+        return null;
+    }
+}
+
 // DELETE /api/admin/productos/:id - Eliminar producto
 const deleteProducto = async (req, res) => {
     const { id } = req.params;
     
     try {
-        const result = await db.query('DELETE FROM productos WHERE id = $1 RETURNING id', [id]);
+        // Obtener imagen_url antes de borrar el registro
+        const selectResult = await db.query('SELECT imagen_url FROM productos WHERE id = $1', [id]);
         
-        if (result.rows.length === 0) {
+        if (selectResult.rows.length === 0) {
             return res.status(404).json({ error: 'Producto no encontrado' });
         }
+
+        const imagenUrl = selectResult.rows[0].imagen_url;
+
+        // Intentar borrar la imagen de Supabase Storage (no bloquear si falla)
+        if (imagenUrl) {
+            try {
+                const filePath = extractStoragePath(imagenUrl);
+                if (filePath) {
+                    const { error: storageError } = await supabaseAdmin.storage
+                        .from(STORAGE_BUCKET)
+                        .remove([filePath]);
+                    
+                    if (storageError) {
+                        console.warn('[deleteProducto] No se pudo borrar imagen del storage:', storageError.message);
+                    } else {
+                        console.log('[deleteProducto] Imagen eliminada del storage:', filePath);
+                    }
+                }
+            } catch (storageErr) {
+                console.warn('[deleteProducto] Error accediendo al storage, se continúa con el DELETE DB:', storageErr.message);
+            }
+        }
+
+        const result = await db.query('DELETE FROM productos WHERE id = $1 RETURNING id', [id]);
         
         res.json({ message: 'Producto eliminado correctamente', id: result.rows[0].id });
     } catch (err) {

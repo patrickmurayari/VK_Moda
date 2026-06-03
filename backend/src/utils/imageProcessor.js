@@ -5,8 +5,6 @@ const convert = require('heic-convert');
 
 const REMOVE_BG_URL = 'https://api.remove.bg/v1.0/removebg';
 
-const HEIC_TYPES = new Set(['image/heic', 'image/heif', 'image/heic-sequence', 'image/heif-sequence']);
-
 const HEIC_EXTS = new Set(['.heic', '.heif']);
 
 async function convertHeicToBuffer(buffer) {
@@ -26,7 +24,7 @@ async function removeBackground(inputBuffer) {
     if (!apiKey) throw new Error('REMOVE_BG_API_KEY no está definida en .env');
 
     const form = new FormData();
-    form.append('image_file', new Blob([inputBuffer]), 'product.png');
+    form.append('image_file', new Blob([inputBuffer], { type: 'image/png' }), 'image.png');
     form.append('size', 'auto');
 
     const controller = new AbortController();
@@ -60,25 +58,26 @@ async function toWhiteWebp(inputBuffer) {
 }
 
 async function processProductImage(buffer, mimetype, originalname) {
-    // 1. Detectar si es HEIC/HEIF por mimetype o extensión
+    // 1. Detectar si es HEIC/HEIF por extensión (no confiamos en mimetype del navegador)
     const ext = originalname
         ? '.' + originalname.split('.').pop().toLowerCase()
         : '';
-    const isHeic = (mimetype && HEIC_TYPES.has(mimetype.toLowerCase())) || HEIC_EXTS.has(ext);
+    const isHeic = HEIC_EXTS.has(ext);
 
     let stepBuffer = buffer;
 
-    // 2. Convertir HEIC/HEIF a buffer intermedio
+    // 2. Si es HEIC/HEIF, convertir primero a JPEG crudo
     if (isHeic) {
         console.log('[imageProcessor] Convirtiendo HEIC/HEIF a buffer intermedio...');
         stepBuffer = await convertHeicToBuffer(stepBuffer);
     }
 
-    // 3. Normalizar TODO a PNG limpio (formato más estable para Remove.bg)
-    console.log('[imageProcessor] Normalizando imagen a PNG...');
+    // 3. Forzar Sharp SIEMPRE: leer buffer crudo, corregir rotación, generar PNG estandarizado
+    //    Esto ignora cualquier inconsistencia de mimetype del navegador móvil
+    console.log('[imageProcessor] Normalizando buffer crudo a PNG estandarizado...');
     const pngBuffer = await normalizeToPng(stepBuffer);
 
-    // 4. Enviar buffer PNG a Remove.bg
+    // 4. Enviar buffer PNG limpio a Remove.bg
     try {
         console.log(`[imageProcessor] Enviando buffer de tipo [${mimetype || ext}] a la IA convertido a PNG...`);
         const noBgBuffer = await removeBackground(pngBuffer);
