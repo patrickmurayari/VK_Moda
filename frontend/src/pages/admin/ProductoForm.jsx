@@ -312,11 +312,11 @@ export default function ProductoForm() {
 
                     {/* Preview */}
                     {previewUrl && (
-                        <div className="mt-3 flex items-start gap-3">
+                        <div className="mt-3 flex items-start gap-5">
                             <img
                                 src={previewUrl}
                                 alt="Preview"
-                                className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-lg border border-stone-200"
+                                className="w-24 h-24 sm:w-32 sm:h-32 rounded-lg border border-stone-200"
                                 onError={(e) => e.target.style.display = 'none'}
                             />
                             {imageFile && (
