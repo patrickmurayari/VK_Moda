@@ -26,6 +26,7 @@ import AdminCategorias from './pages/admin/AdminCategorias'
 import ClienteHistoria from './pages/admin/ClienteHistoria'
 
 const CategoriaTemplate = lazy(() => import("./components/Categorias/CategoriaTemplate"))
+const ProductDetail = lazy(() => import('./pages/ProductDetail'))
 
 const SeccionEditorialModa = lazy(() => import('./components/home/SeccionEditorialModa'))
 const QuienesSomos = lazy(() => import('./pages/QuienesSomos'))
@@ -140,6 +141,7 @@ function App() {
         <Routes>
           {/* Rutas públicas */}
           <Route path="/" element={<Home />}></Route>
+          <Route path="/producto/:id" element={<ProductDetail />}></Route>
           <Route path="/categoria/:slug" element={<CategoriaTemplate />}></Route>
           <Route path="/quienes-somos" element={<QuienesSomos />} />
           

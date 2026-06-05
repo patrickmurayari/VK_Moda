@@ -48,6 +48,10 @@ export async function getProductosDestacados(limit = 4) {
     return fetchJSON(`${API_BASE}/productos?limit=${limit}`);
 }
 
+export async function getProductoByIdPublic(id) {
+    return fetchJSON(`${API_BASE}/productos/id/${id}`);
+}
+
 // ── Públicas: Contenido web por sección ──
 // Secciones válidas: hero, coleccion, editorial, inspiracion, quienes_somos
 

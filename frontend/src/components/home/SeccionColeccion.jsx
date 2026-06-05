@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { getProductosDestacados } from '../../services/api';
 import { formatPrecio } from '../../utils/format';
 
@@ -26,7 +27,7 @@ function SeccionColeccion() {
             {!loading && productos.length > 0 && (
                 <div className="w-full grid grid-cols-2 lg:grid-cols-4 gap-[1px] bg-neutral-200">
                     {productos.slice(0, 4).map((producto) => (
-                        <div key={producto.id} className="group bg-white">
+                        <Link key={producto.id} to={`/producto/${producto.id}`} className="group bg-white">
                             <div className="aspect-[3/4] overflow-hidden bg-white p-2 md:p-4">
                                 <img
                                     src={producto.imagen_url}
@@ -45,7 +46,7 @@ function SeccionColeccion() {
                                     </p>
                                 )}
                             </div>
-                        </div>
+                        </Link>
                     ))}
                 </div>
             )}
