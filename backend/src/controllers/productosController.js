@@ -48,4 +48,26 @@ const getProductosDestacados = async (req, res) => {
     }
 };
 
-module.exports = { getProductosByCategoria, getProductosDestacados };
+const getProductoByIdPublic = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const result = await db.query(`
+            SELECT p.id, p.nombre, p.precio, p.imagen_url, p.colores, p.esta_activo,
+                   c.id as categoria_id, c.slug as categoria_slug, c.nombre as categoria_nombre
+            FROM productos p
+            LEFT JOIN categorias c ON p.categoria_id = c.id
+            WHERE p.id = $1 AND p.esta_activo = true
+        `, [id]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Producto no encontrado' });
+        }
+
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error('Error al obtener producto:', err);
+        res.status(500).json({ error: 'Error al obtener producto' });
+    }
+};
+
+module.exports = { getProductosByCategoria, getProductosDestacados, getProductoByIdPublic };
