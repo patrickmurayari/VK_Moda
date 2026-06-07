@@ -20,8 +20,8 @@ router.delete('/categorias/:id', categoriasController.deleteCategoria);
 // CRUD Productos
 router.get('/productos', adminProductosController.getProductos);
 router.get('/productos/:id', adminProductosController.getProductoById);
-router.post('/productos', upload.single('imagen'), validators.validateProducto, adminProductosController.createProducto);
-router.put('/productos/:id', upload.single('imagen'), validators.validateProductoUpdate, adminProductosController.updateProducto);
+router.post('/productos', upload.fields([{ name: 'imagen_principal', maxCount: 1 }, { name: 'imagenes_variantes', maxCount: 9 }]), validators.validateProducto, adminProductosController.createProducto);
+router.put('/productos/:id', upload.fields([{ name: 'imagen_principal', maxCount: 1 }, { name: 'imagenes_variantes', maxCount: 9 }]), validators.validateProductoUpdate, adminProductosController.updateProducto);
 router.delete('/productos/:id', adminProductosController.deleteProducto);
 
 // Búsqueda rápida de clientes (DEBE ir antes de /clientes/:id)

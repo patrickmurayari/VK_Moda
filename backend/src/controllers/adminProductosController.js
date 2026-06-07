@@ -47,7 +47,7 @@ const getProductos = async (req, res) => {
     }
 };
 
-// GET /api/admin/productos/:id - Obtener un producto
+// GET /api/admin/productos/:id - Obtener un producto con variantes
 const getProductoById = async (req, res) => {
     const { id } = req.params;
     try {
@@ -57,12 +57,18 @@ const getProductoById = async (req, res) => {
             LEFT JOIN categorias c ON p.categoria_id = c.id
             WHERE p.id = $1
         `, [id]);
-        
+
         if (result.rows.length === 0) {
             return res.status(404).json({ error: 'Producto no encontrado' });
         }
-        
-        res.json(result.rows[0]);
+
+        const coloresResult = await db.query(
+            'SELECT color, imagen_url FROM producto_colores WHERE producto_id = $1 ORDER BY id',
+            [id]
+        );
+
+        const producto = { ...result.rows[0], colores_variantes: coloresResult.rows };
+        res.json(producto);
     } catch (err) {
         console.error('Error al obtener producto:', err);
         res.status(500).json({ error: 'Error al obtener producto' });
@@ -71,22 +77,59 @@ const getProductoById = async (req, res) => {
 
 // POST /api/admin/productos - Crear producto
 const createProducto = async (req, res) => {
-    let { nombre, precio, imagen_url, colores, categoria_id, esta_activo } = req.body;
-    
+    let { nombre, precio, imagen_url, categoria_id, esta_activo, variantes, color_principal } = req.body;
+
     // Validaciones realizadas por middleware validateProducto
 
     try {
-        if (req.file) {
-            imagen_url = await uploadProcessedImage(req.file.buffer, req.file.mimetype, req.file.originalname);
+        // Parsear variantes si vienen como JSON stringificado
+        let variantesParsed = [];
+        if (variantes) {
+            try {
+                variantesParsed = typeof variantes === 'string' ? JSON.parse(variantes) : variantes;
+            } catch {
+                variantesParsed = [];
+            }
         }
 
+        // Procesar imagen principal (Bloque A)
+        if (req.files?.imagen_principal?.[0]) {
+            const file = req.files.imagen_principal[0];
+            imagen_url = await uploadProcessedImage(file.buffer, file.mimetype, file.originalname);
+        }
+
+        // Insertar producto madre
         const result = await db.query(`
             INSERT INTO productos (nombre, precio, imagen_url, colores, categoria_id, esta_activo)
             VALUES ($1, $2, $3, $4, $5, $6)
             RETURNING *
-        `, [nombre.trim(), parseFloat(precio), imagen_url || null, colores || null, categoria_id, parseBoolean(esta_activo)]);
-        
-        res.status(201).json(result.rows[0]);
+        `, [nombre.trim(), parseFloat(precio), imagen_url || null, null, categoria_id, parseBoolean(esta_activo)]);
+
+        const productoId = result.rows[0].id;
+
+        // Procesar e insertar variantes adicionales (Bloque B → producto_colores)
+        const variantFiles = req.files?.imagenes_variantes || [];
+        if (variantFiles.length > 0) {
+            for (let i = 0; i < variantFiles.length; i++) {
+                const file = variantFiles[i];
+                const colorName = variantesParsed[i]?.color || `Variante ${i + 1}`;
+                const variantImageUrl = await uploadProcessedImage(file.buffer, file.mimetype, file.originalname);
+
+                await db.query(
+                    'INSERT INTO producto_colores (producto_id, color, imagen_url) VALUES ($1, $2, $3)',
+                    [productoId, colorName.trim(), variantImageUrl]
+                );
+            }
+        }
+
+        // Devolver producto enriquecido con variantes
+        const coloresResult = await db.query(
+            'SELECT color, imagen_url FROM producto_colores WHERE producto_id = $1 ORDER BY id',
+            [productoId]
+        );
+
+        const producto = { ...result.rows[0], colores_variantes: coloresResult.rows };
+        res.status(201).json(producto);
     } catch (err) {
         console.error('Error al crear producto:', err);
         res.status(500).json({ error: 'Error al crear producto' });
@@ -96,20 +139,37 @@ const createProducto = async (req, res) => {
 // PUT /api/admin/productos/:id - Actualizar producto
 const updateProducto = async (req, res) => {
     const { id } = req.params;
-    let { nombre, precio, imagen_url, colores, categoria_id, esta_activo } = req.body;
-    
+    let { nombre, precio, imagen_url, categoria_id, esta_activo, variantes, color_principal } = req.body;
+
     // Validaciones realizadas por middleware validateProductoUpdate
 
     try {
-        if (req.file) {
-            imagen_url = await uploadProcessedImage(req.file.buffer, req.file.mimetype, req.file.originalname);
+        // Parsear variantes si vienen como JSON stringificado
+        let variantesParsed = [];
+        if (variantes) {
+            try {
+                variantesParsed = typeof variantes === 'string' ? JSON.parse(variantes) : variantes;
+            } catch {
+                variantesParsed = [];
+            }
         }
 
-        // Construir query dinámico
+        // Procesar imagen principal nueva (Bloque A)
+        let oldMainImageUrl = null;
+        if (req.files?.imagen_principal?.[0]) {
+            // Obtener URL vieja para limpieza posterior
+            const oldProduct = await db.query('SELECT imagen_url FROM productos WHERE id = $1', [id]);
+            oldMainImageUrl = oldProduct.rows[0]?.imagen_url || null;
+
+            const file = req.files.imagen_principal[0];
+            imagen_url = await uploadProcessedImage(file.buffer, file.mimetype, file.originalname);
+        }
+
+        // Construir query dinámico para campos del producto
         const updates = [];
         const values = [];
         let paramCount = 1;
-        
+
         if (nombre !== undefined) {
             updates.push(`nombre = $${paramCount++}`);
             values.push(nombre.trim());
@@ -122,10 +182,6 @@ const updateProducto = async (req, res) => {
             updates.push(`imagen_url = $${paramCount++}`);
             values.push(imagen_url);
         }
-        if (colores !== undefined) {
-            updates.push(`colores = $${paramCount++}`);
-            values.push(colores);
-        }
         if (categoria_id !== undefined) {
             updates.push(`categoria_id = $${paramCount++}`);
             values.push(categoria_id);
@@ -134,25 +190,117 @@ const updateProducto = async (req, res) => {
             updates.push(`esta_activo = $${paramCount++}`);
             values.push(parseBoolean(esta_activo));
         }
-        
-        if (updates.length === 0) {
+
+        if (updates.length === 0 && !req.files?.imagen_principal?.[0] && !req.files?.imagenes_variantes?.length && !variantesParsed.length) {
             return res.status(400).json({ error: 'No hay campos para actualizar' });
         }
-        
-        values.push(id);
-        
-        const result = await db.query(`
-            UPDATE productos 
-            SET ${updates.join(', ')}
-            WHERE id = $${paramCount}
-            RETURNING *
-        `, values);
-        
-        if (result.rows.length === 0) {
-            return res.status(404).json({ error: 'Producto no encontrado' });
+
+        if (updates.length > 0) {
+            values.push(id);
+            const result = await db.query(`
+                UPDATE productos 
+                SET ${updates.join(', ')}
+                WHERE id = $${paramCount}
+                RETURNING *
+            `, values);
+
+            if (result.rows.length === 0) {
+                return res.status(404).json({ error: 'Producto no encontrado' });
+            }
         }
-        
-        res.json(result.rows[0]);
+
+        // Recolectar paths huérfanos a borrar del storage
+        const pathsABorrar = [];
+
+        // Limpiar imagen principal vieja si fue reemplazada
+        if (oldMainImageUrl) {
+            const path = obtenerPathDesdeUrl(oldMainImageUrl);
+            if (path) pathsABorrar.push(path);
+        }
+
+        // Si hay variantes nuevas, reconstruir producto_colores (solo Bloque B)
+        const hasVariantFiles = !!req.files?.imagenes_variantes?.length;
+        const hasVariantesData = variantesParsed.length > 0;
+
+        if (hasVariantFiles || hasVariantesData) {
+            // Obtener URLs viejas de variantes
+            const oldVariantes = await db.query(
+                'SELECT imagen_url FROM producto_colores WHERE producto_id = $1',
+                [id]
+            );
+
+            // Conjunto de URLs que se conservan en la nueva data
+            const nuevasUrls = new Set(
+                variantesParsed.map(v => v.imagen_url).filter(Boolean)
+            );
+
+            // Identificar URLs huérfanas (viejas que no están en la nueva data)
+            for (const row of oldVariantes.rows) {
+                if (row.imagen_url && !nuevasUrls.has(row.imagen_url)) {
+                    const path = obtenerPathDesdeUrl(row.imagen_url);
+                    if (path) pathsABorrar.push(path);
+                }
+            }
+
+            // Eliminar variantes anteriores de la DB
+            await db.query('DELETE FROM producto_colores WHERE producto_id = $1', [id]);
+
+            // Procesar e insertar variantes con archivo nuevo (Bloque B)
+            const variantFiles = req.files?.imagenes_variantes || [];
+            for (let i = 0; i < variantFiles.length; i++) {
+                const file = variantFiles[i];
+                const colorName = variantesParsed[i]?.color || `Variante ${i + 1}`;
+                const variantImageUrl = await uploadProcessedImage(file.buffer, file.mimetype, file.originalname);
+
+                await db.query(
+                    'INSERT INTO producto_colores (producto_id, color, imagen_url) VALUES ($1, $2, $3)',
+                    [id, colorName.trim(), variantImageUrl]
+                );
+            }
+
+            // Re-insertar variantes que solo tenían imagen_url existente (sin archivo nuevo)
+            if (variantesParsed.length > variantFiles.length) {
+                for (let i = variantFiles.length; i < variantesParsed.length; i++) {
+                    const v = variantesParsed[i];
+                    if (v.imagen_url) {
+                        await db.query(
+                            'INSERT INTO producto_colores (producto_id, color, imagen_url) VALUES ($1, $2, $3)',
+                            [id, (v.color || `Variante ${i + 1}`).trim(), v.imagen_url]
+                        );
+                    }
+                }
+            }
+        }
+
+        // Borrar imágenes huérfanas del storage en lote (no bloquear si falla)
+        if (pathsABorrar.length > 0) {
+            try {
+                const { error: storageError } = await supabaseAdmin.storage
+                    .from(STORAGE_BUCKET)
+                    .remove(pathsABorrar);
+
+                if (storageError) {
+                    console.warn('[updateProducto] No se pudieron borrar imágenes huérfanas del storage:', storageError.message);
+                } else {
+                    console.log(`[updateProducto] ${pathsABorrar.length} imagen(es) huérfana(s) eliminada(s) del storage`);
+                }
+            } catch (storageErr) {
+                console.warn('[updateProducto] Error accediendo al storage:', storageErr.message);
+            }
+        }
+
+        // Devolver producto actualizado con variantes
+        const updatedProduct = await db.query(
+            'SELECT * FROM productos WHERE id = $1',
+            [id]
+        );
+        const coloresResult = await db.query(
+            'SELECT color, imagen_url FROM producto_colores WHERE producto_id = $1 ORDER BY id',
+            [id]
+        );
+
+        const producto = { ...updatedProduct.rows[0], colores_variantes: coloresResult.rows };
+        res.json(producto);
     } catch (err) {
         console.error('Error al actualizar producto:', err);
         res.status(500).json({ error: 'Error al actualizar producto' });
@@ -161,19 +309,10 @@ const updateProducto = async (req, res) => {
 
 // Extrae el path relativo del archivo dentro del bucket a partir de la URL pública
 // Ej: https://xxx.supabase.co/storage/v1/object/public/productos/productos/123-abc.webp → productos/123-abc.webp
-function extractStoragePath(publicUrl) {
-    if (!publicUrl) return null;
-    try {
-        const url = new URL(publicUrl);
-        const parts = url.pathname.split('/');
-        const bucketIdx = parts.indexOf(STORAGE_BUCKET);
-        if (bucketIdx === -1) return null;
-        // +2 para saltar "object/public"
-        const filePath = parts.slice(bucketIdx + 2).join('/');
-        return filePath || null;
-    } catch {
-        return null;
-    }
+function obtenerPathDesdeUrl(url) {
+    if (!url) return null;
+    const partes = url.split('/public/productos/');
+    return partes.length > 1 ? partes[1] : null;
 }
 
 // DELETE /api/admin/productos/:id - Eliminar producto
@@ -190,20 +329,36 @@ const deleteProducto = async (req, res) => {
 
         const imagenUrl = selectResult.rows[0].imagen_url;
 
-        // Intentar borrar la imagen de Supabase Storage (no bloquear si falla)
+        // Obtener URLs de variantes antes de borrar (CASCADE las elimina de la DB)
+        const variantesResult = await db.query(
+            'SELECT imagen_url FROM producto_colores WHERE producto_id = $1',
+            [id]
+        );
+
+        // Recolectar todas las rutas de storage a borrar (portada + variantes)
+        const pathsToDelete = [];
+
         if (imagenUrl) {
+            const filePath = obtenerPathDesdeUrl(imagenUrl);
+            if (filePath) pathsToDelete.push(filePath);
+        }
+
+        for (const row of variantesResult.rows) {
+            const filePath = obtenerPathDesdeUrl(row.imagen_url);
+            if (filePath) pathsToDelete.push(filePath);
+        }
+
+        // Borrar todas las imágenes del storage de una sola vez (no bloquear si falla)
+        if (pathsToDelete.length > 0) {
             try {
-                const filePath = extractStoragePath(imagenUrl);
-                if (filePath) {
-                    const { error: storageError } = await supabaseAdmin.storage
-                        .from(STORAGE_BUCKET)
-                        .remove([filePath]);
-                    
-                    if (storageError) {
-                        console.warn('[deleteProducto] No se pudo borrar imagen del storage:', storageError.message);
-                    } else {
-                        console.log('[deleteProducto] Imagen eliminada del storage:', filePath);
-                    }
+                const { error: storageError } = await supabaseAdmin.storage
+                    .from(STORAGE_BUCKET)
+                    .remove(pathsToDelete);
+
+                if (storageError) {
+                    console.warn('[deleteProducto] No se pudieron borrar imágenes del storage:', storageError.message);
+                } else {
+                    console.log(`[deleteProducto] ${pathsToDelete.length} imagen(es) eliminada(s) del storage`);
                 }
             } catch (storageErr) {
                 console.warn('[deleteProducto] Error accediendo al storage, se continúa con el DELETE DB:', storageErr.message);
