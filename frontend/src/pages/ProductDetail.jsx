@@ -29,6 +29,7 @@ export default function ProductDetail() {
     const [producto, setProducto] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [selectedImage, setSelectedImage] = useState(null);
 
     useEffect(() => {
         if (!id) return;
@@ -36,7 +37,10 @@ export default function ProductDetail() {
         setError(null);
 
         getProductoByIdPublic(id)
-            .then((data) => setProducto(data))
+            .then((data) => {
+                setProducto(data);
+                setSelectedImage(data.imagen_url);
+            })
             .catch((err) => setError(err.message || 'Error al cargar el producto'))
             .finally(() => setLoading(false));
     }, [id]);
@@ -88,18 +92,48 @@ export default function ProductDetail() {
             {/* Two-column layout */}
             <div className="grid grid-cols-1 md:grid-cols-2 min-h-[calc(100vh-10rem)]">
                 {/* Left: Image */}
-                <div className="aspect-[3/4] md:aspect-auto md:min-h-full bg-white flex items-center justify-center p-6 md:p-12">
-                    {producto.imagen_url ? (
+                <div className="aspect-[3/4] md:aspect-auto md:min-h-full bg-white flex flex-col items-center justify-center p-6 md:p-12">
+                    {selectedImage ? (
                         <img
-                            src={producto.imagen_url}
+                            src={selectedImage}
                             alt={producto.nombre}
-                            className="w-full h-full object-contain max-h-[80vh]"
+                            className="w-full h-full object-contain max-h-[80vh] transition-opacity duration-300"
                         />
                     ) : (
                         <div className="w-full h-full bg-neutral-50 flex items-center justify-center">
                             <span className="font-body text-xs tracking-widest uppercase text-neutral-300">Sin imagen</span>
                         </div>
                     )}
+
+                    {/* Color variant thumbnails */}
+                    {(() => {
+                        const allImages = [
+                            ...(producto.imagen_url ? [{ imagen_url: producto.imagen_url, color: 'Principal' }] : []),
+                            ...(producto.colores_variantes || [])
+                        ];
+                        return allImages.length > 1 && (
+                            <div className="flex gap-3 mt-6">
+                                {allImages.map((img, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => setSelectedImage(img.imagen_url)}
+                                        className={`w-12 h-16 overflow-hidden border-2 transition-all ${
+                                            selectedImage === img.imagen_url
+                                                ? 'border-black'
+                                                : 'border-neutral-200 hover:border-neutral-400'
+                                        }`}
+                                        title={img.color}
+                                    >
+                                        <img
+                                            src={img.imagen_url}
+                                            alt={img.color}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </button>
+                                ))}
+                            </div>
+                        );
+                    })()}
                 </div>
 
                 {/* Right: Info */}
@@ -126,18 +160,44 @@ export default function ProductDetail() {
                     {/* Divider */}
                     <div className="h-px bg-neutral-200 my-6" />
 
-                    {/* Colors */}
-                    {producto.colores && (
-                        <div className="mb-6">
-                            <p className="font-body text-[10px] tracking-[0.2em] uppercase text-neutral-400 mb-2">
-                                Colores disponibles
-                            </p>
-                            <p className="font-body text-sm text-neutral-700">
-                                {producto.colores}
-                            </p>
-                        </div>
-                    )}
-
+                    {/* Color variants */}
+                    {(() => {
+                        const allColors = [
+                            ...(producto.imagen_url ? [{ imagen_url: producto.imagen_url, color: 'Principal' }] : []),
+                            ...(producto.colores_variantes || [])
+                        ];
+                        return allColors.length > 0 ? (
+                            <div className="mb-6">
+                                <p className="font-body text-[10px] tracking-[0.2em] uppercase text-neutral-400 mb-3">
+                                    Colores disponibles
+                                </p>
+                                <div className="flex flex-wrap gap-2">
+                                    {allColors.map((variante, index) => (
+                                        <button
+                                            key={index}
+                                            onClick={() => setSelectedImage(variante.imagen_url)}
+                                            className={`px-3 py-1.5 text-xs font-body tracking-wide border transition-all ${
+                                                selectedImage === variante.imagen_url
+                                                    ? 'border-black text-black'
+                                                    : 'border-neutral-200 text-neutral-400 hover:text-black'
+                                            }`}
+                                        >
+                                            {variante.color}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        ) : producto.colores ? (
+                            <div className="mb-6">
+                                <p className="font-body text-[10px] tracking-[0.2em] uppercase text-neutral-400 mb-2">
+                                    Colores disponibles
+                                </p>
+                                <p className="font-body text-sm text-neutral-700">
+                                    {producto.colores}
+                                </p>
+                            </div>
+                        ) : null;
+                    })()}
                     {/* Description placeholder */}
                     <div className="mb-8">
                         <p className="font-body text-[10px] tracking-[0.2em] uppercase text-neutral-400 mb-2">

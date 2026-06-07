@@ -13,14 +13,13 @@ export default function ProductoForm() {
     const [saving, setSaving] = useState(false);
     const [categorias, setCategorias] = useState([]);
 
-    const [imageFile, setImageFile] = useState(null);
-    const [previewUrl, setPreviewUrl] = useState('');
+    const [imagenPrincipal, setImagenPrincipal] = useState({ file: null, preview: '' });
+    const [colorPrincipal, setColorPrincipal] = useState('');
+    const [variantes, setVariantes] = useState([]);
 
     const [formData, setFormData] = useState({
         nombre: '',
         precio: '',
-        imagen_url: '',
-        colores: '',
         categoria_id: '',
         esta_activo: true
     });
@@ -57,12 +56,20 @@ export default function ProductoForm() {
             setFormData({
                 nombre: data.nombre || '',
                 precio: data.precio?.toString() || '',
-                imagen_url: data.imagen_url || '',
-                colores: data.colores || '',
                 categoria_id: data.categoria_id?.toString() || '',
                 esta_activo: data.esta_activo ?? true
             });
-            setPreviewUrl(data.imagen_url || '');
+            if (data.imagen_url) {
+                setImagenPrincipal({ file: null, preview: data.imagen_url });
+            }
+            if (data.colores_variantes && data.colores_variantes.length > 0) {
+                setVariantes(data.colores_variantes.map(v => ({
+                    color: v.color,
+                    imagen_url: v.imagen_url,
+                    file: null,
+                    preview: v.imagen_url
+                })));
+            }
         } catch (error) {
             console.error('Error:', error);
             toast.error('Error al cargar producto');
@@ -92,12 +99,44 @@ export default function ProductoForm() {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleFileChange = (e) => {
+    const handleImagenPrincipalChange = (e) => {
         const file = e.target.files?.[0];
         if (!file) return;
-        setImageFile(file);
-        setPreviewUrl(URL.createObjectURL(file));
-        setFormData(prev => ({ ...prev, imagen_url: '' }));
+        if (imagenPrincipal.preview && imagenPrincipal.file) {
+            URL.revokeObjectURL(imagenPrincipal.preview);
+        }
+        setImagenPrincipal({ file, preview: URL.createObjectURL(file) });
+    };
+
+    const addVariante = () => {
+        setVariantes(prev => [...prev, { color: '', imagen_url: '', file: null, preview: '' }]);
+    };
+
+    const handleVarianteFileChange = (index, e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        const updated = [...variantes];
+        if (updated[index].preview && updated[index].file) {
+            URL.revokeObjectURL(updated[index].preview);
+        }
+        updated[index] = { ...updated[index], file, preview: URL.createObjectURL(file) };
+        setVariantes(updated);
+    };
+
+    const handleVarianteColorChange = (index, color) => {
+        const updated = [...variantes];
+        updated[index] = { ...updated[index], color };
+        setVariantes(updated);
+    };
+
+    const removeVariante = (index) => {
+        const confirmar = window.confirm("¿Estás seguro de que querés eliminar esta variante de color? Se perderán la imagen y el texto cargados.");
+        if (!confirmar) return;
+        const updated = variantes.filter((_, i) => i !== index);
+        if (variantes[index].preview && variantes[index].file) {
+            URL.revokeObjectURL(variantes[index].preview);
+        }
+        setVariantes(updated);
     };
 
     const handleChange = (e) => {
@@ -129,13 +168,32 @@ export default function ProductoForm() {
             const fd = new FormData();
             fd.append('nombre', formData.nombre.trim());
             fd.append('precio', String(parseFloat(formData.precio)));
-            fd.append('colores', formData.colores || '');
             fd.append('categoria_id', String(parseInt(formData.categoria_id)));
             fd.append('esta_activo', String(formData.esta_activo));
-            if (imageFile) {
-                fd.append('imagen', imageFile);
-            } else if (formData.imagen_url) {
-                fd.append('imagen_url', formData.imagen_url);
+
+            // Bloque A: Imagen principal
+            if (imagenPrincipal.file) {
+                fd.append('imagen_principal', imagenPrincipal.file);
+            } else if (imagenPrincipal.preview) {
+                fd.append('imagen_url', imagenPrincipal.preview);
+            }
+
+            // Color principal
+            fd.append('color_principal', colorPrincipal.trim());
+
+            // Bloque B: Variantes con imagen
+            const variantesConFile = variantes.filter(v => v.file);
+            for (const variante of variantesConFile) {
+                fd.append('imagenes_variantes', variante.file);
+            }
+
+            // Mapeo de colores para variantes (incluye las que ya tenían imagen de Supabase)
+            const variantesData = variantes.map(v => ({
+                color: v.color || 'Sin color',
+                imagen_url: v.imagen_url || ''
+            }));
+            if (variantesData.length > 0) {
+                fd.append('variantes', JSON.stringify(variantesData));
             }
 
             if (isEdit) {
@@ -148,8 +206,9 @@ export default function ProductoForm() {
                 ? '¡Producto actualizado correctamente!'
                 : '¡Producto creado correctamente!'
             );
-            setImageFile(null);
-            setPreviewUrl('');
+            setImagenPrincipal({ file: null, preview: '' });
+            setColorPrincipal('');
+            setVariantes([]);
             navigate('/admin/productos');
         } catch (error) {
             console.error('Error:', error);
@@ -260,93 +319,156 @@ export default function ProductoForm() {
                     )}
                 </div>
 
-                {/* Imagen */}
+                {/* ─── BLOQUE A: Imagen Principal / Portada ─── */}
                 <div>
                     <label className="block text-sm font-medium text-stone-700 mb-2">
-                        Imagen del producto
+                        Imagen principal *
                     </label>
 
-                    {/* File picker */}
-                    <label
-                        htmlFor="imagen_file"
-                        className={`flex flex-col items-center justify-center w-full h-28 border-2 border-dashed rounded-lg transition-colors bg-stone-50 ${
-                            saving
-                                ? 'border-stone-200 opacity-50 cursor-not-allowed pointer-events-none'
-                                : 'border-stone-300 cursor-pointer hover:border-stone-400'
-                        }`}
-                    >
-                        <span className="text-xs text-stone-500 text-center px-4">
-                            {imageFile
-                                ? imageFile.name
-                                : 'Haz clic para subir archivo (JPG, PNG, WEBP — máx. 10 MB)'}
-                        </span>
-                        <span className="mt-1 text-[10px] text-stone-400">
-                            El fondo se eliminará automáticamente y se convertirá a .webp
-                        </span>
-                    </label>
-                    <input
-                        type="file"
-                        id="imagen_file"
-                        accept="image/*"
-                        disabled={saving}
-                        className="sr-only"
-                        onChange={handleFileChange}
-                    />
-
-                    {/* Fallback: URL manual */}
-                    {!imageFile && (
-                        <div className="mt-3">
-                            <p className="text-[11px] text-stone-400 mb-1">O bien, pega una URL directa:</p>
+                    <div className="flex flex-col sm:flex-row gap-4">
+                        {/* File selector */}
+                        <div className="flex-1">
+                            <label
+                                htmlFor="imagen_principal"
+                                className={`flex flex-col items-center justify-center w-full h-28 border-2 border-dashed rounded-lg transition-colors bg-stone-50 ${
+                                    saving
+                                        ? 'border-stone-200 opacity-50 cursor-not-allowed pointer-events-none'
+                                        : 'border-stone-300 cursor-pointer hover:border-stone-400'
+                                }`}
+                            >
+                                {imagenPrincipal.preview ? (
+                                    <span className="text-xs text-stone-500">Toca para reemplazar la imagen</span>
+                                ) : (
+                                    <>
+                                        <svg className="w-5 h-5 text-stone-400 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                        <span className="text-xs text-stone-500">Seleccionar imagen (JPG, PNG, WEBP)</span>
+                                    </>
+                                )}
+                            </label>
                             <input
-                                type="url"
-                                id="imagen_url"
-                                name="imagen_url"
-                                value={formData.imagen_url}
-                                onChange={handleChange}
+                                type="file"
+                                id="imagen_principal"
+                                accept="image/*"
                                 disabled={saving}
-                                className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-stone-400 focus:border-transparent transition-all outline-none text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-                                placeholder="https://..."
+                                className="sr-only"
+                                onChange={handleImagenPrincipalChange}
                             />
                         </div>
-                    )}
 
-                    {/* Preview */}
-                    {previewUrl && (
-                        <div className="mt-3 flex items-start gap-5">
+                        {/* Preview */}
+                        {imagenPrincipal.preview && (
                             <img
-                                src={previewUrl}
-                                alt="Preview"
-                                className="w-24 h-24 sm:w-32 sm:h-32 rounded-lg border border-stone-200"
+                                src={imagenPrincipal.preview}
+                                alt="Imagen principal"
+                                className="w-20 h-24 object-cover shrink-0"
                                 onError={(e) => e.target.style.display = 'none'}
                             />
-                            {imageFile && (
-                                <button
-                                    type="button"
-                                    onClick={() => { setImageFile(null); setPreviewUrl(formData.imagen_url); }}
-                                    className="text-xs text-stone-400 hover:text-red-500 transition-colors mt-1"
-                                >
-                                    Quitar archivo
-                                </button>
-                            )}
-                        </div>
-                    )}
+                        )}
+                    </div>
+
+                    {/* Color de la prenda */}
+                    <div className="mt-3">
+                        <input
+                            type="text"
+                            value={colorPrincipal}
+                            onChange={(e) => setColorPrincipal(e.target.value)}
+                            disabled={saving}
+                            placeholder="Color de esta prenda (Opcional)"
+                            className="w-full px-0 py-2 border-b border-neutral-200 focus:border-black rounded-none bg-transparent text-sm focus:outline-none transition-colors disabled:opacity-50"
+                        />
+                    </div>
                 </div>
 
-                {/* Colores */}
+                {/* ─── BLOQUE B: Galería de Variantes ─── */}
                 <div>
-                    <label htmlFor="colores" className="block text-sm font-medium text-stone-700 mb-2">
-                        Colores disponibles
-                    </label>
-                    <input
-                        type="text"
-                        id="colores"
-                        name="colores"
-                        value={formData.colores}
-                        onChange={handleChange}
-                        disabled={saving}
-                        className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-stone-400 focus:border-transparent transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed"
-                        placeholder="Rojo, Azul, Negro"
-                    />
+                    <p className="text-sm font-medium text-stone-700 mb-1">
+                        ¿Este modelo tiene otros colores disponibles?
+                    </p>
+                    <p className="text-[11px] text-stone-400 mb-3">
+                        Agrega una imagen y un nombre de color por cada variante adicional.
+                    </p>
+
+                    {/* Botón agregar */}
+                    <button
+                        type="button"
+                        onClick={addVariante}
+                        disabled={saving || variantes.length >= 9}
+                        className="flex items-center gap-2 px-0 py-2 text-xs font-body tracking-wide text-neutral-500 hover:text-black transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                    >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
+                        </svg>
+                        Agregar Variante de Color
+                    </button>
+
+                    {/* Filas dinámicas */}
+                    {variantes.length > 0 && (
+                        <div className="mt-3">
+                            {variantes.map((variante, index) => (
+                                <div key={index} className={`flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 py-3 ${index < variantes.length - 1 ? 'border-b border-neutral-100' : ''}`}>
+                                    {/* File selector exclusivo por variante */}
+                                    <div className="flex items-center gap-3 shrink-0">
+                                        <label
+                                            htmlFor={`variante_file_${index}`}
+                                            className={`block w-16 h-20 overflow-hidden border-2 border-dashed transition-colors ${
+                                                variante.preview
+                                                    ? 'border-neutral-200 cursor-pointer hover:border-neutral-400'
+                                                    : 'border-neutral-200 bg-stone-50 cursor-pointer hover:border-stone-400'
+                                            } ${saving ? 'opacity-50 pointer-events-none' : ''}`}
+                                        >
+                                            {variante.preview ? (
+                                                <img
+                                                    src={variante.preview}
+                                                    alt={`Variante ${index + 1}`}
+                                                    className="w-full h-full object-cover"
+                                                    onError={(e) => e.target.style.display = 'none'}
+                                                />
+                                            ) : (
+                                                <div className="w-full h-full flex items-center justify-center">
+                                                    <svg className="w-4 h-4 text-stone-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                    </svg>
+                                                </div>
+                                            )}
+                                        </label>
+                                        <input
+                                            type="file"
+                                            id={`variante_file_${index}`}
+                                            accept="image/*"
+                                            disabled={saving}
+                                            className="sr-only"
+                                            onChange={(e) => handleVarianteFileChange(index, e)}
+                                        />
+                                    </div>
+
+                                    {/* Color input + delete */}
+                                    <div className="flex-1 min-w-0 flex items-center gap-3">
+                                        <input
+                                            type="text"
+                                            value={variante.color}
+                                            onChange={(e) => handleVarianteColorChange(index, e.target.value)}
+                                            disabled={saving}
+                                            placeholder="Ej: Beige"
+                                            className="flex-1 px-0 py-2 border-b border-neutral-200 focus:border-black rounded-none bg-transparent text-sm focus:outline-none transition-colors disabled:opacity-50"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => removeVariante(index)}
+                                            disabled={saving}
+                                            className="p-1.5 text-neutral-300 hover:text-red-400 transition-colors shrink-0 disabled:opacity-50"
+                                            title="Quitar variante"
+                                        >
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 {/* Activo */}
@@ -385,7 +507,7 @@ export default function ProductoForm() {
                         }`}
                     >
                         {saving
-                            ? (imageFile ? 'Procesando imagen con IA...' : 'Guardando...')
+                            ? ((imagenPrincipal.file || variantes.some(v => v.file)) ? 'Procesando imágenes...' : 'Guardando...')
                             : (isEdit ? 'Guardar Cambios' : 'Crear Producto')
                         }
                     </button>
