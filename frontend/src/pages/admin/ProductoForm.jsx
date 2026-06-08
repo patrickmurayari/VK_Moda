@@ -501,14 +501,20 @@ export default function ProductoForm() {
                     <button
                         type="submit"
                         disabled={saving}
-                        className={`w-full sm:flex-1 text-white font-medium py-3 px-4 rounded-lg transition-all disabled:cursor-not-allowed flex items-center justify-center tracking-widest text-xs uppercase ${
+                        className={`w-full sm:flex-1 text-white font-medium py-3 px-4 rounded-lg transition-all flex items-center justify-center gap-2 tracking-widest text-xs uppercase ${
                             saving
-                                ? 'bg-neutral-800 animate-pulse'
+                                ? 'bg-neutral-800 opacity-50 cursor-not-allowed'
                                 : 'bg-black hover:bg-neutral-800 active:scale-[0.98]'
                         }`}
                     >
+                        {saving && (
+                            <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                            </svg>
+                        )}
                         {saving
-                            ? ((imagenPrincipal.file || variantes.some(v => v.file)) ? 'Procesando imágenes...' : 'Guardando...')
+                            ? ((imagenPrincipal.file || variantes.some(v => v.file)) ? 'Procesando y subiendo prendas...' : 'Guardando...')
                             : (isEdit ? 'Guardar Cambios' : 'Crear Producto')
                         }
                     </button>
