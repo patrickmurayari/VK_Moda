@@ -157,16 +157,16 @@ export default function AdminProductos() {
                             ) : (
                                 productosFiltrados.map((producto) => (
                                     <tr key={producto.id} className="hover:bg-stone-50 transition-colors">
-                                        <td className="px-4 py-3 whitespace-nowrap">
+                                        <td className="px-4 py-3 align-middle min-w-[150px]">
                                             <div className="flex items-center gap-3">
                                                 {producto.imagen_url && (
                                                     <img
                                                         src={producto.imagen_url}
                                                         alt={producto.nombre}
-                                                        className="w-30 h-40 sm:w-30 sm:h-40 rounded shrink-0 border border-stone-200"
+                                                        className="w-16 h-24 sm:w-30 sm:h-40 rounded shrink-0 border border-stone-200"
                                                     />
                                                 )}
-                                                <span className="font-medium text-stone-800">{producto.nombre}</span>
+                                                <span className="font-medium text-stone-800 break-normal whitespace-normal min-w-0 pr-4">{producto.nombre}</span>
                                             </div>
                                         </td>
                                         <td className="px-4 py-3 text-stone-600 whitespace-nowrap">
