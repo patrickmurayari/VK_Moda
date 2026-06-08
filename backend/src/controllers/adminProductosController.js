@@ -6,22 +6,27 @@ const { processProductImage } = require('../utils/imageProcessor');
 // Bucket de Supabase Storage donde se guardan las imágenes de productos
 const STORAGE_BUCKET = 'productos';
 
-async function uploadProcessedImage(fileBuffer, mimetype, originalname) {
-    const processed = await processProductImage(fileBuffer, mimetype, originalname);
-    const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.webp`;
-    const storagePath = `productos/${fileName}`;
+async function uploadProcessedImage(fileBuffer, mimetype, originalname, fileSize) {
+    try {
+        const processed = await processProductImage(fileBuffer, mimetype, originalname);
+        const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.webp`;
+        const storagePath = `productos/${fileName}`;
 
-    const { error } = await supabaseAdmin.storage
-        .from(STORAGE_BUCKET)
-        .upload(storagePath, processed, { contentType: 'image/webp', upsert: false });
+        const { error } = await supabaseAdmin.storage
+            .from(STORAGE_BUCKET)
+            .upload(storagePath, processed, { contentType: 'image/webp', upsert: false });
 
-    if (error) throw error;
+        if (error) throw error;
 
-    const { data: { publicUrl } } = supabaseAdmin.storage
-        .from(STORAGE_BUCKET)
-        .getPublicUrl(storagePath);
+        const { data: { publicUrl } } = supabaseAdmin.storage
+            .from(STORAGE_BUCKET)
+            .getPublicUrl(storagePath);
 
-    return publicUrl;
+        return publicUrl;
+    } catch (error) {
+        console.error(`[Error Procesamiento] Archivo: ${originalname}, Mimetype: ${mimetype}, Tamaño: ${fileSize || 'N/A'} bytes. Detalle:`, error);
+        throw error;
+    }
 }
 
 function parseBoolean(val, fallback = true) {
@@ -95,7 +100,7 @@ const createProducto = async (req, res) => {
         // Procesar imagen principal (Bloque A)
         if (req.files?.imagen_principal?.[0]) {
             const file = req.files.imagen_principal[0];
-            imagen_url = await uploadProcessedImage(file.buffer, file.mimetype, file.originalname);
+            imagen_url = await uploadProcessedImage(file.buffer, file.mimetype, file.originalname, file.size);
         }
 
         // Insertar producto madre
@@ -109,15 +114,19 @@ const createProducto = async (req, res) => {
 
         // Procesar e insertar variantes adicionales (Bloque B → producto_colores)
         const variantFiles = req.files?.imagenes_variantes || [];
-        if (variantFiles.length > 0) {
-            for (let i = 0; i < variantFiles.length; i++) {
-                const file = variantFiles[i];
-                const colorName = variantesParsed[i]?.color || `Variante ${i + 1}`;
-                const variantImageUrl = await uploadProcessedImage(file.buffer, file.mimetype, file.originalname);
+        let fileIdx = 0;
+
+        for (let i = 0; i < variantesParsed.length; i++) {
+            const v = variantesParsed[i];
+            const colorName = (v.color || `Variante ${i + 1}`).trim();
+
+            if (v.es_nueva && fileIdx < variantFiles.length) {
+                const file = variantFiles[fileIdx++];
+                const variantImageUrl = await uploadProcessedImage(file.buffer, file.mimetype, file.originalname, file.size);
 
                 await db.query(
                     'INSERT INTO producto_colores (producto_id, color, imagen_url) VALUES ($1, $2, $3)',
-                    [productoId, colorName.trim(), variantImageUrl]
+                    [productoId, colorName, variantImageUrl]
                 );
             }
         }
@@ -162,7 +171,7 @@ const updateProducto = async (req, res) => {
             oldMainImageUrl = oldProduct.rows[0]?.imagen_url || null;
 
             const file = req.files.imagen_principal[0];
-            imagen_url = await uploadProcessedImage(file.buffer, file.mimetype, file.originalname);
+            imagen_url = await uploadProcessedImage(file.buffer, file.mimetype, file.originalname, file.size);
         }
 
         // Construir query dinámico para campos del producto
@@ -245,29 +254,29 @@ const updateProducto = async (req, res) => {
             // Eliminar variantes anteriores de la DB
             await db.query('DELETE FROM producto_colores WHERE producto_id = $1', [id]);
 
-            // Procesar e insertar variantes con archivo nuevo (Bloque B)
+            // Recorrer variantesParsed y alinear con archivos nuevos usando es_nueva
             const variantFiles = req.files?.imagenes_variantes || [];
-            for (let i = 0; i < variantFiles.length; i++) {
-                const file = variantFiles[i];
-                const colorName = variantesParsed[i]?.color || `Variante ${i + 1}`;
-                const variantImageUrl = await uploadProcessedImage(file.buffer, file.mimetype, file.originalname);
+            let fileIdx = 0;
 
-                await db.query(
-                    'INSERT INTO producto_colores (producto_id, color, imagen_url) VALUES ($1, $2, $3)',
-                    [id, colorName.trim(), variantImageUrl]
-                );
-            }
+            for (let i = 0; i < variantesParsed.length; i++) {
+                const v = variantesParsed[i];
+                const colorName = (v.color || `Variante ${i + 1}`).trim();
 
-            // Re-insertar variantes que solo tenían imagen_url existente (sin archivo nuevo)
-            if (variantesParsed.length > variantFiles.length) {
-                for (let i = variantFiles.length; i < variantesParsed.length; i++) {
-                    const v = variantesParsed[i];
-                    if (v.imagen_url) {
-                        await db.query(
-                            'INSERT INTO producto_colores (producto_id, color, imagen_url) VALUES ($1, $2, $3)',
-                            [id, (v.color || `Variante ${i + 1}`).trim(), v.imagen_url]
-                        );
-                    }
+                if (v.es_nueva && fileIdx < variantFiles.length) {
+                    // Variante nueva: procesar archivo correspondiente
+                    const file = variantFiles[fileIdx++];
+                    const variantImageUrl = await uploadProcessedImage(file.buffer, file.mimetype, file.originalname, file.size);
+
+                    await db.query(
+                        'INSERT INTO producto_colores (producto_id, color, imagen_url) VALUES ($1, $2, $3)',
+                        [id, colorName, variantImageUrl]
+                    );
+                } else if (v.imagen_url) {
+                    // Variante existente: re-insertar con su URL de Supabase intacta
+                    await db.query(
+                        'INSERT INTO producto_colores (producto_id, color, imagen_url) VALUES ($1, $2, $3)',
+                        [id, colorName, v.imagen_url]
+                    );
                 }
             }
         }
