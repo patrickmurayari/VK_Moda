@@ -190,7 +190,8 @@ export default function ProductoForm() {
             // Mapeo de colores para variantes (incluye las que ya tenían imagen de Supabase)
             const variantesData = variantes.map(v => ({
                 color: v.color || 'Sin color',
-                imagen_url: v.imagen_url || ''
+                imagen_url: v.imagen_url || '',
+                es_nueva: !!v.file
             }));
             if (variantesData.length > 0) {
                 fd.append('variantes', JSON.stringify(variantesData));
