@@ -105,11 +105,11 @@ export default function ProductDetail() {
                         </div>
                     )}
 
-                    {/* Color variant thumbnails */}
+                    {/* Gallery thumbnails */}
                     {(() => {
                         const allImages = [
-                            ...(producto.imagen_url ? [{ imagen_url: producto.imagen_url, color: 'Principal' }] : []),
-                            ...(producto.colores_variantes || [])
+                            ...(producto.imagen_url ? [{ imagen_url: producto.imagen_url, etiqueta: 'Principal' }] : []),
+                            ...(producto.imagenes_adicionales || [])
                         ];
                         return allImages.length > 1 && (
                             <div className="flex gap-3 mt-6">
@@ -122,11 +122,11 @@ export default function ProductDetail() {
                                                 ? 'border-black'
                                                 : 'border-neutral-200 hover:border-neutral-400'
                                         }`}
-                                        title={img.color}
+                                        title={img.etiqueta}
                                     >
                                         <img
                                             src={img.imagen_url}
-                                            alt={img.color}
+                                            alt={img.etiqueta || `Imagen ${index + 1}`}
                                             className="w-full h-full object-cover"
                                         />
                                     </button>
@@ -160,44 +160,6 @@ export default function ProductDetail() {
                     {/* Divider */}
                     <div className="h-px bg-neutral-200 my-6" />
 
-                    {/* Color variants */}
-                    {(() => {
-                        const allColors = [
-                            ...(producto.imagen_url ? [{ imagen_url: producto.imagen_url, color: 'Principal' }] : []),
-                            ...(producto.colores_variantes || [])
-                        ];
-                        return allColors.length > 0 ? (
-                            <div className="mb-6">
-                                <p className="font-body text-[10px] tracking-[0.2em] uppercase text-neutral-400 mb-3">
-                                    Colores disponibles
-                                </p>
-                                <div className="flex flex-wrap gap-2">
-                                    {allColors.map((variante, index) => (
-                                        <button
-                                            key={index}
-                                            onClick={() => setSelectedImage(variante.imagen_url)}
-                                            className={`px-3 py-1.5 text-xs font-body tracking-wide border transition-all ${
-                                                selectedImage === variante.imagen_url
-                                                    ? 'border-black text-black'
-                                                    : 'border-neutral-200 text-neutral-400 hover:text-black'
-                                            }`}
-                                        >
-                                            {variante.color}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                        ) : producto.colores ? (
-                            <div className="mb-6">
-                                <p className="font-body text-[10px] tracking-[0.2em] uppercase text-neutral-400 mb-2">
-                                    Colores disponibles
-                                </p>
-                                <p className="font-body text-sm text-neutral-700">
-                                    {producto.colores}
-                                </p>
-                            </div>
-                        ) : null;
-                    })()}
                     {/* Description placeholder */}
                     <div className="mb-8">
                         <p className="font-body text-[10px] tracking-[0.2em] uppercase text-neutral-400 mb-2">

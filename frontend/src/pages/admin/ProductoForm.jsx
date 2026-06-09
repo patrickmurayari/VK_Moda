@@ -14,8 +14,7 @@ export default function ProductoForm() {
     const [categorias, setCategorias] = useState([]);
 
     const [imagenPrincipal, setImagenPrincipal] = useState({ file: null, preview: '' });
-    const [colorPrincipal, setColorPrincipal] = useState('');
-    const [variantes, setVariantes] = useState([]);
+    const [imagenesAdicionales, setImagenesAdicionales] = useState([]);
 
     const [formData, setFormData] = useState({
         nombre: '',
@@ -62,9 +61,9 @@ export default function ProductoForm() {
             if (data.imagen_url) {
                 setImagenPrincipal({ file: null, preview: data.imagen_url });
             }
-            if (data.colores_variantes && data.colores_variantes.length > 0) {
-                setVariantes(data.colores_variantes.map(v => ({
-                    color: v.color,
+            if (data.imagenes_adicionales && data.imagenes_adicionales.length > 0) {
+                setImagenesAdicionales(data.imagenes_adicionales.map(v => ({
+                    etiqueta: v.etiqueta,
                     imagen_url: v.imagen_url,
                     file: null,
                     preview: v.imagen_url
@@ -108,35 +107,35 @@ export default function ProductoForm() {
         setImagenPrincipal({ file, preview: URL.createObjectURL(file) });
     };
 
-    const addVariante = () => {
-        setVariantes(prev => [...prev, { color: '', imagen_url: '', file: null, preview: '' }]);
+    const addImagenAdicional = () => {
+        setImagenesAdicionales(prev => [...prev, { etiqueta: '', imagen_url: '', file: null, preview: '' }]);
     };
 
-    const handleVarianteFileChange = (index, e) => {
+    const handleImagenFileChange = (index, e) => {
         const file = e.target.files?.[0];
         if (!file) return;
-        const updated = [...variantes];
+        const updated = [...imagenesAdicionales];
         if (updated[index].preview && updated[index].file) {
             URL.revokeObjectURL(updated[index].preview);
         }
         updated[index] = { ...updated[index], file, preview: URL.createObjectURL(file) };
-        setVariantes(updated);
+        setImagenesAdicionales(updated);
     };
 
-    const handleVarianteColorChange = (index, color) => {
-        const updated = [...variantes];
-        updated[index] = { ...updated[index], color };
-        setVariantes(updated);
+    const handleEtiquetaChange = (index, etiqueta) => {
+        const updated = [...imagenesAdicionales];
+        updated[index] = { ...updated[index], etiqueta };
+        setImagenesAdicionales(updated);
     };
 
-    const removeVariante = (index) => {
-        const confirmar = window.confirm("¿Estás seguro de que querés eliminar esta variante de color? Se perderán la imagen y el texto cargados.");
+    const removeImagenAdicional = (index) => {
+        const confirmar = window.confirm("¿Estás seguro de que querés eliminar esta foto adicional? Se perderán la imagen y la etiqueta cargadas.");
         if (!confirmar) return;
-        const updated = variantes.filter((_, i) => i !== index);
-        if (variantes[index].preview && variantes[index].file) {
-            URL.revokeObjectURL(variantes[index].preview);
+        const updated = imagenesAdicionales.filter((_, i) => i !== index);
+        if (imagenesAdicionales[index].preview && imagenesAdicionales[index].file) {
+            URL.revokeObjectURL(imagenesAdicionales[index].preview);
         }
-        setVariantes(updated);
+        setImagenesAdicionales(updated);
     };
 
     const handleChange = (e) => {
@@ -178,23 +177,20 @@ export default function ProductoForm() {
                 fd.append('imagen_url', imagenPrincipal.preview);
             }
 
-            // Color principal
-            fd.append('color_principal', colorPrincipal.trim());
-
-            // Bloque B: Variantes con imagen
-            const variantesConFile = variantes.filter(v => v.file);
-            for (const variante of variantesConFile) {
-                fd.append('imagenes_variantes', variante.file);
+            // Bloque B: Imágenes adicionales
+            const imagenesConFile = imagenesAdicionales.filter(v => v.file);
+            for (const img of imagenesConFile) {
+                fd.append('imagenes_variantes', img.file);
             }
 
-            // Mapeo de colores para variantes (incluye las que ya tenían imagen de Supabase)
-            const variantesData = variantes.map(v => ({
-                color: v.color || 'Sin color',
+            // Mapeo de etiquetas para imágenes adicionales (incluye las que ya tenían imagen de Supabase)
+            const imagenesData = imagenesAdicionales.map(v => ({
+                etiqueta: v.etiqueta || '',
                 imagen_url: v.imagen_url || '',
                 es_nueva: !!v.file
             }));
-            if (variantesData.length > 0) {
-                fd.append('variantes', JSON.stringify(variantesData));
+            if (imagenesData.length > 0) {
+                fd.append('imagenes_adicionales', JSON.stringify(imagenesData));
             }
 
             if (isEdit) {
@@ -208,8 +204,7 @@ export default function ProductoForm() {
                 : '¡Producto creado correctamente!'
             );
             setImagenPrincipal({ file: null, preview: '' });
-            setColorPrincipal('');
-            setVariantes([]);
+            setImagenesAdicionales([]);
             navigate('/admin/productos');
         } catch (error) {
             console.error('Error:', error);
@@ -368,61 +363,49 @@ export default function ProductoForm() {
                             />
                         )}
                     </div>
-
-                    {/* Color de la prenda */}
-                    <div className="mt-3">
-                        <input
-                            type="text"
-                            value={colorPrincipal}
-                            onChange={(e) => setColorPrincipal(e.target.value)}
-                            disabled={saving}
-                            placeholder="Color de esta prenda (Opcional)"
-                            className="w-full px-0 py-2 border-b border-neutral-200 focus:border-black rounded-none bg-transparent text-sm focus:outline-none transition-colors disabled:opacity-50"
-                        />
-                    </div>
                 </div>
 
-                {/* ─── BLOQUE B: Galería de Variantes ─── */}
+                {/* ─── BLOQUE B: Galería de imágenes adicionales ─── */}
                 <div>
                     <p className="text-sm font-medium text-stone-700 mb-1">
-                        ¿Este modelo tiene otros colores disponibles?
+                        ¿Querés agregar más fotos o ángulos de este producto?
                     </p>
                     <p className="text-[11px] text-stone-400 mb-3">
-                        Agrega una imagen y un nombre de color por cada variante adicional.
+                        Agregá una imagen y una etiqueta descriptiva por cada ángulo o detalle adicional.
                     </p>
 
                     {/* Botón agregar */}
                     <button
                         type="button"
-                        onClick={addVariante}
-                        disabled={saving || variantes.length >= 9}
+                        onClick={addImagenAdicional}
+                        disabled={saving || imagenesAdicionales.length >= 9}
                         className="flex items-center gap-2 px-0 py-2 text-xs font-body tracking-wide text-neutral-500 hover:text-black transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
                         </svg>
-                        Agregar Variante de Color
+                        + Agregar Foto / Ángulo
                     </button>
 
                     {/* Filas dinámicas */}
-                    {variantes.length > 0 && (
+                    {imagenesAdicionales.length > 0 && (
                         <div className="mt-3">
-                            {variantes.map((variante, index) => (
-                                <div key={index} className={`flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 py-3 ${index < variantes.length - 1 ? 'border-b border-neutral-100' : ''}`}>
-                                    {/* File selector exclusivo por variante */}
+                            {imagenesAdicionales.map((img, index) => (
+                                <div key={index} className={`flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 py-3 ${index < imagenesAdicionales.length - 1 ? 'border-b border-neutral-100' : ''}`}>
+                                    {/* File selector exclusivo por imagen */}
                                     <div className="flex items-center gap-3 shrink-0">
                                         <label
-                                            htmlFor={`variante_file_${index}`}
+                                            htmlFor={`img_file_${index}`}
                                             className={`block w-16 h-20 overflow-hidden border-2 border-dashed transition-colors ${
-                                                variante.preview
+                                                img.preview
                                                     ? 'border-neutral-200 cursor-pointer hover:border-neutral-400'
                                                     : 'border-neutral-200 bg-stone-50 cursor-pointer hover:border-stone-400'
                                             } ${saving ? 'opacity-50 pointer-events-none' : ''}`}
                                         >
-                                            {variante.preview ? (
+                                            {img.preview ? (
                                                 <img
-                                                    src={variante.preview}
-                                                    alt={`Variante ${index + 1}`}
+                                                    src={img.preview}
+                                                    alt={`Imagen ${index + 1}`}
                                                     className="w-full h-full object-cover"
                                                     onError={(e) => e.target.style.display = 'none'}
                                                 />
@@ -436,30 +419,30 @@ export default function ProductoForm() {
                                         </label>
                                         <input
                                             type="file"
-                                            id={`variante_file_${index}`}
+                                            id={`img_file_${index}`}
                                             accept="image/*"
                                             disabled={saving}
                                             className="sr-only"
-                                            onChange={(e) => handleVarianteFileChange(index, e)}
+                                            onChange={(e) => handleImagenFileChange(index, e)}
                                         />
                                     </div>
 
-                                    {/* Color input + delete */}
+                                    {/* Etiqueta input + delete */}
                                     <div className="flex-1 min-w-0 flex items-center gap-3">
                                         <input
                                             type="text"
-                                            value={variante.color}
-                                            onChange={(e) => handleVarianteColorChange(index, e.target.value)}
+                                            value={img.etiqueta}
+                                            onChange={(e) => handleEtiquetaChange(index, e.target.value)}
                                             disabled={saving}
-                                            placeholder="Ej: Beige"
+                                            placeholder="Ángulo / Detalle (Ej: Espalda, Calce, Textura - Opcional)"
                                             className="flex-1 px-0 py-2 border-b border-neutral-200 focus:border-black rounded-none bg-transparent text-sm focus:outline-none transition-colors disabled:opacity-50"
                                         />
                                         <button
                                             type="button"
-                                            onClick={() => removeVariante(index)}
+                                            onClick={() => removeImagenAdicional(index)}
                                             disabled={saving}
                                             className="p-1.5 text-neutral-300 hover:text-red-400 transition-colors shrink-0 disabled:opacity-50"
-                                            title="Quitar variante"
+                                            title="Quitar imagen"
                                         >
                                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -514,7 +497,7 @@ export default function ProductoForm() {
                             </svg>
                         )}
                         {saving
-                            ? ((imagenPrincipal.file || variantes.some(v => v.file)) ? 'Procesando y subiendo prendas...' : 'Guardando...')
+                            ? ((imagenPrincipal.file || imagenesAdicionales.some(v => v.file)) ? 'Procesando y subiendo prendas...' : 'Guardando...')
                             : (isEdit ? 'Guardar Cambios' : 'Crear Producto')
                         }
                     </button>
