@@ -163,7 +163,7 @@ export default function AdminProductos() {
                                                     <img
                                                         src={producto.imagen_url}
                                                         alt={producto.nombre}
-                                                        className="w-16 h-24 sm:w-30 sm:h-40 rounded shrink-0 border border-stone-200"
+                                                        className="w-16 h-24 sm:w-40 sm:h-52 rounded shrink-0 border border-stone-200"
                                                     />
                                                 )}
                                                 <span className="font-medium text-stone-800 break-normal whitespace-normal min-w-0 pr-4">{producto.nombre}</span>
