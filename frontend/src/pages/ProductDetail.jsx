@@ -66,9 +66,6 @@ export default function ProductDetail() {
         );
     }
 
-    // Debug: inspeccionar qué llega del backend
-    console.log('[DEBUG TALLES CLIENTE]:', producto.talles);
-
     // Determinar hilera de talles a mostrar
     const talles = Array.isArray(producto.talles) ? producto.talles : [];
     let hileraTalles = [];
