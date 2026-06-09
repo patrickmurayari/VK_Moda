@@ -16,7 +16,7 @@ const getProductosByCategoria = async (req, res) => {
         const categoria = catResult.rows[0];
 
         const prodResult = await db.query(
-            'SELECT id, nombre, precio, imagen_url, colores FROM productos WHERE categoria_id = $1 AND esta_activo = true ORDER BY id ASC',
+            'SELECT id, nombre, precio, imagen_url, colores, talles FROM productos WHERE categoria_id = $1 AND esta_activo = true ORDER BY id ASC',
             [categoria.id]
         );
 
@@ -38,7 +38,7 @@ const getProductosDestacados = async (req, res) => {
     const limit = parseInt(req.query.limit) || 4;
     try {
         const result = await db.query(
-            'SELECT id, nombre, precio, imagen_url, colores FROM productos WHERE esta_activo = true ORDER BY id DESC LIMIT $1',
+            'SELECT id, nombre, precio, imagen_url, colores, talles FROM productos WHERE esta_activo = true ORDER BY id DESC LIMIT $1',
             [limit]
         );
         res.json(result.rows);
@@ -52,7 +52,7 @@ const getProductoByIdPublic = async (req, res) => {
     const { id } = req.params;
     try {
         const result = await db.query(`
-            SELECT p.id, p.nombre, p.precio, p.imagen_url, p.colores, p.esta_activo,
+            SELECT p.id, p.nombre, p.precio, p.imagen_url, p.colores, p.talles, p.esta_activo,
                    c.id as categoria_id, c.slug as categoria_slug, c.nombre as categoria_nombre
             FROM productos p
             LEFT JOIN categorias c ON p.categoria_id = c.id
@@ -68,7 +68,13 @@ const getProductoByIdPublic = async (req, res) => {
             [id]
         );
 
-        const producto = { ...result.rows[0], imagenes_adicionales: imagenesResult.rows };
+        const row = result.rows[0];
+        // Seguridad: asegurar que talles llegue como array nativo
+        let tallesParsed = row.talles;
+        if (typeof tallesParsed === 'string') {
+            try { tallesParsed = JSON.parse(tallesParsed); } catch { tallesParsed = []; }
+        }
+        const producto = { ...row, talles: Array.isArray(tallesParsed) ? tallesParsed : [], imagenes_adicionales: imagenesResult.rows };
         res.json(producto);
     } catch (err) {
         console.error('Error al obtener producto:', err);

@@ -82,7 +82,7 @@ const getProductoById = async (req, res) => {
 
 // POST /api/admin/productos - Crear producto
 const createProducto = async (req, res) => {
-    let { nombre, precio, imagen_url, categoria_id, esta_activo, imagenes_adicionales } = req.body;
+    let { nombre, precio, imagen_url, categoria_id, esta_activo, imagenes_adicionales, talles } = req.body;
 
     // Validaciones realizadas por middleware validateProducto
 
@@ -97,6 +97,16 @@ const createProducto = async (req, res) => {
             }
         }
 
+        // Parsear talles (viene como JSON stringificado desde FormData)
+        let tallesArray = [];
+        if (talles) {
+            try {
+                tallesArray = JSON.parse(talles);
+            } catch (e) {
+                tallesArray = typeof talles === 'string' ? talles.split(',').map(t => t.trim()).filter(Boolean) : [];
+            }
+        }
+
         // Procesar imagen principal (Bloque A)
         if (req.files?.imagen_principal?.[0]) {
             const file = req.files.imagen_principal[0];
@@ -105,10 +115,10 @@ const createProducto = async (req, res) => {
 
         // Insertar producto madre
         const result = await db.query(`
-            INSERT INTO productos (nombre, precio, imagen_url, colores, categoria_id, esta_activo)
-            VALUES ($1, $2, $3, $4, $5, $6)
+            INSERT INTO productos (nombre, precio, imagen_url, colores, talles, categoria_id, esta_activo)
+            VALUES ($1, $2, $3, $4, $5, $6, $7)
             RETURNING *
-        `, [nombre.trim(), parseFloat(precio), imagen_url || null, null, categoria_id, parseBoolean(esta_activo)]);
+        `, [nombre.trim(), parseFloat(precio), imagen_url || null, null, tallesArray, categoria_id, parseBoolean(esta_activo)]);
 
         const productoId = result.rows[0].id;
 
@@ -148,7 +158,7 @@ const createProducto = async (req, res) => {
 // PUT /api/admin/productos/:id - Actualizar producto
 const updateProducto = async (req, res) => {
     const { id } = req.params;
-    let { nombre, precio, imagen_url, categoria_id, esta_activo, imagenes_adicionales } = req.body;
+    let { nombre, precio, imagen_url, categoria_id, esta_activo, imagenes_adicionales, talles } = req.body;
 
     // Validaciones realizadas por middleware validateProductoUpdate
 
@@ -160,6 +170,16 @@ const updateProducto = async (req, res) => {
                 imagenesParsed = typeof imagenes_adicionales === 'string' ? JSON.parse(imagenes_adicionales) : imagenes_adicionales;
             } catch {
                 imagenesParsed = [];
+            }
+        }
+
+        // Parsear talles (viene como JSON stringificado desde FormData)
+        let tallesArray = [];
+        if (talles) {
+            try {
+                tallesArray = JSON.parse(talles);
+            } catch (e) {
+                tallesArray = typeof talles === 'string' ? talles.split(',').map(t => t.trim()).filter(Boolean) : [];
             }
         }
 
@@ -198,6 +218,10 @@ const updateProducto = async (req, res) => {
         if (esta_activo !== undefined) {
             updates.push(`esta_activo = $${paramCount++}`);
             values.push(parseBoolean(esta_activo));
+        }
+        if (talles !== undefined) {
+            updates.push(`talles = $${paramCount++}`);
+            values.push(tallesArray);
         }
 
         if (updates.length === 0 && !req.files?.imagen_principal?.[0] && !req.files?.imagenes_variantes?.length && !imagenesParsed.length) {
