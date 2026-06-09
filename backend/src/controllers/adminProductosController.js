@@ -227,57 +227,56 @@ const updateProducto = async (req, res) => {
             if (path) pathsABorrar.push(path);
         }
 
-        // Si hay imágenes adicionales, reconstruir producto_imagenes (solo Bloque B)
-        const hasAdditionalFiles = !!req.files?.imagenes_variantes?.length;
-        const hasImagenesData = imagenesParsed.length > 0;
+        // ── Lógica de limpieza de imágenes adicionales (Bloque B) ──
 
-        if (hasAdditionalFiles || hasImagenesData) {
-            // Obtener URLs viejas de imágenes adicionales
-            const oldImagenes = await db.query(
-                'SELECT imagen_url FROM producto_imagenes WHERE producto_id = $1',
-                [id]
-            );
+        // 1) Armar array de URLs conservadas (existentes que el usuario no eliminó)
+        const urlsConservadas = imagenesParsed
+            .filter(v => v.imagen_url && !v.es_nueva)
+            .map(v => v.imagen_url);
 
-            // Conjunto de URLs que se conservan en la nueva data
-            const nuevasUrls = new Set(
-                imagenesParsed.map(v => v.imagen_url).filter(Boolean)
-            );
+        // 2) Obtener URLs actuales en la DB antes de modificar nada
+        const oldImagenes = await db.query(
+            'SELECT imagen_url FROM producto_imagenes WHERE producto_id = $1',
+            [id]
+        );
 
-            // Identificar URLs huérfanas (viejas que no están en la nueva data)
-            for (const row of oldImagenes.rows) {
-                if (row.imagen_url && !nuevasUrls.has(row.imagen_url)) {
-                    const path = obtenerPathDesdeUrl(row.imagen_url);
-                    if (path) pathsABorrar.push(path);
-                }
+        // 3) Identificar URLs huérfanas (en DB pero no en urlsConservadas)
+        const conservadasSet = new Set(urlsConservadas);
+        for (const row of oldImagenes.rows) {
+            if (row.imagen_url && !conservadasSet.has(row.imagen_url)) {
+                const path = obtenerPathDesdeUrl(row.imagen_url);
+                if (path) pathsABorrar.push(path);
             }
+        }
 
-            // Eliminar imágenes adicionales anteriores de la DB
+        // 4) Borrado atómico en PostgreSQL con NOT IN
+        if (urlsConservadas.length > 0) {
+            // Construir placeholders dinámicos: $2, $3, ... para cada URL conservada
+            const notInParams = urlsConservadas.map((_, i) => `$${i + 2}`).join(', ');
+            await db.query(
+                `DELETE FROM producto_imagenes WHERE producto_id = $1 AND imagen_url NOT IN (${notInParams})`,
+                [id, ...urlsConservadas]
+            );
+        } else if (oldImagenes.rows.length > 0) {
+            // El usuario eliminó todas las imágenes adicionales
             await db.query('DELETE FROM producto_imagenes WHERE producto_id = $1', [id]);
+        }
 
-            // Recorrer imagenesParsed y alinear con archivos nuevos usando es_nueva
-            const additionalFiles = req.files?.imagenes_variantes || [];
-            let fileIdx = 0;
+        // 5) Procesar e insertar únicamente las imágenes nuevas
+        const additionalFiles = req.files?.imagenes_variantes || [];
+        let fileIdx = 0;
 
-            for (let i = 0; i < imagenesParsed.length; i++) {
-                const v = imagenesParsed[i];
+        for (let i = 0; i < imagenesParsed.length; i++) {
+            const v = imagenesParsed[i];
+            if (v.es_nueva && fileIdx < additionalFiles.length) {
+                const file = additionalFiles[fileIdx++];
                 const etiquetaVal = (v.etiqueta || `Imagen ${i + 1}`).trim();
+                const uploadedUrl = await uploadProcessedImage(file.buffer, file.mimetype, file.originalname, file.size);
 
-                if (v.es_nueva && fileIdx < additionalFiles.length) {
-                    // Imagen nueva: procesar archivo correspondiente
-                    const file = additionalFiles[fileIdx++];
-                    const variantImageUrl = await uploadProcessedImage(file.buffer, file.mimetype, file.originalname, file.size);
-
-                    await db.query(
-                        'INSERT INTO producto_imagenes (producto_id, etiqueta, imagen_url) VALUES ($1, $2, $3)',
-                        [id, etiquetaVal, variantImageUrl]
-                    );
-                } else if (v.imagen_url) {
-                    // Imagen existente: re-insertar con su URL de Supabase intacta
-                    await db.query(
-                        'INSERT INTO producto_imagenes (producto_id, etiqueta, imagen_url) VALUES ($1, $2, $3)',
-                        [id, etiquetaVal, v.imagen_url]
-                    );
-                }
+                await db.query(
+                    'INSERT INTO producto_imagenes (producto_id, etiqueta, imagen_url) VALUES ($1, $2, $3)',
+                    [id, etiquetaVal, uploadedUrl]
+                );
             }
         }
 
