@@ -4,6 +4,10 @@ import toast from 'react-hot-toast';
 import { supabase } from '@/lib/supabase';
 import { getCategoriasSelectOptions, getProductoById, createProducto, updateProducto } from '@/services/api';
 
+const TALLES_LETRAS = ['S', 'M', 'L', 'XL', 'XXL'];
+const TALLES_NUMERICOS = ['36', '38', '40', '42', '44', '46', '48', '50'];
+const TALLE_UNICO = ['Único'];
+
 export default function ProductoForm() {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -15,6 +19,7 @@ export default function ProductoForm() {
 
     const [imagenPrincipal, setImagenPrincipal] = useState({ file: null, preview: '' });
     const [imagenesAdicionales, setImagenesAdicionales] = useState([]);
+    const [tallesSeleccionados, setTallesSeleccionados] = useState([]);
 
     const [formData, setFormData] = useState({
         nombre: '',
@@ -60,6 +65,9 @@ export default function ProductoForm() {
             });
             if (data.imagen_url) {
                 setImagenPrincipal({ file: null, preview: data.imagen_url });
+            }
+            if (data.talles && Array.isArray(data.talles)) {
+                setTallesSeleccionados(data.talles);
             }
             if (data.imagenes_adicionales && data.imagenes_adicionales.length > 0) {
                 setImagenesAdicionales(data.imagenes_adicionales.map(v => ({
@@ -170,6 +178,9 @@ export default function ProductoForm() {
             fd.append('categoria_id', String(parseInt(formData.categoria_id)));
             fd.append('esta_activo', String(formData.esta_activo));
 
+            // Talles disponibles
+            fd.append('talles', JSON.stringify(tallesSeleccionados));
+
             // Bloque A: Imagen principal
             if (imagenPrincipal.file) {
                 fd.append('imagen_principal', imagenPrincipal.file);
@@ -205,6 +216,7 @@ export default function ProductoForm() {
             );
             setImagenPrincipal({ file: null, preview: '' });
             setImagenesAdicionales([]);
+            setTallesSeleccionados([]);
             navigate('/admin/productos');
         } catch (error) {
             console.error('Error:', error);
@@ -453,6 +465,80 @@ export default function ProductoForm() {
                             ))}
                         </div>
                     )}
+                </div>
+
+                {/* ─── TALLES DISPONIBLES ─── */}
+                <div>
+                    <p className="text-sm font-medium text-stone-700 mb-1">
+                        Talles disponibles
+                    </p>
+                    <p className="text-[11px] text-stone-400 mb-3">
+                        Usá los atajos para cargar una curva completa, y luego destildá los talles sin stock.
+                    </p>
+
+                    {/* Atajos rápidos */}
+                    <div className="flex flex-wrap gap-2 mb-3">
+                        <button
+                            type="button"
+                            onClick={() => setTallesSeleccionados([...TALLES_LETRAS.slice(0, 4)])}
+                            disabled={saving}
+                            className="px-3 py-1.5 text-xs font-body tracking-wide border border-stone-300 text-stone-600 hover:border-black hover:text-black transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                        >
+                            Curva S a XL
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setTallesSeleccionados(['36', '38', '40', '42', '44', '46'])}
+                            disabled={saving}
+                            className="px-3 py-1.5 text-xs font-body tracking-wide border border-stone-300 text-stone-600 hover:border-black hover:text-black transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                        >
+                            Curva Jeans 36 a 46
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setTallesSeleccionados([...TALLE_UNICO])}
+                            disabled={saving}
+                            className="px-3 py-1.5 text-xs font-body tracking-wide border border-stone-300 text-stone-600 hover:border-black hover:text-black transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                        >
+                            Talle Único
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setTallesSeleccionados([])}
+                            disabled={saving || tallesSeleccionados.length === 0}
+                            className="px-3 py-1.5 text-xs font-body tracking-wide border border-stone-200 text-stone-400 hover:border-stone-400 hover:text-stone-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                        >
+                            Limpiar
+                        </button>
+                    </div>
+
+                    {/* Grilla de checkboxes */}
+                    <div className="grid grid-cols-4 sm:grid-cols-8 gap-2">
+                        {[...TALLES_LETRAS, ...TALLES_NUMERICOS].map(talle => {
+                            const activo = tallesSeleccionados.includes(talle);
+                            return (
+                                <button
+                                    key={talle}
+                                    type="button"
+                                    disabled={saving}
+                                    onClick={() => {
+                                        setTallesSeleccionados(prev =>
+                                            activo
+                                                ? prev.filter(t => t !== talle)
+                                                : [...prev, talle]
+                                        );
+                                    }}
+                                    className={`py-2 text-xs font-body tracking-wide border transition-all disabled:opacity-40 disabled:cursor-not-allowed ${
+                                        activo
+                                            ? 'bg-black text-white border-black'
+                                            : 'bg-white text-stone-700 border-stone-300 hover:border-stone-500'
+                                    }`}
+                                >
+                                    {talle}
+                                </button>
+                            );
+                        })}
+                    </div>
                 </div>
 
                 {/* Activo */}
