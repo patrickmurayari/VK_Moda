@@ -85,18 +85,18 @@ export default function OrderWizard() {
     };
 
     const handleCrearCliente = async () => {
-        const { nombre, apellido } = nuevoCliente;
-        if (!nombre.trim() || !apellido.trim()) {
-            toast.error('Nombre y apellido son obligatorios');
+        const { nombre, telefono } = nuevoCliente;
+        if (!nombre.trim() || !telefono.trim()) {
+            toast.error('Nombre y teléfono son obligatorios');
             return;
         }
         setCreatingCliente(true);
         try {
             const { data: { session } } = await supabase.auth.getSession();
             const data = await createCliente({
-                nombre: nombre.trim(),
-                apellido: apellido.trim(),
-                telefono: nuevoCliente.telefono.trim() || null,
+                nombre: nuevoCliente.nombre.trim(),
+                apellido: nuevoCliente.apellido.trim() || null,
+                telefono: nuevoCliente.telefono.trim(),
                 email: nuevoCliente.email.trim() || null,
             }, session.access_token);
 
@@ -342,7 +342,7 @@ export default function OrderWizard() {
                                             />
                                         </div>
                                         <div>
-                                            <label className="block text-xs text-stone-500 mb-1">Apellido *</label>
+                                            <label className="block text-xs text-stone-500 mb-1">Apellido</label>
                                             <input
                                                 type="text"
                                                 placeholder="Apellido"
@@ -352,7 +352,7 @@ export default function OrderWizard() {
                                             />
                                         </div>
                                         <div>
-                                            <label className="block text-xs text-stone-500 mb-1">Teléfono</label>
+                                            <label className="block text-xs text-stone-500 mb-1">Teléfono *</label>
                                             <input
                                                 type="tel"
                                                 placeholder="11-1234-5678"
@@ -374,8 +374,8 @@ export default function OrderWizard() {
                                     </div>
                                     <button
                                         onClick={handleCrearCliente}
-                                        disabled={creatingCliente}
-                                        className="w-full py-3 bg-stone-800 text-white rounded-lg font-medium hover:bg-stone-700 disabled:opacity-50 transition-colors flex items-center justify-center gap-2 active:scale-[0.98]"
+                                        disabled={creatingCliente || !nuevoCliente.nombre.trim() || !nuevoCliente.telefono.trim()}
+                                        className="w-full py-3 bg-stone-800 text-white rounded-lg font-medium hover:bg-stone-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2 active:scale-[0.98]"
                                     >
                                         {creatingCliente ? (
                                             <>
