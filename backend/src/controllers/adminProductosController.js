@@ -52,7 +52,7 @@ const getProductos = async (req, res) => {
     }
 };
 
-// GET /api/admin/productos/:id - Obtener un producto con variantes
+// GET /api/admin/productos/:id - Obtener un producto con imágenes adicionales
 const getProductoById = async (req, res) => {
     const { id } = req.params;
     try {
@@ -67,12 +67,12 @@ const getProductoById = async (req, res) => {
             return res.status(404).json({ error: 'Producto no encontrado' });
         }
 
-        const coloresResult = await db.query(
-            'SELECT color, imagen_url FROM producto_colores WHERE producto_id = $1 ORDER BY id',
+        const imagenesResult = await db.query(
+            'SELECT etiqueta, imagen_url FROM producto_imagenes WHERE producto_id = $1 ORDER BY id',
             [id]
         );
 
-        const producto = { ...result.rows[0], colores_variantes: coloresResult.rows };
+        const producto = { ...result.rows[0], imagenes_adicionales: imagenesResult.rows };
         res.json(producto);
     } catch (err) {
         console.error('Error al obtener producto:', err);
@@ -82,18 +82,18 @@ const getProductoById = async (req, res) => {
 
 // POST /api/admin/productos - Crear producto
 const createProducto = async (req, res) => {
-    let { nombre, precio, imagen_url, categoria_id, esta_activo, variantes, color_principal } = req.body;
+    let { nombre, precio, imagen_url, categoria_id, esta_activo, imagenes_adicionales } = req.body;
 
     // Validaciones realizadas por middleware validateProducto
 
     try {
-        // Parsear variantes si vienen como JSON stringificado
-        let variantesParsed = [];
-        if (variantes) {
+        // Parsear imagenes_adicionales si vienen como JSON stringificado
+        let imagenesParsed = [];
+        if (imagenes_adicionales) {
             try {
-                variantesParsed = typeof variantes === 'string' ? JSON.parse(variantes) : variantes;
+                imagenesParsed = typeof imagenes_adicionales === 'string' ? JSON.parse(imagenes_adicionales) : imagenes_adicionales;
             } catch {
-                variantesParsed = [];
+                imagenesParsed = [];
             }
         }
 
@@ -112,32 +112,32 @@ const createProducto = async (req, res) => {
 
         const productoId = result.rows[0].id;
 
-        // Procesar e insertar variantes adicionales (Bloque B → producto_colores)
-        const variantFiles = req.files?.imagenes_variantes || [];
+        // Procesar e insertar imágenes adicionales (Bloque B → producto_imagenes)
+        const additionalFiles = req.files?.imagenes_variantes || [];
         let fileIdx = 0;
 
-        for (let i = 0; i < variantesParsed.length; i++) {
-            const v = variantesParsed[i];
-            const colorName = (v.color || `Variante ${i + 1}`).trim();
+        for (let i = 0; i < imagenesParsed.length; i++) {
+            const v = imagenesParsed[i];
+            const etiquetaVal = (v.etiqueta || `Imagen ${i + 1}`).trim();
 
-            if (v.es_nueva && fileIdx < variantFiles.length) {
-                const file = variantFiles[fileIdx++];
+            if (v.es_nueva && fileIdx < additionalFiles.length) {
+                const file = additionalFiles[fileIdx++];
                 const variantImageUrl = await uploadProcessedImage(file.buffer, file.mimetype, file.originalname, file.size);
 
                 await db.query(
-                    'INSERT INTO producto_colores (producto_id, color, imagen_url) VALUES ($1, $2, $3)',
-                    [productoId, colorName, variantImageUrl]
+                    'INSERT INTO producto_imagenes (producto_id, etiqueta, imagen_url) VALUES ($1, $2, $3)',
+                    [productoId, etiquetaVal, variantImageUrl]
                 );
             }
         }
 
-        // Devolver producto enriquecido con variantes
-        const coloresResult = await db.query(
-            'SELECT color, imagen_url FROM producto_colores WHERE producto_id = $1 ORDER BY id',
+        // Devolver producto enriquecido con imágenes adicionales
+        const imagenesResult = await db.query(
+            'SELECT etiqueta, imagen_url FROM producto_imagenes WHERE producto_id = $1 ORDER BY id',
             [productoId]
         );
 
-        const producto = { ...result.rows[0], colores_variantes: coloresResult.rows };
+        const producto = { ...result.rows[0], imagenes_adicionales: imagenesResult.rows };
         res.status(201).json(producto);
     } catch (err) {
         console.error('Error al crear producto:', err);
@@ -148,18 +148,18 @@ const createProducto = async (req, res) => {
 // PUT /api/admin/productos/:id - Actualizar producto
 const updateProducto = async (req, res) => {
     const { id } = req.params;
-    let { nombre, precio, imagen_url, categoria_id, esta_activo, variantes, color_principal } = req.body;
+    let { nombre, precio, imagen_url, categoria_id, esta_activo, imagenes_adicionales } = req.body;
 
     // Validaciones realizadas por middleware validateProductoUpdate
 
     try {
-        // Parsear variantes si vienen como JSON stringificado
-        let variantesParsed = [];
-        if (variantes) {
+        // Parsear imagenes_adicionales si vienen como JSON stringificado
+        let imagenesParsed = [];
+        if (imagenes_adicionales) {
             try {
-                variantesParsed = typeof variantes === 'string' ? JSON.parse(variantes) : variantes;
+                imagenesParsed = typeof imagenes_adicionales === 'string' ? JSON.parse(imagenes_adicionales) : imagenes_adicionales;
             } catch {
-                variantesParsed = [];
+                imagenesParsed = [];
             }
         }
 
@@ -200,7 +200,7 @@ const updateProducto = async (req, res) => {
             values.push(parseBoolean(esta_activo));
         }
 
-        if (updates.length === 0 && !req.files?.imagen_principal?.[0] && !req.files?.imagenes_variantes?.length && !variantesParsed.length) {
+        if (updates.length === 0 && !req.files?.imagen_principal?.[0] && !req.files?.imagenes_variantes?.length && !imagenesParsed.length) {
             return res.status(400).json({ error: 'No hay campos para actualizar' });
         }
 
@@ -227,55 +227,55 @@ const updateProducto = async (req, res) => {
             if (path) pathsABorrar.push(path);
         }
 
-        // Si hay variantes nuevas, reconstruir producto_colores (solo Bloque B)
-        const hasVariantFiles = !!req.files?.imagenes_variantes?.length;
-        const hasVariantesData = variantesParsed.length > 0;
+        // Si hay imágenes adicionales, reconstruir producto_imagenes (solo Bloque B)
+        const hasAdditionalFiles = !!req.files?.imagenes_variantes?.length;
+        const hasImagenesData = imagenesParsed.length > 0;
 
-        if (hasVariantFiles || hasVariantesData) {
-            // Obtener URLs viejas de variantes
-            const oldVariantes = await db.query(
-                'SELECT imagen_url FROM producto_colores WHERE producto_id = $1',
+        if (hasAdditionalFiles || hasImagenesData) {
+            // Obtener URLs viejas de imágenes adicionales
+            const oldImagenes = await db.query(
+                'SELECT imagen_url FROM producto_imagenes WHERE producto_id = $1',
                 [id]
             );
 
             // Conjunto de URLs que se conservan en la nueva data
             const nuevasUrls = new Set(
-                variantesParsed.map(v => v.imagen_url).filter(Boolean)
+                imagenesParsed.map(v => v.imagen_url).filter(Boolean)
             );
 
             // Identificar URLs huérfanas (viejas que no están en la nueva data)
-            for (const row of oldVariantes.rows) {
+            for (const row of oldImagenes.rows) {
                 if (row.imagen_url && !nuevasUrls.has(row.imagen_url)) {
                     const path = obtenerPathDesdeUrl(row.imagen_url);
                     if (path) pathsABorrar.push(path);
                 }
             }
 
-            // Eliminar variantes anteriores de la DB
-            await db.query('DELETE FROM producto_colores WHERE producto_id = $1', [id]);
+            // Eliminar imágenes adicionales anteriores de la DB
+            await db.query('DELETE FROM producto_imagenes WHERE producto_id = $1', [id]);
 
-            // Recorrer variantesParsed y alinear con archivos nuevos usando es_nueva
-            const variantFiles = req.files?.imagenes_variantes || [];
+            // Recorrer imagenesParsed y alinear con archivos nuevos usando es_nueva
+            const additionalFiles = req.files?.imagenes_variantes || [];
             let fileIdx = 0;
 
-            for (let i = 0; i < variantesParsed.length; i++) {
-                const v = variantesParsed[i];
-                const colorName = (v.color || `Variante ${i + 1}`).trim();
+            for (let i = 0; i < imagenesParsed.length; i++) {
+                const v = imagenesParsed[i];
+                const etiquetaVal = (v.etiqueta || `Imagen ${i + 1}`).trim();
 
-                if (v.es_nueva && fileIdx < variantFiles.length) {
-                    // Variante nueva: procesar archivo correspondiente
-                    const file = variantFiles[fileIdx++];
+                if (v.es_nueva && fileIdx < additionalFiles.length) {
+                    // Imagen nueva: procesar archivo correspondiente
+                    const file = additionalFiles[fileIdx++];
                     const variantImageUrl = await uploadProcessedImage(file.buffer, file.mimetype, file.originalname, file.size);
 
                     await db.query(
-                        'INSERT INTO producto_colores (producto_id, color, imagen_url) VALUES ($1, $2, $3)',
-                        [id, colorName, variantImageUrl]
+                        'INSERT INTO producto_imagenes (producto_id, etiqueta, imagen_url) VALUES ($1, $2, $3)',
+                        [id, etiquetaVal, variantImageUrl]
                     );
                 } else if (v.imagen_url) {
-                    // Variante existente: re-insertar con su URL de Supabase intacta
+                    // Imagen existente: re-insertar con su URL de Supabase intacta
                     await db.query(
-                        'INSERT INTO producto_colores (producto_id, color, imagen_url) VALUES ($1, $2, $3)',
-                        [id, colorName, v.imagen_url]
+                        'INSERT INTO producto_imagenes (producto_id, etiqueta, imagen_url) VALUES ($1, $2, $3)',
+                        [id, etiquetaVal, v.imagen_url]
                     );
                 }
             }
@@ -298,17 +298,17 @@ const updateProducto = async (req, res) => {
             }
         }
 
-        // Devolver producto actualizado con variantes
+        // Devolver producto actualizado con imágenes adicionales
         const updatedProduct = await db.query(
             'SELECT * FROM productos WHERE id = $1',
             [id]
         );
-        const coloresResult = await db.query(
-            'SELECT color, imagen_url FROM producto_colores WHERE producto_id = $1 ORDER BY id',
+        const imagenesResult = await db.query(
+            'SELECT etiqueta, imagen_url FROM producto_imagenes WHERE producto_id = $1 ORDER BY id',
             [id]
         );
 
-        const producto = { ...updatedProduct.rows[0], colores_variantes: coloresResult.rows };
+        const producto = { ...updatedProduct.rows[0], imagenes_adicionales: imagenesResult.rows };
         res.json(producto);
     } catch (err) {
         console.error('Error al actualizar producto:', err);
@@ -338,13 +338,13 @@ const deleteProducto = async (req, res) => {
 
         const imagenUrl = selectResult.rows[0].imagen_url;
 
-        // Obtener URLs de variantes antes de borrar (CASCADE las elimina de la DB)
-        const variantesResult = await db.query(
-            'SELECT imagen_url FROM producto_colores WHERE producto_id = $1',
+        // Obtener URLs de imágenes adicionales antes de borrar (CASCADE las elimina de la DB)
+        const imagenesResult = await db.query(
+            'SELECT imagen_url FROM producto_imagenes WHERE producto_id = $1',
             [id]
         );
 
-        // Recolectar todas las rutas de storage a borrar (portada + variantes)
+        // Recolectar todas las rutas de storage a borrar (portada + imágenes adicionales)
         const pathsToDelete = [];
 
         if (imagenUrl) {
@@ -352,7 +352,7 @@ const deleteProducto = async (req, res) => {
             if (filePath) pathsToDelete.push(filePath);
         }
 
-        for (const row of variantesResult.rows) {
+        for (const row of imagenesResult.rows) {
             const filePath = obtenerPathDesdeUrl(row.imagen_url);
             if (filePath) pathsToDelete.push(filePath);
         }

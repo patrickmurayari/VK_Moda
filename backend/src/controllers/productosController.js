@@ -63,12 +63,12 @@ const getProductoByIdPublic = async (req, res) => {
             return res.status(404).json({ error: 'Producto no encontrado' });
         }
 
-        const coloresResult = await db.query(
-            'SELECT color, imagen_url FROM producto_colores WHERE producto_id = $1 ORDER BY id',
+        const imagenesResult = await db.query(
+            'SELECT etiqueta, imagen_url FROM producto_imagenes WHERE producto_id = $1 ORDER BY id',
             [id]
         );
 
-        const producto = { ...result.rows[0], colores_variantes: coloresResult.rows };
+        const producto = { ...result.rows[0], imagenes_adicionales: imagenesResult.rows };
         res.json(producto);
     } catch (err) {
         console.error('Error al obtener producto:', err);
