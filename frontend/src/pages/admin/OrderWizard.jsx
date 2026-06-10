@@ -208,7 +208,7 @@ export default function OrderWizard() {
     const formatCurrency = (val) => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(val || 0);
 
     return (
-        <div className="space-y-4 sm:space-y-6 max-w-3xl mx-auto">
+        <div className="space-y-4 sm:space-y-6 w-full px-0 sm:px-0 md:max-w-2xl md:mx-auto">
             {/* Header */}
             <div className="flex items-center gap-3">
                 <button onClick={() => navigate('/admin/pedidos')} className="p-2 rounded-lg hover:bg-stone-200 transition-colors">
@@ -245,7 +245,7 @@ export default function OrderWizard() {
 
             {/* STEP 1: Cliente */}
             {step === 1 && (
-                <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-stone-200 space-y-4">
+                <div className="bg-white rounded-xl p-3 sm:p-6 shadow-sm border border-stone-200 space-y-4 overflow-hidden">
                     <h3 className="font-heading text-stone-800">Seleccionar Cliente</h3>
 
                     {clienteId ? (
@@ -409,7 +409,7 @@ export default function OrderWizard() {
                                 value={fechaEntrega}
                                 onChange={(e) => setFechaEntrega(e.target.value)}
                                 min={new Date().toISOString().split('T')[0]}
-                                className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 outline-none"
+                                className="w-full box-border px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 outline-none"
                             />
                         </div>
                         <div>
