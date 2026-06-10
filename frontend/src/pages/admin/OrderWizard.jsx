@@ -21,7 +21,7 @@ const MEDIDAS_FIELDS = [
 
 const emptyItem = () => ({
     descripcion_prenda: '',
-    tipo_trabajo: 'confeccion',
+    tipo_trabajo: '',
     precio_item: '',
     tela_id: '',
     usa_medida_existente: false,
@@ -119,6 +119,10 @@ export default function OrderWizard() {
     const updateItem = (index, field, value) => {
         const updated = [...items];
         updated[index] = { ...updated[index], [field]: value };
+        // Limpiar medidas si se cambia tipo_trabajo fuera de confeccion
+        if (field === 'tipo_trabajo' && value !== 'confeccion') {
+            updated[index] = { ...updated[index], medidas: {} };
+        }
         setItems(updated);
     };
 
@@ -484,6 +488,7 @@ export default function OrderWizard() {
                                         onChange={(e) => updateItem(idx, 'tipo_trabajo', e.target.value)}
                                         className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-stone-400 outline-none"
                                     >
+                                        <option value="" disabled>Seleccionar tipo de trabajo</option>
                                         <option value="confeccion">Confección</option>
                                         <option value="retrabajo">Re-trabajo</option>
                                         <option value="arreglo">Arreglo</option>
