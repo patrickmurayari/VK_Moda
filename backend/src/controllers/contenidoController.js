@@ -13,7 +13,7 @@ const getContenidoBySeccion = async (req, res) => {
 
     try {
         const result = await db.query(
-            'SELECT id, seccion, posicion, titulo, subtitulo, imagen_url, orden FROM contenido_web WHERE seccion = $1 ORDER BY orden ASC',
+            'SELECT id, seccion, posicion, titulo, subtitulo, imagen_url, imagen_desktop_url, orden FROM contenido_web WHERE seccion = $1 ORDER BY orden ASC',
             [seccion]
         );
 
