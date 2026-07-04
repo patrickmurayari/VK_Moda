@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link as RouterLink, useLocation } from "react-router-dom";
-import { Search, Menu, X } from 'lucide-react';
+import { Search, Menu, X, ShoppingBag } from 'lucide-react';
 import MobileMenu from './MobileMenu';
+import { useCart } from '../../context/CartContext';
 
 const scrollTo = (id) => {
     const el = document.getElementById(id);
@@ -46,6 +47,7 @@ function Navbar() {
 
     const closeMenu = () => setMenuOpen(false);
     const toggleSearch = () => setSearchOpen(!searchOpen);
+    const { totalItems, setDrawerOpen } = useCart();
 
     const textColor = menuOpen || isScrolled || isCategoryPage ? 'text-black' : 'text-white';
 
@@ -76,8 +78,22 @@ function Navbar() {
                         </button>
                     )}
 
-                    {/* Right: Search + Menu (both mobile & desktop) */}
+                    {/* Right: Cart + Search + Menu (both mobile & desktop) */}
                     <div className="flex items-center space-x-6 md:absolute md:right-6 lg:right-80">
+                        {!menuOpen && (
+                            <button
+                                className={`${textColor} hover:opacity-60 transition-colors duration-300 relative`}
+                                onClick={() => setDrawerOpen(true)}
+                                aria-label="Abrir bolsa de compras"
+                            >
+                                <ShoppingBag className="w-6 h-6" strokeWidth={1.5} />
+                                {totalItems > 0 && (
+                                    <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-black text-white text-[9px] font-body flex items-center justify-center leading-none">
+                                        {totalItems > 9 ? '9+' : totalItems}
+                                    </span>
+                                )}
+                            </button>
+                        )}
                         {!menuOpen && (
                             <button
                                 className={`${textColor} hover:opacity-60 transition-colors duration-300`}

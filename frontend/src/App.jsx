@@ -5,6 +5,7 @@ import { Toaster } from 'react-hot-toast'
 import './App.css'
 
 import Navbar from './components/layout/Navbar'
+import CartDrawer from './components/cart/CartDrawer'
 import NotFound from './components/common/NotFound'
 import HeroSection from './components/home/HeroSection'
 import SeccionCategorias from './components/home/SeccionCategorias'
@@ -125,6 +126,7 @@ function App() {
       
       {/* Se renderiza Navbar solo si hideLayout es false */}
       {!hideLayout && <Navbar />}
+      {!hideLayout && <CartDrawer />}
 
       <Suspense
         fallback={
