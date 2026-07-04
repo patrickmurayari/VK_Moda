@@ -22,26 +22,14 @@ function SlideImage({ slide, extraClass = '' }) {
                 loading="eager"
                 decoding="async"
             />
-            {/* Desktop: blurred backdrop + centered sharp image */}
-            <div className="hidden lg:block absolute inset-0">
-                <img
-                    src={slide.imageDesktop}
-                    alt=""
-                    aria-hidden="true"
-                    className="absolute inset-0 w-full h-full object-cover scale-110 blur-3xl opacity-40"
-                    loading="eager"
-                    decoding="async"
-                />
-                <div className="absolute inset-0 flex items-center justify-center">
-                    <img
-                        src={slide.imageDesktop}
-                        alt={slide.alt}
-                        className="h-full w-auto object-contain"
-                        loading="eager"
-                        decoding="async"
-                    />
-                </div>
-            </div>
+            {/* Desktop: Pantalla Completa Limpia */}
+            <img
+                src={slide.imageDesktop}
+                alt={slide.alt}
+                className="hidden lg:block absolute inset-0 w-full h-full object-cover object-center"
+                loading="eager"
+                decoding="async"
+            />
         </div>
     );
 }
@@ -58,8 +46,8 @@ function HeroSection() {
             .then((data) => {
                 const mapped = data.map((item) => ({
                     image: item.imagen_url,
-                    imageDesktop: item.imagen_url_desktop || item.imagen_url,
-                    alt: item.alt_text || '',
+                    imageDesktop: item.imagen_desktop_url || item.imagen_url,
+                    alt: item.titulo || 'V&A Banner',
                 }));
                 setSlides(mapped);
             })
