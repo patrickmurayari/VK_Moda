@@ -70,6 +70,15 @@ function Footer() {
               <RouterLink to="/categoria/camperas-hombre" className="block font-body font-normal text-xs text-white underline underline-offset-4 decoration-[0.5px] decoration-neutral-500 hover:decoration-white transition-colors duration-300">
                 Camperas
               </RouterLink>
+              <RouterLink to="/categoria/pantalones" className="block font-body font-normal text-xs text-white underline underline-offset-4 decoration-[0.5px] decoration-neutral-500 hover:decoration-white transition-colors duration-300">
+                Pantalones
+              </RouterLink>
+              <RouterLink to="/categoria/joggings" className="block font-body font-normal text-xs text-white underline underline-offset-4 decoration-[0.5px] decoration-neutral-500 hover:decoration-white transition-colors duration-300">
+                Joggings
+              </RouterLink>
+              <RouterLink to="/categoria/accesorios" className="block font-body font-normal text-xs text-white underline underline-offset-4 decoration-[0.5px] decoration-neutral-500 hover:decoration-white transition-colors duration-300">
+                Accesorios
+              </RouterLink>
             </div>
           </div>
 

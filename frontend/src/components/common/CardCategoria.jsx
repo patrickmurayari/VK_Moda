@@ -18,7 +18,7 @@ const CardProducts = ({ products }) => {
             <div className="overflow-hidden">
                 <div className="aspect-[3/4] overflow-hidden bg-neutral-100">
                     <img
-                        className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                        className="w-full h-full object-contain transition-transform duration-700 ease-out group-hover:scale-105"
                         src={elem.image}
                         alt={elem.name}
                         loading="lazy"

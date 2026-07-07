@@ -40,6 +40,8 @@ function HeroSection() {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [incomingSlide, setIncomingSlide] = useState(null);
     const [showIncoming, setShowIncoming] = useState(false);
+    const [touchStartX, setTouchStartX] = useState(0);
+    const [touchEndX, setTouchEndX] = useState(0);
 
     useEffect(() => {
         getContenido('hero')
@@ -78,8 +80,21 @@ function HeroSection() {
             setCurrentSlide(index);
             setIncomingSlide(null);
             setShowIncoming(false);
-        }, 700);
+        }, 1000);
     }, [incomingSlide, slides.length]);
+
+    const handleTouchStart = (e) => setTouchStartX(e.targetTouches[0].clientX);
+    const handleTouchMove = (e) => setTouchEndX(e.targetTouches[0].clientX);
+    const handleTouchEnd = () => {
+        if (!touchStartX || !touchEndX) return;
+        const distance = touchStartX - touchEndX;
+        const isLeftSwipe = distance > 50;
+        const isRightSwipe = distance < -50;
+        if (isLeftSwipe) goToSlide((currentSlide + 1) % slides.length);
+        if (isRightSwipe) goToSlide((currentSlide - 1 + slides.length) % slides.length);
+        setTouchStartX(0);
+        setTouchEndX(0);
+    };
 
     // Auto-advance
     useEffect(() => {
@@ -104,14 +119,20 @@ function HeroSection() {
     if (slides.length === 0) return null;
 
     return (
-        <div id="hero" className="relative w-full h-screen max-h-[73vh] md:max-h-none overflow-hidden group">
+        <div
+            id="hero"
+            className="relative w-full h-screen max-h-[73vh] md:max-h-none overflow-hidden group"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+        >
             {/* Images */}
             <div className="absolute inset-0">
                 <SlideImage slide={slides[currentSlide]} />
                 {incomingSlide !== null && (
                     <SlideImage
                         slide={slides[incomingSlide]}
-                        extraClass={`transition-all duration-700 ease-out will-change-transform ${showIncoming ? 'opacity-100 scale-100' : 'opacity-0 scale-105'}`}
+                        extraClass={`transition-opacity duration-1000 ease-in-out will-change-opacity ${showIncoming ? 'opacity-100' : 'opacity-0'}`}
                     />
                 )}
             </div>

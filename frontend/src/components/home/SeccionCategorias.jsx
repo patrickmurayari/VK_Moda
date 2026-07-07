@@ -5,7 +5,7 @@ import { getCategorias } from "../../services/api";
 // Import estático original (comentado — datos ahora desde API)
 // import { ProductsCategoria } from "../../data/categoriasData";
 
-const ACTIVE_SLUGS = ['buzos-mujer', 'camperas-hombre', 'camisas-mujer', 'sweaters-hombre'];
+const ACTIVE_SLUGS = ['buzos-mujer', 'camperas-hombre', 'camisas-mujer', 'sweaters-sin-cierre'];
 
 function SeccionCategorias() {
     const [categories, setCategories] = useState([]);
