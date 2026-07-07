@@ -10,6 +10,7 @@ import NotFound from './components/common/NotFound'
 import HeroSection from './components/home/HeroSection'
 import SeccionCategorias from './components/home/SeccionCategorias'
 import SeccionColeccion from './components/home/SeccionColeccion'
+import EditorialLookbook from './components/home/EditorialLookbook'
 import Footer from "./components/layout/Footer"
 
 // Admin imports
@@ -89,6 +90,7 @@ function Home() {
             <SeccionCategorias />
             <SeccionColeccion />
             <DeferredSection id="editorial" Component={SeccionEditorialModa} placeholderClassName="min-h-[520px]" />
+            <EditorialLookbook />
         </div>
     );
 }
