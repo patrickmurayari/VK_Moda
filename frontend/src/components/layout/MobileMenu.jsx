@@ -4,11 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { getCategoryTree } from '../../services/api';
 
-const NAV_EXTRAS = [
-    { id: 'quienes-somos', label: 'Quiénes Somos', slug: '/quienes-somos' },
-    { id: 'colecciones', label: 'Colecciones', slug: '/coleccion' },
-    { id: 'contacto', label: 'Contacto', action: 'scroll', target: 'contactos' },
-];
+const NAV_EXTRAS = [];
 
 const scrollTo = (id) => {
     const el = document.getElementById(id);
@@ -68,6 +64,16 @@ function MobileMenuView({ view, handleItemClick }) {
                                 )}
                             </button>
                         ))}
+                        <div className="border-t border-neutral-100 mt-6 pt-4">
+                            <button
+                                onClick={() => handleItemClick({ slug: '/login' })}
+                                className="w-full text-left py-3 animate-fade-in"
+                            >
+                                <span className="font-body text-xs tracking-[0.2em] uppercase text-neutral-400 hover:text-neutral-800 transition-colors duration-300">
+                                    Acceso Personal
+                                </span>
+                            </button>
+                        </div>
                     </div>
                 </nav>
             </div>

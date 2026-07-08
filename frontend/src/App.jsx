@@ -11,6 +11,7 @@ import HeroSection from './components/home/HeroSection'
 import SeccionCategorias from './components/home/SeccionCategorias'
 import SeccionColeccion from './components/home/SeccionColeccion'
 import EditorialLookbook from './components/home/EditorialLookbook'
+import AtelierBanner from './components/home/AtelierBanner'
 import Footer from "./components/layout/Footer"
 
 // Admin imports
@@ -32,6 +33,7 @@ const ProductDetail = lazy(() => import('./pages/ProductDetail'))
 
 const SeccionEditorialModa = lazy(() => import('./components/home/SeccionEditorialModa'))
 const QuienesSomos = lazy(() => import('./pages/QuienesSomos'))
+const Atelier = lazy(() => import('./pages/Atelier'))
 
 function DeferredSection({ id, Component, placeholderClassName = 'min-h-[240px]' }) {
   const ref = useRef(null);
@@ -91,6 +93,7 @@ function Home() {
             <SeccionColeccion />
             <DeferredSection id="editorial" Component={SeccionEditorialModa} placeholderClassName="min-h-[520px]" />
             <EditorialLookbook />
+            <AtelierBanner />
         </div>
     );
 }
@@ -148,6 +151,7 @@ function App() {
           <Route path="/producto/:id" element={<ProductDetail />}></Route>
           <Route path="/categoria/:slug" element={<CategoriaTemplate />}></Route>
           <Route path="/quienes-somos" element={<QuienesSomos />} />
+          <Route path="/atelier" element={<Atelier />} />
           
           {/* Rutas de autenticación */}
           <Route path="/login" element={<Login />} />
