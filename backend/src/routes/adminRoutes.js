@@ -34,16 +34,16 @@ router.post('/clientes', validators.validateCliente, clientesController.createCl
 router.put('/clientes/:id', validators.validateClienteUpdate, clientesController.updateCliente);
 router.delete('/clientes/:id', clientesController.deleteCliente);
 
-// Historial de Medidas
-router.get('/clientes/:id/medidas', clientesController.getHistorialMedidas);
-router.post('/clientes/:id/medidas', validators.validateMedidas, clientesController.addMedidas);
-
 // CRUD Pedidos
 router.get('/pedidos', pedidosController.getPedidos);
+router.get('/pedidos/cronograma', pedidosController.getCronogramaEntregas);
+router.get('/pedidos/finalizados', pedidosController.getPedidosFinalizados);
+router.get('/pedidos/entregados', pedidosController.getPedidosEntregados);
 router.get('/pedidos/:id', pedidosController.getPedidoById);
 router.post('/pedidos', validators.validatePedido, pedidosController.createPedido);
 router.put('/pedidos/:id', validators.validatePedidoUpdate, pedidosController.updatePedido);
 router.delete('/pedidos/:id', pedidosController.deletePedido);
+router.put('/pedidos/:id/entregar', pedidosController.entregarPedido);
 
 // Items de Pedido
 router.put('/pedidos/:pedidoId/items/:itemId', validators.validateItemUpdate, pedidosController.updateItem);

@@ -35,9 +35,8 @@ const getPedidoById = async (req, res) => {
         }
 
         const itemsRes = await db.query(`
-            SELECT ip.*, hm.medidas_json
+            SELECT ip.*
             FROM items_pedido ip
-            LEFT JOIN historial_medidas hm ON ip.medida_id = hm.id
             WHERE ip.pedido_id = $1
             ORDER BY ip.id
         `, [id]);
@@ -92,33 +91,23 @@ const createPedido = async (req, res) => {
 
         const pedido = pedidoRes.rows[0];
 
-        // 2. Insertar items (con historial_medidas si incluye medidas_json)
+        // 2. Insertar items (medidas_json se guarda directamente en items_pedido)
         const itemsInserted = [];
         for (const item of items) {
-            let medidaId = item.medida_id || null;
-
-            // Si el item trae medidas_json, insertar en historial_medidas primero
-            if (item.medidas_json && typeof item.medidas_json === 'object' && Object.keys(item.medidas_json).length > 0) {
-                const medidasRes = await client.query(`
-                    INSERT INTO historial_medidas (cliente_id, medidas_json, fecha_toma, notas_medida, tomada_por)
-                    VALUES ($1, $2, CURRENT_DATE, $3, $4)
-                    RETURNING id
-                `, [
-                    cliente_id,
-                    JSON.stringify(item.medidas_json),
-                    `Medidas tomadas para pedido #${pedido.id}`,
-                    null
-                ]);
-                medidaId = medidasRes.rows[0].id;
-            }
+            const medidas_json =
+                item.tipo_trabajo === 'confeccion' &&
+                item.medidas_json &&
+                typeof item.medidas_json === 'object' &&
+                Object.keys(item.medidas_json).length > 0
+                    ? JSON.stringify(item.medidas_json)
+                    : null;
 
             const itemRes = await client.query(`
-                INSERT INTO items_pedido (pedido_id, medida_id, tipo_trabajo, descripcion_prenda, tela_id, usa_medida_existente, trae_tela, estado_item, precio_item, notas_especificas, item_padre_id)
+                INSERT INTO items_pedido (pedido_id, tipo_trabajo, descripcion_prenda, tela_id, usa_medida_existente, trae_tela, estado_item, precio_item, notas_especificas, item_padre_id, medidas_json)
                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
                 RETURNING *
             `, [
                 pedido.id,
-                medidaId,
                 item.tipo_trabajo || 'confeccion',
                 item.descripcion_prenda.trim(),
                 item.tela_id || null,
@@ -127,15 +116,10 @@ const createPedido = async (req, res) => {
                 item.estado_item || 'pendiente',
                 parseFloat(item.precio_item),
                 item.notas_especificas || null,
-                item.item_padre_id || null
+                item.item_padre_id || null,
+                medidas_json
             ]);
-            const insertedItem = itemRes.rows[0];
-            // Adjuntar medidas_json si se creó registro de medidas
-            if (medidaId) {
-                const medRes = await client.query('SELECT medidas_json FROM historial_medidas WHERE id = $1', [medidaId]);
-                insertedItem.medidas_json = medRes.rows[0]?.medidas_json || null;
-            }
-            itemsInserted.push(insertedItem);
+            itemsInserted.push(itemRes.rows[0]);
         }
 
         await client.query('COMMIT');
@@ -217,7 +201,7 @@ const deletePedido = async (req, res) => {
 const updateItem = async (req, res) => {
     const { pedidoId, itemId } = req.params;
     const { descripcion_prenda, tipo_trabajo, precio_item, estado_item, tela_id,
-            usa_medida_existente, trae_tela, notas_especificas, medida_id } = req.body;
+            usa_medida_existente, trae_tela, notas_especificas } = req.body;
 
     // Validaciones realizadas por middleware validateItemUpdate
 
@@ -226,7 +210,7 @@ const updateItem = async (req, res) => {
         const values = [];
         let paramCount = 1;
 
-        const fields = { descripcion_prenda, tipo_trabajo, estado_item, tela_id, usa_medida_existente, trae_tela, notas_especificas, medida_id };
+        const fields = { descripcion_prenda, tipo_trabajo, estado_item, tela_id, usa_medida_existente, trae_tela, notas_especificas };
         if (precio_item !== undefined) fields.precio_item = parseFloat(precio_item);
 
         for (const [key, val] of Object.entries(fields)) {
@@ -325,9 +309,9 @@ const cambiarEstadoItem = async (req, res) => {
             return res.status(404).json({ error: 'Ítem no encontrado' });
         }
 
-        const estado_anterior = itemRes.rows[0].estado_item;
+        const { estado_item: estado_anterior, pedido_id } = itemRes.rows[0];
 
-        if (estado_anterior === estado_nuevo) {
+        if (estado_anterior.toLowerCase() === estado_nuevo.toLowerCase()) {
             await client.query('ROLLBACK');
             return res.status(400).json({ error: 'El ítem ya se encuentra en ese estado' });
         }
@@ -345,10 +329,25 @@ const cambiarEstadoItem = async (req, res) => {
             VALUES ($1, $2, $3, $4, NOW())
         `, [id, estado_anterior, estado_nuevo, comentario || null]);
 
+        // 4. Auto-transición: si todas las prendas están terminadas → pasar pedido a 'Terminado'
+        let pedido_transicionado = false;
+        if (estado_nuevo.toLowerCase() === 'terminado') {
+            const pendingRes = await client.query(
+                `SELECT COUNT(*) AS cnt FROM items_pedido WHERE pedido_id = $1 AND LOWER(estado_item) != 'terminado'`,
+                [pedido_id]
+            );
+            if (parseInt(pendingRes.rows[0].cnt) === 0) {
+                await client.query(`UPDATE pedidos SET estado_global = 'Terminado' WHERE id = $1`, [pedido_id]);
+                pedido_transicionado = true;
+            }
+        }
+
         await client.query('COMMIT');
 
         res.json({
             item: updatedItem.rows[0],
+            pedido_id,
+            pedido_transicionado,
             workflow: {
                 item_id: id,
                 estado_anterior,
@@ -495,6 +494,149 @@ const realizarSesionPrueba = async (req, res) => {
     }
 };
 
+// ── GET /api/admin/pedidos/finalizados - Pedidos con estado Terminado ──
+const getPedidosFinalizados = async (req, res) => {
+    try {
+        const result = await db.query(`
+            SELECT
+                p.id,
+                p.cliente_id,
+                p.estado_global,
+                p.fecha_ingreso,
+                p.fecha_entrega_prometida,
+                p.total_presupuestado,
+                p.observaciones_generales,
+                COALESCE(c.nombre, '') || ' ' || COALESCE(c.apellido, '') AS cliente_nombre,
+                COALESCE(
+                    JSON_AGG(
+                        JSON_BUILD_OBJECT(
+                            'id', ip.id,
+                            'descripcion_prenda', ip.descripcion_prenda,
+                            'tipo_trabajo', ip.tipo_trabajo,
+                            'estado_item', ip.estado_item
+                        ) ORDER BY ip.id
+                    ) FILTER (WHERE ip.id IS NOT NULL),
+                    '[]'::json
+                ) AS items
+            FROM pedidos p
+            LEFT JOIN clientes c ON p.cliente_id = c.id
+            LEFT JOIN items_pedido ip ON ip.pedido_id = p.id
+            WHERE LOWER(p.estado_global) = 'terminado'
+            GROUP BY p.id, c.nombre, c.apellido
+            ORDER BY p.created_at DESC
+        `);
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Error al obtener pedidos finalizados:', err);
+        res.status(500).json({ error: 'Error al obtener pedidos finalizados' });
+    }
+};
+
+// ── GET /api/admin/pedidos/entregados - Historial de pedidos entregados ──
+const getPedidosEntregados = async (req, res) => {
+    try {
+        const result = await db.query(`
+            SELECT
+                p.id,
+                p.cliente_id,
+                p.estado_global,
+                p.fecha_ingreso,
+                p.fecha_entrega_prometida,
+                p.total_presupuestado,
+                p.observaciones_generales,
+                COALESCE(c.nombre, '') || ' ' || COALESCE(c.apellido, '') AS cliente_nombre,
+                COALESCE(
+                    JSON_AGG(
+                        JSON_BUILD_OBJECT(
+                            'id', ip.id,
+                            'descripcion_prenda', ip.descripcion_prenda,
+                            'tipo_trabajo', ip.tipo_trabajo,
+                            'estado_item', ip.estado_item
+                        ) ORDER BY ip.id
+                    ) FILTER (WHERE ip.id IS NOT NULL),
+                    '[]'::json
+                ) AS items
+            FROM pedidos p
+            LEFT JOIN clientes c ON p.cliente_id = c.id
+            LEFT JOIN items_pedido ip ON ip.pedido_id = p.id
+            WHERE LOWER(p.estado_global) = 'entregado'
+            GROUP BY p.id, c.nombre, c.apellido
+            ORDER BY p.created_at DESC
+        `);
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Error al obtener pedidos entregados:', err);
+        res.status(500).json({ error: 'Error al obtener pedidos entregados' });
+    }
+};
+
+// ── PUT /api/admin/pedidos/:id/entregar - Marcar pedido como Entregado ──
+const entregarPedido = async (req, res) => {
+    const { id } = req.params;
+    const { pool } = db;
+    const client = await pool.connect();
+    try {
+        await client.query('BEGIN');
+
+        const pedidoRes = await client.query('SELECT id FROM pedidos WHERE id = $1', [id]);
+        if (pedidoRes.rows.length === 0) {
+            await client.query('ROLLBACK');
+            return res.status(404).json({ error: 'Pedido no encontrado' });
+        }
+
+        await client.query(`UPDATE pedidos SET estado_global = 'Entregado' WHERE id = $1`, [id]);
+        await client.query(`UPDATE items_pedido SET estado_item = 'entregado' WHERE pedido_id = $1`, [id]);
+
+        await client.query('COMMIT');
+        res.json({ success: true, pedido_id: parseInt(id), estado_global: 'Entregado' });
+    } catch (err) {
+        await client.query('ROLLBACK');
+        console.error('Error al entregar pedido:', err);
+        res.status(500).json({ error: 'Error al marcar pedido como entregado' });
+    } finally {
+        client.release();
+    }
+};
+
+// ── GET /api/admin/pedidos/cronograma - Agenda de entregas agrupada por fecha ──
+const getCronogramaEntregas = async (req, res) => {
+    try {
+        const result = await db.query(`
+            SELECT
+                p.id,
+                p.cliente_id,
+                p.estado_global,
+                p.fecha_ingreso,
+                p.fecha_entrega_prometida,
+                p.total_presupuestado,
+                p.observaciones_generales,
+                COALESCE(c.nombre, '') || ' ' || COALESCE(c.apellido, '') AS cliente_nombre,
+                COALESCE(
+                    JSON_AGG(
+                        JSON_BUILD_OBJECT(
+                            'id', ip.id,
+                            'descripcion_prenda', ip.descripcion_prenda,
+                            'tipo_trabajo', ip.tipo_trabajo,
+                            'estado_item', ip.estado_item
+                        ) ORDER BY ip.id
+                    ) FILTER (WHERE ip.id IS NOT NULL),
+                    '[]'::json
+                ) AS items
+            FROM pedidos p
+            LEFT JOIN clientes c ON p.cliente_id = c.id
+            LEFT JOIN items_pedido ip ON ip.pedido_id = p.id
+            WHERE LOWER(p.estado_global) = 'recibido'
+              AND p.fecha_entrega_prometida IS NOT NULL
+            GROUP BY p.id, c.nombre, c.apellido
+            ORDER BY p.fecha_entrega_prometida ASC
+        `);
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Error al obtener cronograma de entregas:', err);
+        res.status(500).json({ error: 'Error al obtener cronograma de entregas' });
+    }
+};
+
 module.exports = {
     getPedidos,
     getPedidoById,
@@ -507,5 +649,9 @@ module.exports = {
     createSesionPrueba,
     getSesionesPrueba,
     updateSesionPrueba,
-    realizarSesionPrueba
+    realizarSesionPrueba,
+    getCronogramaEntregas,
+    getPedidosFinalizados,
+    getPedidosEntregados,
+    entregarPedido
 };

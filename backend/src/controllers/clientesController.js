@@ -32,7 +32,7 @@ const getClienteById = async (req, res) => {
 
 // ── POST /api/admin/clientes - Crear cliente (con medidas opcionales) ──
 const createCliente = async (req, res) => {
-    const { nombre, apellido, email, telefono, preferencias_estilo, notas_fisonomia, medidas } = req.body;
+    const { nombre, apellido, email, telefono, preferencias_estilo, notas_fisonomia } = req.body;
 
     // Validaciones realizadas por middleware validateCliente
 
@@ -49,14 +49,6 @@ const createCliente = async (req, res) => {
         `, [nombre, apellido, email || null, telefono || null, preferencias_estilo || null, notas_fisonomia || null]);
 
         const nuevoCliente = result.rows[0];
-
-        // Si vienen medidas, insertar en historial_medidas en la misma transacción
-        if (medidas && Object.keys(medidas).length > 0) {
-            await client.query(`
-                INSERT INTO historial_medidas (cliente_id, medidas_json, fecha_toma, notas_medida)
-                VALUES ($1, $2, CURRENT_DATE, $3)
-            `, [nuevoCliente.id, JSON.stringify(medidas), 'Primera toma al registrar cliente']);
-        }
 
         await client.query('COMMIT');
         res.status(201).json(nuevoCliente);
@@ -130,59 +122,6 @@ const deleteCliente = async (req, res) => {
     }
 };
 
-// ── GET /api/admin/clientes/:id/medidas - Historial de medidas ──
-const getHistorialMedidas = async (req, res) => {
-    const { id } = req.params;
-    try {
-        const result = await db.query(`
-            SELECT id, medidas_json, fecha_toma, notas_medida, tomada_por, created_at
-            FROM historial_medidas
-            WHERE cliente_id = $1
-            ORDER BY created_at DESC
-        `, [id]);
-
-        if (result.rows.length === 0) {
-            return res.status(404).json({ error: 'Sin historial de medidas para este cliente' });
-        }
-
-        res.json({
-            cliente_id: parseInt(id),
-            total_registros: result.rows.length,
-            medidas_recientes: result.rows[0],
-            historial_completo: result.rows
-        });
-    } catch (err) {
-        console.error('Error al obtener historial de medidas:', err);
-        res.status(500).json({ error: 'Error al obtener historial de medidas' });
-    }
-};
-
-// ── POST /api/admin/clientes/:id/medidas - Agregar registro de medidas ──
-const addMedidas = async (req, res) => {
-    const { id } = req.params;
-    const { medidas, notas_medida, tomada_por } = req.body;
-
-    // Validación realizada por middleware validateMedidas
-
-    try {
-        const clienteExists = await db.query('SELECT id FROM clientes WHERE id = $1', [id]);
-        if (clienteExists.rows.length === 0) {
-            return res.status(404).json({ error: 'Cliente no encontrado' });
-        }
-
-        const result = await db.query(`
-            INSERT INTO historial_medidas (cliente_id, medidas_json, fecha_toma, notas_medida, tomada_por)
-            VALUES ($1, $2, CURRENT_DATE, $3, $4)
-            RETURNING *
-        `, [id, JSON.stringify(medidas), notas_medida || null, tomada_por || null]);
-
-        res.status(201).json(result.rows[0]);
-    } catch (err) {
-        console.error('Error al agregar medidas:', err);
-        res.status(500).json({ error: 'Error al agregar medidas' });
-    }
-};
-
 // ── GET /api/admin/clientes/buscar?q= - Búsqueda rápida ──
 const buscarClientes = async (req, res) => {
     const { q } = req.query;
@@ -220,7 +159,5 @@ module.exports = {
     createCliente,
     updateCliente,
     deleteCliente,
-    getHistorialMedidas,
-    addMedidas,
     buscarClientes
 };

@@ -126,8 +126,8 @@ const validatePedidoUpdate = async (req, res, next) => {
 const validateItemUpdate = (req, res, next) => {
     const { estado_item, precio_item } = req.body;
 
-    const ESTADOS_ITEM = ['pendiente', 'cortado', 'en_confeccion', 'en_prueba', 'terminado', 'entregado'];
-    const enumErr = validateEnum(estado_item, ESTADOS_ITEM, 'Estado');
+    const ESTADOS_ITEM = ['pendiente', 'en_proceso', 'terminado', 'entregado'];
+    const enumErr = validateEnum(estado_item?.toLowerCase(), ESTADOS_ITEM, 'Estado');
     if (enumErr) return res.status(400).json(enumErr);
 
     if (precio_item !== undefined) {
@@ -141,13 +141,15 @@ const validateItemUpdate = (req, res, next) => {
 const validateEstadoItemChange = (req, res, next) => {
     const { estado_nuevo } = req.body;
 
-    const ESTADOS_ITEM = ['pendiente', 'cortado', 'en_confeccion', 'en_prueba', 'terminado', 'entregado'];
+    const ESTADOS_ITEM = ['pendiente', 'en_proceso', 'terminado', 'entregado'];
     if (!estado_nuevo) {
         return res.status(400).json({ error: 'estado_nuevo es requerido' });
     }
-    const enumErr = validateEnum(estado_nuevo, ESTADOS_ITEM, 'estado_nuevo');
+    const normalizado = estado_nuevo.toLowerCase();
+    const enumErr = validateEnum(normalizado, ESTADOS_ITEM, 'estado_nuevo');
     if (enumErr) return res.status(400).json(enumErr);
 
+    req.body.estado_nuevo = normalizado;
     next();
 };
 
