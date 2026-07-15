@@ -89,6 +89,22 @@ export async function deletePedido(id, token) {
     return authFetchJSON(adminURL(`/pedidos/${id}`), token, { method: 'DELETE' });
 }
 
+export async function getCronogramaEntregas(token) {
+    return authFetchJSON(adminURL('/pedidos/cronograma'), token);
+}
+
+export async function getPedidosFinalizados(token) {
+    return authFetchJSON(adminURL('/pedidos/finalizados'), token);
+}
+
+export async function getPedidosEntregados(token) {
+    return authFetchJSON(adminURL('/pedidos/entregados'), token);
+}
+
+export async function entregarPedido(id, token) {
+    return authFetchJSON(adminURL(`/pedidos/${id}/entregar`), token, { method: 'PUT' });
+}
+
 // ── Admin: Items de Pedido ──
 
 export async function updateItem(pedidoId, itemId, data, token) {
@@ -173,18 +189,6 @@ export async function deleteCliente(id, token) {
 
 export async function buscarClientes(query, token) {
     return authFetchJSON(adminURL(`/clientes/buscar?q=${encodeURIComponent(query)}`), token);
-}
-
-export async function getHistorialMedidas(clienteId, token) {
-    return authFetchJSON(adminURL(`/clientes/${clienteId}/medidas`), token);
-}
-
-export async function addMedidas(clienteId, data, token) {
-    return authFetchJSON(adminURL(`/clientes/${clienteId}/medidas`), token, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-    });
 }
 
 // ── Admin: Categorías ──

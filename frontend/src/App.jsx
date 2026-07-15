@@ -27,6 +27,9 @@ import OrderWizard from './pages/admin/OrderWizard'
 import AdminClientes from './pages/admin/AdminClientes'
 import AdminCategorias from './pages/admin/AdminCategorias'
 import ClienteHistoria from './pages/admin/ClienteHistoria'
+import AdminCronograma from './pages/admin/AdminCronograma'
+import AdminFinalizados from './pages/admin/AdminFinalizados'
+import AdminEntregados from './pages/admin/AdminEntregados'
 
 const CategoriaTemplate = lazy(() => import("./components/Categorias/CategoriaTemplate"))
 const ProductDetail = lazy(() => import('./pages/ProductDetail'))
@@ -172,6 +175,9 @@ function App() {
             <Route path="productos" element={<AdminProductos />} />
             <Route path="productos/nuevo" element={<ProductoForm />} />
             <Route path="productos/editar/:id" element={<ProductoForm />} />
+            <Route path="cronograma" element={<AdminCronograma />} />
+            <Route path="finalizados" element={<AdminFinalizados />} />
+            <Route path="entregados" element={<AdminEntregados />} />
           </Route>
           
           <Route path="*" element={<NotFound />}></Route>

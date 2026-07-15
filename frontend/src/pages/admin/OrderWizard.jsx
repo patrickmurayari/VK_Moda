@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { supabase } from '@/lib/supabase';
-import { buscarClientes, createCliente, getHistorialMedidas, createPedido } from '@/services/api';
+import { buscarClientes, createCliente, createPedido } from '@/services/api';
 
 const MEDIDAS_FIELDS = [
     { key: 'busto', label: 'Busto' },
@@ -27,7 +27,7 @@ const emptyItem = () => ({
     usa_medida_existente: false,
     trae_tela: false,
     notas_especificas: '',
-    medidas: {},
+    medidas_json: {},
 });
 
 export default function OrderWizard() {
@@ -121,7 +121,7 @@ export default function OrderWizard() {
         updated[index] = { ...updated[index], [field]: value };
         // Limpiar medidas si se cambia tipo_trabajo fuera de confeccion
         if (field === 'tipo_trabajo' && value !== 'confeccion') {
-            updated[index] = { ...updated[index], medidas: {} };
+            updated[index] = { ...updated[index], medidas_json: {} };
         }
         setItems(updated);
     };
@@ -130,30 +130,9 @@ export default function OrderWizard() {
         const updated = [...items];
         updated[index] = {
             ...updated[index],
-            medidas: { ...updated[index].medidas, [key]: value },
+            medidas_json: { ...updated[index].medidas_json, [key]: value },
         };
         setItems(updated);
-    };
-
-    const loadLastMedidas = async (index) => {
-        if (!clienteId) {
-            toast.error('Seleccione un cliente primero');
-            return;
-        }
-        try {
-            const { data: { session } } = await supabase.auth.getSession();
-            const data = await getHistorialMedidas(clienteId, session.access_token);
-            if (data.medidas_recientes?.medidas_json) {
-                const updated = [...items];
-                updated[index] = { ...updated[index], medidas: data.medidas_recientes.medidas_json };
-                setItems(updated);
-                toast.success('Últimas medidas cargadas');
-            } else {
-                toast.error('Sin medidas previas para este cliente');
-            }
-        } catch {
-            toast.error('Error al cargar medidas');
-        }
     };
 
     const addItem = () => setItems([...items, emptyItem()]);
@@ -187,8 +166,8 @@ export default function OrderWizard() {
                     usa_medida_existente: item.usa_medida_existente,
                     trae_tela: item.trae_tela,
                     notas_especificas: item.notas_especificas || null,
-                    medidas_json: item.tipo_trabajo === 'confeccion' && Object.keys(item.medidas).length > 0
-                        ? item.medidas
+                    medidas_json: item.tipo_trabajo === 'confeccion' && Object.keys(item.medidas_json).length > 0
+                        ? item.medidas_json
                         : null,
                 })),
             };
@@ -541,14 +520,8 @@ export default function OrderWizard() {
                             {/* Medidas para Confección */}
                             {item.tipo_trabajo === 'confeccion' && (
                                 <div className="mt-4 border border-stone-200 rounded-lg p-3 bg-stone-50">
-                                    <div className="flex items-center justify-between mb-3">
+                                    <div className="mb-3">
                                         <h5 className="text-xs font-medium text-stone-700 uppercase">Medidas</h5>
-                                        <button
-                                            onClick={() => loadLastMedidas(idx)}
-                                            className="text-xs text-stone-600 hover:text-stone-900 font-medium"
-                                        >
-                                            Cargar últimas medidas
-                                        </button>
                                     </div>
                                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                                         {MEDIDAS_FIELDS.map((m) => (
@@ -557,7 +530,7 @@ export default function OrderWizard() {
                                                 <input
                                                     type="text"
                                                     placeholder="cm"
-                                                    value={item.medidas[m.key] || ''}
+                                                    value={item.medidas_json[m.key] || ''}
                                                     onChange={(e) => updateMedida(idx, m.key, e.target.value)}
                                                     className="w-full px-2 py-1.5 border border-stone-300 rounded text-sm focus:ring-1 focus:ring-stone-400 outline-none"
                                                 />
@@ -636,7 +609,7 @@ export default function OrderWizard() {
                             <h4 className="text-sm font-medium text-stone-700 mb-3">Prendas ({items.length})</h4>
                             <div className="space-y-2">
                                 {items.map((item, idx) => {
-                                    const medidasEntries = Object.entries(item.medidas || {}).filter(([, v]) => v);
+                                    const medidasEntries = Object.entries(item.medidas_json || {}).filter(([, v]) => v);
                                     return (
                                         <div key={idx} className="bg-stone-50 rounded-lg p-3">
                                             <div className="flex items-center justify-between">

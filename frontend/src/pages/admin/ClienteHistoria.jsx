@@ -2,35 +2,14 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { supabase } from '@/lib/supabase';
-import { getClienteById, getHistorialMedidas, getPedidos, addMedidas } from '@/services/api';
-
-const MEDIDAS_LABELS = {
-    busto: 'Busto',
-    cintura: 'Cintura',
-    cadera: 'Cadera',
-    talle_espalda: 'Talle Espalda',
-    talle_delantero: 'Talle Delantero',
-    largo_manga: 'Largo Manga',
-    largo_pantalon: 'Largo Pantalón',
-    contorno_brazo: 'Contorno Brazo',
-    contorno_muneca: 'Contorno Muñeca',
-    ancho_espalda: 'Ancho Espalda',
-    largo_falda: 'Largo Falda',
-    largo_total: 'Largo Total',
-};
+import { getClienteById, getPedidos } from '@/services/api';
 
 export default function ClienteHistoria() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [cliente, setCliente] = useState(null);
-    const [historial, setHistorial] = useState(null);
     const [pedidos, setPedidos] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [showAddMedidas, setShowAddMedidas] = useState(false);
-    const [saving, setSaving] = useState(false);
-    const [nuevasMedidas, setNuevasMedidas] = useState({});
-    const [notasMedida, setNotasMedida] = useState('');
-    const [tomadaPor, setTomadaPor] = useState('');
 
     useEffect(() => {
         fetchCliente();
@@ -42,49 +21,17 @@ export default function ClienteHistoria() {
             const { data: { session } } = await supabase.auth.getSession();
             const token = session.access_token;
 
-            const [clienteData, medidasData, pedidosData] = await Promise.all([
+            const [clienteData, pedidosData] = await Promise.all([
                 getClienteById(id, token),
-                getHistorialMedidas(id, token).catch(() => null),
                 getPedidos(token),
             ]);
 
             setCliente(clienteData);
-            setHistorial(medidasData);
             setPedidos(pedidosData.filter((p) => p.cliente_id === parseInt(id)));
         } catch {
             toast.error('Error al cargar datos del cliente');
         } finally {
             setLoading(false);
-        }
-    };
-
-    const handleAddMedidas = async () => {
-        const medidasLimpias = {};
-        for (const [k, v] of Object.entries(nuevasMedidas)) {
-            if (v) medidasLimpias[k] = v;
-        }
-        if (Object.keys(medidasLimpias).length === 0) {
-            toast.error('Ingrese al menos una medida');
-            return;
-        }
-        setSaving(true);
-        try {
-            const { data: { session } } = await supabase.auth.getSession();
-            await addMedidas(id, {
-                medidas: medidasLimpias,
-                notas_medida: notasMedida || null,
-                tomada_por: tomadaPor || null,
-            }, session.access_token);
-            toast.success('Medidas guardadas correctamente');
-            setShowAddMedidas(false);
-            setNuevasMedidas({});
-            setNotasMedida('');
-            setTomadaPor('');
-            fetchCliente();
-        } catch {
-            toast.error('Error al guardar medidas');
-        } finally {
-            setSaving(false);
         }
     };
 
@@ -157,110 +104,6 @@ export default function ClienteHistoria() {
                         <div className="col-span-2">
                             <p className="text-stone-500 text-xs">Notas de fisonomía</p>
                             <p className="text-stone-700">{cliente.notas_fisonomia}</p>
-                        </div>
-                    )}
-                </div>
-            </div>
-
-            {/* Historial de Medidas */}
-            <div className="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden">
-                <div className="px-4 py-3 border-b border-stone-200 bg-stone-50 flex items-center justify-between">
-                    <h3 className="text-sm font-heading text-stone-700">Evolución de Medidas</h3>
-                    <button
-                        onClick={() => setShowAddMedidas(!showAddMedidas)}
-                        className="text-xs text-stone-600 hover:text-stone-900 font-medium"
-                    >
-                        {showAddMedidas ? 'Cancelar' : '+ Nueva toma'}
-                    </button>
-                </div>
-
-                {/* Formulario nueva toma */}
-                {showAddMedidas && (
-                    <div className="p-4 border-b border-stone-200 bg-stone-50">
-                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-3">
-                            {Object.entries(MEDIDAS_LABELS).map(([key, label]) => (
-                                <div key={key}>
-                                    <label className="block text-xs text-stone-500 mb-0.5">{label}</label>
-                                    <input
-                                        type="text"
-                                        placeholder="cm"
-                                        value={nuevasMedidas[key] || ''}
-                                        onChange={(e) => setNuevasMedidas({ ...nuevasMedidas, [key]: e.target.value })}
-                                        className="w-full px-2 py-1.5 border border-stone-300 rounded text-sm focus:ring-1 focus:ring-stone-400 outline-none"
-                                    />
-                                </div>
-                            ))}
-                        </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3">
-                            <div>
-                                <label className="block text-xs text-stone-500 mb-0.5">Notas</label>
-                                <input
-                                    type="text"
-                                    placeholder="Ej: Ajuste post prueba"
-                                    value={notasMedida}
-                                    onChange={(e) => setNotasMedida(e.target.value)}
-                                    className="w-full px-2 py-1.5 border border-stone-300 rounded text-sm focus:ring-1 focus:ring-stone-400 outline-none"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-xs text-stone-500 mb-0.5">Tomada por</label>
-                                <input
-                                    type="text"
-                                    placeholder="Nombre"
-                                    value={tomadaPor}
-                                    onChange={(e) => setTomadaPor(e.target.value)}
-                                    className="w-full px-2 py-1.5 border border-stone-300 rounded text-sm focus:ring-1 focus:ring-stone-400 outline-none"
-                                />
-                            </div>
-                        </div>
-                        <button
-                            onClick={handleAddMedidas}
-                            disabled={saving}
-                            className="w-full py-2 bg-stone-800 text-white rounded-lg text-sm font-medium hover:bg-stone-700 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
-                        >
-                            {saving && <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>}
-                            {saving ? 'Guardando...' : 'Guardar Medidas'}
-                        </button>
-                    </div>
-                )}
-
-                {/* Lista de historial */}
-                <div className="divide-y divide-stone-100">
-                    {historial ? (
-                        historial.historial_completo.map((registro, idx) => {
-                            const medidas = registro.medidas_json || {};
-                            return (
-                                <div key={registro.id} className={`p-4 ${idx === 0 ? 'bg-stone-50' : ''}`}>
-                                    <div className="flex items-center justify-between mb-2">
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-xs font-medium text-stone-800">
-                                                {formatDate(registro.fecha_toma || registro.created_at)}
-                                            </span>
-                                            {idx === 0 && (
-                                                <span className="px-1.5 py-0.5 bg-stone-200 text-stone-700 text-xs rounded font-medium">Más reciente</span>
-                                            )}
-                                        </div>
-                                        {registro.tomada_por && (
-                                            <span className="text-xs text-stone-500">Por: {registro.tomada_por}</span>
-                                        )}
-                                    </div>
-                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-1">
-                                        {Object.entries(medidas).map(([key, val]) => (
-                                            <div key={key} className="flex justify-between text-xs">
-                                                <span className="text-stone-500">{MEDIDAS_LABELS[key] || key}</span>
-                                                <span className="font-medium text-stone-800">{val} cm</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    {registro.notas_medida && (
-                                        <p className="text-xs text-stone-500 mt-2 italic">{registro.notas_medida}</p>
-                                    )}
-                                </div>
-                            );
-                        })
-                    ) : (
-                        <div className="p-8 text-center text-stone-400 text-sm">
-                            Sin registros de medidas
                         </div>
                     )}
                 </div>

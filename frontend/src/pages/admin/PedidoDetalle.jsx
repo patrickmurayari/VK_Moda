@@ -13,13 +13,21 @@ const ESTADO_COLORS = {
     cancelado: 'bg-red-100 text-red-800',
 };
 
+const MEDIDAS_LABELS = {
+    busto: 'Busto',
+    cintura: 'Cintura',
+    cadera: 'Cadera',
+    talle_espalda: 'Talle Espalda',
+    talle_delantero: 'Talle Delantero',
+    largo_manga: 'Largo Manga',
+    largo_total: 'Largo Total',
+};
+
 const ITEM_ESTADO_COLORS = {
-    pendiente: 'bg-stone-100 text-stone-700',
-    cortado: 'bg-sky-100 text-sky-800',
-    en_confeccion: 'bg-stone-100 text-stone-700',
-    en_prueba: 'bg-purple-100 text-purple-800',
-    terminado: 'bg-green-100 text-green-800',
-    entregado: 'bg-stone-200 text-stone-800',
+    pendiente:  'bg-stone-100 text-stone-700',
+    en_proceso: 'bg-amber-100 text-amber-700',
+    terminado:  'bg-green-100 text-green-800',
+    entregado:  'bg-stone-200 text-stone-500',
 };
 
 export default function PedidoDetalle() {
@@ -140,8 +148,8 @@ export default function PedidoDetalle() {
                                 <div className="flex-1 min-w-0">
                                     <p className="font-medium text-stone-800 truncate">{item.descripcion_prenda}</p>
                                     <div className="flex flex-wrap gap-2 mt-1">
-                                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${ITEM_ESTADO_COLORS[item.estado_item] || 'bg-stone-100 text-stone-600'}`}>
-                                            {item.estado_item?.replace('_', ' ')}
+                                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${ITEM_ESTADO_COLORS[item.estado_item?.toLowerCase()] || 'bg-stone-100 text-stone-600'}`}>
+                                            {{ pendiente: 'Pendiente', en_proceso: 'En Proceso', terminado: 'Terminado', entregado: 'Entregado' }[item.estado_item?.toLowerCase()] || item.estado_item}
                                         </span>
                                         {item.tipo_trabajo && (
                                             <span className="px-2 py-0.5 rounded-full text-xs bg-stone-100 text-stone-600">
@@ -164,7 +172,7 @@ export default function PedidoDetalle() {
                                                 <div className="flex flex-wrap gap-x-3 gap-y-0.5">
                                                     {Object.entries(mj).filter(([, v]) => v).map(([key, val]) => (
                                                         <span key={key} className="text-xs text-stone-700">
-                                                            {key.replace(/_/g, ' ')}: <strong>{val}cm</strong>
+                                                            {MEDIDAS_LABELS[key] || key.replace(/_/g, ' ')}: <strong>{val}cm</strong>
                                                         </span>
                                                     ))}
                                                 </div>
@@ -183,11 +191,8 @@ export default function PedidoDetalle() {
                                             className="text-xs border border-stone-300 rounded px-2 py-1 bg-white focus:ring-1 focus:ring-stone-400 outline-none"
                                         >
                                             <option value="pendiente">Pendiente</option>
-                                            <option value="cortado">Cortado</option>
-                                            <option value="en_confeccion">En Confección</option>
-                                            <option value="en_prueba">En Prueba</option>
+                                            <option value="en_proceso">En Proceso</option>
                                             <option value="terminado">Terminado</option>
-                                            <option value="entregado">Entregado</option>
                                         </select>
                                     )}
                                 </div>
