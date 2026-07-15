@@ -6,20 +6,15 @@ import { getPedidos } from '@/services/api';
 
 const ESTADOS = [
     { value: '', label: 'Todos' },
-    { value: 'recibido', label: 'Recibido' },
-    { value: 'en_proceso', label: 'En Proceso' },
-    { value: 'en_prueba', label: 'En Prueba' },
-    { value: 'terminado', label: 'Terminado' },
-    { value: 'entregado', label: 'Entregado' },
-    { value: 'cancelado', label: 'Cancelado' },
+    { value: 'Recibido', label: 'Recibido' },
+    { value: 'Terminado', label: 'Terminado' },
+    { value: 'Entregado', label: 'Entregado' },
 ];
 
 const ESTADO_COLORS = {
-    recibido: 'bg-blue-100 text-blue-800',
-    en_proceso: 'bg-stone-100 text-stone-700',
-    en_prueba: 'bg-purple-100 text-purple-800',
+    recibido:  'bg-blue-100 text-blue-800',
     terminado: 'bg-green-100 text-green-800',
-    entregado: 'bg-stone-100 text-stone-800',
+    entregado: 'bg-stone-100 text-stone-700',
     cancelado: 'bg-red-100 text-red-800',
 };
 
@@ -47,7 +42,7 @@ export default function AdminPedidos() {
     };
 
     const pedidosFiltrados = pedidos.filter((p) => {
-        const matchEstado = !filtroEstado || p.estado_global === filtroEstado;
+        const matchEstado = !filtroEstado || p.estado_global?.toLowerCase() === filtroEstado.toLowerCase();
         const matchBusqueda = !busqueda ||
             (p.cliente_nombre || '').toLowerCase().includes(busqueda.toLowerCase()) ||
             String(p.id).includes(busqueda);
@@ -134,8 +129,8 @@ export default function AdminPedidos() {
                                     <p className="font-medium text-stone-800">#{p.id}</p>
                                     <p className="text-sm text-stone-600">{p.cliente_nombre || 'Sin cliente'}</p>
                                 </div>
-                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${ESTADO_COLORS[p.estado_global] || 'bg-stone-100 text-stone-600'}`}>
-                                    {p.estado_global?.replace('_', ' ')}
+                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${ESTADO_COLORS[p.estado_global?.toLowerCase()] || 'bg-stone-100 text-stone-600'}`}>
+                                    {p.estado_global}
                                 </span>
                             </div>
                             <div className="flex items-center justify-between text-sm text-stone-500">
@@ -178,8 +173,8 @@ export default function AdminPedidos() {
                                         </td>
                                         <td className="px-4 py-3 text-sm text-stone-700">{p.cliente_nombre || '—'}</td>
                                         <td className="px-4 py-3">
-                                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${ESTADO_COLORS[p.estado_global] || 'bg-stone-100 text-stone-600'}`}>
-                                                {p.estado_global?.replace('_', ' ')}
+                                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${ESTADO_COLORS[p.estado_global?.toLowerCase()] || 'bg-stone-100 text-stone-600'}`}>
+                                                {p.estado_global}
                                             </span>
                                         </td>
                                         <td className="px-4 py-3 text-sm text-stone-600">{formatDate(p.fecha_entrega_prometida)}</td>

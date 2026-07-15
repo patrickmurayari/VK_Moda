@@ -24,7 +24,6 @@ const emptyItem = () => ({
     tipo_trabajo: '',
     precio_item: '',
     tela_id: '',
-    usa_medida_existente: false,
     trae_tela: false,
     notas_especificas: '',
     medidas_json: {},
@@ -163,7 +162,6 @@ export default function OrderWizard() {
                     descripcion_prenda: item.descripcion_prenda.trim(),
                     tipo_trabajo: item.tipo_trabajo,
                     precio_item: parseFloat(item.precio_item),
-                    usa_medida_existente: item.usa_medida_existente,
                     trae_tela: item.trae_tela,
                     notas_especificas: item.notas_especificas || null,
                     medidas_json: item.tipo_trabajo === 'confeccion' && Object.keys(item.medidas_json).length > 0
@@ -493,15 +491,6 @@ export default function OrderWizard() {
                                             className="w-4 h-4 text-stone-700 rounded border-stone-300 focus:ring-stone-400"
                                         />
                                         <span className="text-sm text-stone-700">Trae tela</span>
-                                    </label>
-                                    <label className="flex items-center gap-2 cursor-pointer">
-                                        <input
-                                            type="checkbox"
-                                            checked={item.usa_medida_existente}
-                                            onChange={(e) => updateItem(idx, 'usa_medida_existente', e.target.checked)}
-                                            className="w-4 h-4 text-stone-700 rounded border-stone-300 focus:ring-stone-400"
-                                        />
-                                        <span className="text-sm text-stone-700">Usa medida existente</span>
                                     </label>
                                 </div>
                             </div>

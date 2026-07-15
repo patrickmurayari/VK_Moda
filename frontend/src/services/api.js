@@ -115,6 +115,10 @@ export async function updateItem(pedidoId, itemId, data, token) {
     });
 }
 
+export async function deleteItem(pedidoId, itemId, token) {
+    return authFetchJSON(adminURL(`/pedidos/${pedidoId}/items/${itemId}`), token, { method: 'DELETE' });
+}
+
 export async function cambiarEstadoItem(itemId, data, token) {
     return authFetchJSON(adminURL(`/items/${itemId}/estado`), token, {
         method: 'PUT',
