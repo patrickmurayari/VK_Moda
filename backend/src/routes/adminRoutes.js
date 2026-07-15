@@ -47,6 +47,7 @@ router.put('/pedidos/:id/entregar', pedidosController.entregarPedido);
 
 // Items de Pedido
 router.put('/pedidos/:pedidoId/items/:itemId', validators.validateItemUpdate, pedidosController.updateItem);
+router.delete('/pedidos/:pedidoId/items/:itemId', pedidosController.deleteItem);
 
 // Workflow de Items (cambio de estado + historial)
 router.put('/items/:id/estado', validators.validateEstadoItemChange, pedidosController.cambiarEstadoItem);

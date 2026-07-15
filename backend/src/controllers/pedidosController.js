@@ -201,11 +201,15 @@ const deletePedido = async (req, res) => {
 const updateItem = async (req, res) => {
     const { pedidoId, itemId } = req.params;
     const { descripcion_prenda, tipo_trabajo, precio_item, estado_item, tela_id,
-            usa_medida_existente, trae_tela, notas_especificas } = req.body;
+            usa_medida_existente, trae_tela, notas_especificas, medidas_json } = req.body;
 
     // Validaciones realizadas por middleware validateItemUpdate
 
+    const { pool } = db;
+    const client = await pool.connect();
     try {
+        await client.query('BEGIN');
+
         const updates = [];
         const values = [];
         let paramCount = 1;
@@ -220,25 +224,95 @@ const updateItem = async (req, res) => {
             }
         }
 
+        if (medidas_json !== undefined) {
+            updates.push(`medidas_json = $${paramCount++}`);
+            values.push(medidas_json);
+        }
+
         if (updates.length === 0) {
+            await client.query('ROLLBACK');
             return res.status(400).json({ error: 'No hay campos para actualizar' });
         }
 
-        values.push(pedidoId, itemId);
-        const result = await db.query(`
+        values.push(itemId, pedidoId);
+        const result = await client.query(`
             UPDATE items_pedido SET ${updates.join(', ')}
             WHERE id = $${paramCount} AND pedido_id = $${paramCount + 1}
             RETURNING *
         `, values);
 
         if (result.rows.length === 0) {
+            await client.query('ROLLBACK');
             return res.status(404).json({ error: 'Ítem no encontrado' });
         }
 
-        res.json(result.rows[0]);
+        const totalRes = await client.query(
+            'SELECT COALESCE(SUM(precio_item), 0) AS total FROM items_pedido WHERE pedido_id = $1',
+            [pedidoId]
+        );
+        const nuevoTotal = parseFloat(totalRes.rows[0].total);
+        await client.query(
+            'UPDATE pedidos SET total_presupuestado = $1 WHERE id = $2',
+            [nuevoTotal, pedidoId]
+        );
+
+        await client.query('COMMIT');
+        res.json({ item: result.rows[0], nuevo_total: nuevoTotal });
     } catch (err) {
+        await client.query('ROLLBACK');
         console.error('Error al actualizar ítem:', err);
         res.status(500).json({ error: 'Error al actualizar ítem' });
+    } finally {
+        client.release();
+    }
+};
+
+// ── DELETE /api/admin/pedidos/:pedidoId/items/:itemId - Eliminar ítem con recalculo de total ──
+const deleteItem = async (req, res) => {
+    const { pedidoId, itemId } = req.params;
+    const { pool } = db;
+    const client = await pool.connect();
+    try {
+        await client.query('BEGIN');
+
+        const itemRes = await client.query(
+            'SELECT id FROM items_pedido WHERE id = $1 AND pedido_id = $2',
+            [itemId, pedidoId]
+        );
+        if (itemRes.rows.length === 0) {
+            await client.query('ROLLBACK');
+            return res.status(404).json({ error: 'Ítem no encontrado en este pedido' });
+        }
+
+        await client.query('DELETE FROM items_pedido WHERE id = $1', [itemId]);
+
+        const countRes = await client.query(
+            'SELECT COUNT(*) AS cnt FROM items_pedido WHERE pedido_id = $1',
+            [pedidoId]
+        );
+        const remaining = parseInt(countRes.rows[0].cnt);
+
+        if (remaining === 0) {
+            await client.query('DELETE FROM pedidos WHERE id = $1', [pedidoId]);
+            await client.query('COMMIT');
+            return res.json({ pedido_eliminado: true, pedido_id: parseInt(pedidoId) });
+        }
+
+        const totalRes = await client.query(
+            'SELECT COALESCE(SUM(precio_item), 0) AS total FROM items_pedido WHERE pedido_id = $1',
+            [pedidoId]
+        );
+        const nuevoTotal = parseFloat(totalRes.rows[0].total);
+        await client.query('UPDATE pedidos SET total_presupuestado = $1 WHERE id = $2', [nuevoTotal, pedidoId]);
+
+        await client.query('COMMIT');
+        res.json({ pedido_eliminado: false, item_id: parseInt(itemId), nuevo_total: nuevoTotal });
+    } catch (err) {
+        await client.query('ROLLBACK');
+        console.error('Error al eliminar ítem:', err);
+        res.status(500).json({ error: 'Error al eliminar ítem' });
+    } finally {
+        client.release();
     }
 };
 
@@ -644,6 +718,7 @@ module.exports = {
     updatePedido,
     deletePedido,
     updateItem,
+    deleteItem,
     cambiarEstadoItem,
     getWorkflowItem,
     createSesionPrueba,
