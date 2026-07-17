@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { supabase } from '@/lib/supabase';
+import { USUARIOS_TALLER, usuarioById } from '@/constants/taller';
 import {
     getPedidoById,
     cambiarEstadoItem as cambiarEstadoItemApi,
@@ -56,6 +57,7 @@ function parseMedidas(raw) {
 export default function PedidoDetalle() {
     const { id } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
     const [pedido, setPedido] = useState(null);
     const [loading, setLoading] = useState(true);
     const [cambiandoEstado, setCambiandoEstado] = useState(null);
@@ -77,7 +79,7 @@ export default function PedidoDetalle() {
             setPedido(data);
         } catch {
             toast.error('Error al cargar pedido');
-            navigate('/admin/pedidos');
+            navigate('/admin/cronograma');
         } finally {
             setLoading(false);
         }
@@ -108,6 +110,7 @@ export default function PedidoDetalle() {
                 tipo_trabajo: item.tipo_trabajo ?? '',
                 precio_item: item.precio_item ?? '',
                 medidas_json: parseMedidas(item.medidas_json),
+                asignado_a: item.asignado_a ?? null,
             })),
         });
         setEditMode(true);
@@ -147,13 +150,15 @@ export default function PedidoDetalle() {
                     item.descripcion_prenda !== orig?.descripcion_prenda ||
                     item.tipo_trabajo !== (orig?.tipo_trabajo ?? '') ||
                     String(item.precio_item) !== String(orig?.precio_item ?? '') ||
-                    JSON.stringify(item.medidas_json) !== JSON.stringify(origMj);
+                    JSON.stringify(item.medidas_json) !== JSON.stringify(origMj) ||
+                    item.asignado_a !== (orig?.asignado_a ?? null);
                 if (changed) {
                     const res = await updateItemApi(id, item.id, {
                         descripcion_prenda: item.descripcion_prenda,
                         tipo_trabajo: item.tipo_trabajo || null,
                         precio_item: parseFloat(item.precio_item) || 0,
                         medidas_json: item.tipo_trabajo === 'confeccion' ? item.medidas_json : null,
+                        asignado_a: item.asignado_a,
                     }, session.access_token);
                     if (res?.nuevo_total !== undefined) latestTotal = res.nuevo_total;
                 }
@@ -178,7 +183,7 @@ export default function PedidoDetalle() {
             const { data: { session } } = await supabase.auth.getSession();
             await deletePedidoApi(id, session.access_token);
             toast.success(`Pedido #${id} eliminado`);
-            navigate('/admin/pedidos');
+            navigate('/admin/cronograma');
         } catch (err) {
             toast.error(err.message || 'Error al eliminar pedido');
             setDeletingPedido(false);
@@ -193,7 +198,7 @@ export default function PedidoDetalle() {
             const result = await deleteItemApi(id, itemId, session.access_token);
             if (result.pedido_eliminado) {
                 toast.success('Última prenda eliminada — pedido eliminado automáticamente.');
-                navigate('/admin/pedidos');
+                navigate('/admin/cronograma');
             } else {
                 toast.success('Prenda eliminada');
                 setConfirmDeleteItemId(null);
@@ -230,7 +235,7 @@ export default function PedidoDetalle() {
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                 <div className="flex items-center gap-3">
-                    <button onClick={() => navigate('/admin/pedidos')} className="p-2 rounded-lg hover:bg-stone-200 transition-colors shrink-0">
+                    <button onClick={() => location.key !== 'default' ? navigate(-1) : navigate('/admin/cronograma')} className="p-2 rounded-lg hover:bg-stone-200 transition-colors shrink-0">
                         <svg className="w-5 h-5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                         </svg>
@@ -386,6 +391,7 @@ export default function PedidoDetalle() {
                                                 </span>
                                                 {item.tipo_trabajo && <span className="px-2 py-0.5 rounded-full text-xs bg-stone-100 text-stone-600">{item.tipo_trabajo}</span>}
                                                 {item.trae_tela && <span className="px-2 py-0.5 rounded-full text-xs bg-teal-100 text-teal-700">Trae tela</span>}
+                                                {(() => { const u = usuarioById(item.asignado_a); return u ? <span className={`px-2 py-0.5 rounded-full text-xs font-medium border ${u.color}`}>{u.iniciales}</span> : null; })()}
                                             </div>
                                             {item.notas_especificas && <p className="text-xs text-stone-500 mt-1">{item.notas_especificas}</p>}
                                             {(() => {
@@ -452,7 +458,7 @@ export default function PedidoDetalle() {
                     <div className="divide-y divide-stone-100">
                         {editData.items.map((item, idx) => (
                             <div key={item.id} className="p-4 space-y-3">
-                                <div className="grid grid-cols-1 sm:grid-cols-[1fr_9rem_8rem] gap-3">
+                                <div className="grid grid-cols-1 sm:grid-cols-[1fr_9rem_8rem_10rem] gap-3">
                                     <div>
                                         <label className="block text-xs text-stone-500 mb-1">Descripción</label>
                                         <input
@@ -481,6 +487,19 @@ export default function PedidoDetalle() {
                                             onChange={(e) => updateEditItem(idx, 'precio_item', e.target.value)}
                                             className="w-full px-3 py-2 border border-stone-300 rounded-lg text-sm focus:ring-1 focus:ring-stone-400 outline-none"
                                         />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs text-stone-500 mb-1">Asignado a</label>
+                                        <select
+                                            value={item.asignado_a ?? ''}
+                                            onChange={(e) => updateEditItem(idx, 'asignado_a', e.target.value || null)}
+                                            className="w-full px-3 py-2 border border-stone-300 rounded-lg text-sm bg-white focus:ring-1 focus:ring-stone-400 outline-none"
+                                        >
+                                            <option value="">Sin asignar</option>
+                                            {USUARIOS_TALLER.map((u) => (
+                                                <option key={u.id} value={u.id}>{u.nombre}</option>
+                                            ))}
+                                        </select>
                                     </div>
                                 </div>
                                 {item.tipo_trabajo === 'confeccion' && (

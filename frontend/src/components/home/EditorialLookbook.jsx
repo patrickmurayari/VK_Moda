@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 const LOOKBOOK_ITEMS = [
     {
         id: 1,
-        urlImagen: 'https://vdatngjhpompoemllczo.supabase.co/storage/v1/object/public/imagenes_vya/Editorial/03ed96d7-74d5-4b32-b702-032ceb84b76a.JPG.webp',
+        urlImagen: 'https://vdatngjhpompoemllczo.supabase.co/storage/v1/object/public/ateliervya/fotoAtelier1.webp',
         titulo: 'Línea Sastrera',
         subtitulo: 'Diseño y caída impecable',
         texto: 'Prendas construidas con precisión artesanal. Cada detalle pensado para una silueta que habla por sí sola.',
@@ -11,7 +11,7 @@ const LOOKBOOK_ITEMS = [
     },
     {
         id: 2,
-        urlImagen: 'https://vdatngjhpompoemllczo.supabase.co/storage/v1/object/public/imagenes_vya/Editorial/979a05d8-4c1f-4e12-942b-75c5b793d41f.JPG.webp',
+        urlImagen: 'https://vdatngjhpompoemllczo.supabase.co/storage/v1/object/public/ateliervya/fotoAtelier2.webp',
         titulo: 'Colección Casual',
         subtitulo: 'Comodidad sin resignar elegancia',
         texto: 'La versatilidad hecha prenda. Piezas que acompañan desde el amanecer hasta la noche sin perder identidad.',
@@ -19,7 +19,7 @@ const LOOKBOOK_ITEMS = [
     },
     {
         id: 3,
-        urlImagen: 'https://vdatngjhpompoemllczo.supabase.co/storage/v1/object/public/imagenes_vya/Editorial/a842b98f-5f17-4298-95f6-06b5ad3b95df.JPG.webp',
+        urlImagen: 'https://vdatngjhpompoemllczo.supabase.co/storage/v1/object/public/ateliervya/fotoAtelier3.webp',
         titulo: 'Esencia Urbana',
         subtitulo: 'La ciudad como pasarela',
         texto: 'Confección local con mirada global. Diseños que dialogan con el ritmo contemporáneo.',
@@ -27,7 +27,7 @@ const LOOKBOOK_ITEMS = [
     },
     {
         id: 4,
-        urlImagen: 'https://vdatngjhpompoemllczo.supabase.co/storage/v1/object/public/imagenes_vya/Editorial/IMG_0084.JPG.webp',
+        urlImagen: 'https://vdatngjhpompoemllczo.supabase.co/storage/v1/object/public/ateliervya/fotoAtelier4.webp',
         titulo: 'Hecho a Medida',
         subtitulo: 'Tu cuerpo, tu corte',
         texto: 'Cada prenda nace de un encargo. Trabajamos contigo para que el resultado sea exactamente lo que imaginaste.',
