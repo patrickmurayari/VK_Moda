@@ -59,7 +59,7 @@ export default function ProductoForm() {
             const data = await getProductoById(id, token);
             setFormData({
                 nombre: data.nombre || '',
-                precio: data.precio?.toString() || '',
+                precio: data.precio != null ? Math.round(data.precio).toString() : '',
                 categoria_id: data.categoria_id?.toString() || '',
                 esta_activo: data.esta_activo ?? true
             });
@@ -286,13 +286,13 @@ export default function ProductoForm() {
                             name="precio"
                             value={formData.precio}
                             onChange={handleChange}
-                            step="0.01"
+                            step="1"
                             min="0"
                             disabled={saving}
-                            className={`w-full pl-8 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-stone-400 focus:border-transparent transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed ${
+                            className={`w-full pl-8 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-stone-400 focus:border-transparent transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
                                 errors.precio ? 'border-red-500' : 'border-stone-300'
                             }`}
-                            placeholder="0.00"
+                            placeholder="0"
                         />
                     </div>
                     {errors.precio && (
