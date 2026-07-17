@@ -479,7 +479,7 @@ export default function OrderWizard() {
                                         placeholder="0"
                                         value={item.precio_item}
                                         onChange={(e) => updateItem(idx, 'precio_item', e.target.value)}
-                                        className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 outline-none"
+                                        className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                     />
                                 </div>
                                 <div className="flex items-center gap-4">
