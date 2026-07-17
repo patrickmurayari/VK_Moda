@@ -24,6 +24,7 @@ export default function AdminProductos() {
     const [deleteId, setDeleteId] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
+    const [selectedImage, setSelectedImage] = useState(null);
 
     useEffect(() => {
         fetchProductos();
@@ -73,6 +74,7 @@ export default function AdminProductos() {
     };
 
     return (
+        <>
         <div className="space-y-6">
             {/* Header: Apilado en mobile, en línea en sm+ */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -163,7 +165,8 @@ export default function AdminProductos() {
                                                     <img
                                                         src={producto.imagen_url}
                                                         alt={producto.nombre}
-                                                        className="w-16 h-24 sm:w-40 sm:h-52 rounded shrink-0 border border-stone-200"
+                                                        onClick={() => setSelectedImage(producto.imagen_url)}
+                                                        className="w-16 h-24 sm:w-40 sm:h-52 rounded shrink-0 border border-stone-200 cursor-pointer hover:opacity-80 transition-opacity"
                                                     />
                                                 )}
                                                 <span className="font-medium text-stone-800 break-normal whitespace-normal min-w-0 pr-4">{producto.nombre}</span>
@@ -224,5 +227,31 @@ export default function AdminProductos() {
                 </div>
             </div>
         </div>
+
+        {/* Image preview modal */}
+            {selectedImage && (
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+                    onClick={() => setSelectedImage(null)}
+                >
+                    <div
+                        className="relative max-w-3xl max-h-[85vh] overflow-hidden rounded-lg bg-white p-2"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <button
+                            className="absolute top-2 right-2 text-white bg-black/50 hover:bg-black rounded-full w-7 h-7 flex items-center justify-center text-xs transition-colors z-10"
+                            onClick={() => setSelectedImage(null)}
+                        >
+                            ✕
+                        </button>
+                        <img
+                            src={selectedImage}
+                            alt="Vista previa ampliada"
+                            className="max-w-full max-h-[80vh] object-contain"
+                        />
+                    </div>
+                </div>
+            )}
+        </>
     );
 }
