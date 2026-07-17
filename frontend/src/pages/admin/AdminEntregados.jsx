@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { supabase } from '@/lib/supabase';
 import { getPedidosEntregados } from '@/services/api';
+import { Search } from 'lucide-react';
 
 const TIPO_TRABAJO_LABEL = {
     confeccion: 'Confección',
@@ -31,6 +32,16 @@ function formatCurrency(val) {
 export default function AdminEntregados() {
     const [pedidos, setPedidos] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [busqueda, setBusqueda] = useState('');
+
+    const pedidosFiltrados = useMemo(() => {
+        const term = busqueda.replace('#', '').trim().toLowerCase();
+        if (!term) return pedidos;
+        return pedidos.filter((p) =>
+            String(p.id).includes(term) ||
+            p.cliente_nombre?.toLowerCase().includes(term)
+        );
+    }, [pedidos, busqueda]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -55,7 +66,7 @@ export default function AdminEntregados() {
                 <div>
                     <h2 className="text-xl sm:text-2xl font-heading text-stone-800">Historial de Entregados</h2>
                     <p className="text-sm text-stone-500 mt-0.5">
-                        {loading ? 'Cargando…' : `${pedidos.length} pedido${pedidos.length !== 1 ? 's' : ''} entregado${pedidos.length !== 1 ? 's' : ''}`}
+                        {loading ? 'Cargando…' : `${pedidosFiltrados.length}${busqueda ? ` de ${pedidos.length}` : ''} pedido${pedidos.length !== 1 ? 's' : ''} entregado${pedidos.length !== 1 ? 's' : ''}`}
                     </p>
                 </div>
                 {!loading && pedidos.length > 0 && (
@@ -66,9 +77,29 @@ export default function AdminEntregados() {
                 )}
             </div>
 
+            {!loading && pedidos.length > 0 && (
+                <div className="relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400 pointer-events-none" />
+                    <input
+                        type="text"
+                        value={busqueda}
+                        onChange={(e) => setBusqueda(e.target.value)}
+                        placeholder="Buscar por cliente o #pedido..."
+                        className="w-full pl-9 pr-4 py-2.5 border border-stone-200 rounded-lg text-sm text-stone-700 placeholder:text-stone-400 bg-white focus:outline-none focus:border-stone-400 focus:ring-1 focus:ring-stone-400 transition-colors"
+                    />
+                </div>
+            )}
+
             {loading && (
                 <div className="flex items-center justify-center py-20">
                     <div className="w-8 h-8 border-4 border-stone-600 border-t-transparent rounded-full animate-spin" />
+                </div>
+            )}
+
+            {!loading && pedidos.length > 0 && pedidosFiltrados.length === 0 && (
+                <div className="bg-white rounded-xl border border-stone-200 p-10 text-center">
+                    <Search className="w-8 h-8 text-stone-300 mx-auto mb-3" />
+                    <p className="text-stone-400 text-sm">No se encontraron pedidos para esta búsqueda.</p>
                 </div>
             )}
 
@@ -81,7 +112,7 @@ export default function AdminEntregados() {
                 </div>
             )}
 
-            {!loading && pedidos.length > 0 && (
+            {!loading && pedidosFiltrados.length > 0 && (
                 <div className="bg-white rounded-xl border border-stone-200 overflow-hidden shadow-sm">
                     <div className="hidden sm:grid grid-cols-[3rem_1fr_2.5fr_9rem_8rem] gap-4 px-4 py-2 border-b border-stone-200 bg-stone-50">
                         <span className="text-xs font-medium text-stone-500 uppercase tracking-wide">#</span>
@@ -91,7 +122,7 @@ export default function AdminEntregados() {
                         <span className="text-xs font-medium text-stone-500 uppercase tracking-wide">Total</span>
                     </div>
                     <div className="divide-y divide-stone-100">
-                        {pedidos.map((p) => (
+                        {pedidosFiltrados.map((p) => (
                             <Link
                                 key={p.id}
                                 to={`/admin/pedidos/${p.id}`}
