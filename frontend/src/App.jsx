@@ -7,6 +7,7 @@ import './App.css'
 import Navbar from './components/layout/Navbar'
 import CartDrawer from './components/cart/CartDrawer'
 import NotFound from './components/common/NotFound'
+import ScrollToTop from './components/common/ScrollToTop'
 import HeroSection from './components/home/HeroSection'
 import SeccionCategorias from './components/home/SeccionCategorias'
 import SeccionColeccion from './components/home/SeccionColeccion'
@@ -148,6 +149,7 @@ function App() {
           </div>
         }
       >
+        <ScrollToTop />
         <Routes>
           {/* Rutas públicas */}
           <Route path="/" element={<Home />}></Route>

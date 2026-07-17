@@ -69,7 +69,7 @@ export default function CartDrawer() {
                     <div className="flex items-center gap-2">
                         <ShoppingBag className="w-4 h-4 text-black" strokeWidth={1.5} />
                         <span className="font-body text-xs tracking-[0.2em] uppercase">
-                            Bolsa {items.length > 0 && `(${items.reduce((s, i) => s + i.cantidad, 0)})`}
+                            Carrito {items.length > 0 && `(${items.reduce((s, i) => s + i.cantidad, 0)})`}
                         </span>
                     </div>
                     <button
@@ -87,7 +87,7 @@ export default function CartDrawer() {
                         <div className="flex flex-col items-center justify-center h-full gap-4 px-8 text-center">
                             <ShoppingBag className="w-10 h-10 text-neutral-200" strokeWidth={1} />
                             <p className="font-body text-xs tracking-[0.15em] uppercase text-neutral-400">
-                                Tu bolsa está vacía
+                                Tu carrito está vacío
                             </p>
                         </div>
                     ) : (
