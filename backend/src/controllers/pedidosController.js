@@ -201,7 +201,7 @@ const deletePedido = async (req, res) => {
 const updateItem = async (req, res) => {
     const { pedidoId, itemId } = req.params;
     const { descripcion_prenda, tipo_trabajo, precio_item, estado_item, tela_id,
-            usa_medida_existente, trae_tela, notas_especificas, medidas_json } = req.body;
+            usa_medida_existente, trae_tela, notas_especificas, medidas_json, asignado_a } = req.body;
 
     // Validaciones realizadas por middleware validateItemUpdate
 
@@ -227,6 +227,11 @@ const updateItem = async (req, res) => {
         if (medidas_json !== undefined) {
             updates.push(`medidas_json = $${paramCount++}`);
             values.push(medidas_json);
+        }
+
+        if (asignado_a !== undefined) {
+            updates.push(`asignado_a = $${paramCount++}`);
+            values.push(asignado_a);
         }
 
         if (updates.length === 0) {
@@ -587,7 +592,8 @@ const getPedidosFinalizados = async (req, res) => {
                             'id', ip.id,
                             'descripcion_prenda', ip.descripcion_prenda,
                             'tipo_trabajo', ip.tipo_trabajo,
-                            'estado_item', ip.estado_item
+                            'estado_item', ip.estado_item,
+                            'asignado_a', ip.asignado_a
                         ) ORDER BY ip.id
                     ) FILTER (WHERE ip.id IS NOT NULL),
                     '[]'::json
@@ -625,7 +631,8 @@ const getPedidosEntregados = async (req, res) => {
                             'id', ip.id,
                             'descripcion_prenda', ip.descripcion_prenda,
                             'tipo_trabajo', ip.tipo_trabajo,
-                            'estado_item', ip.estado_item
+                            'estado_item', ip.estado_item,
+                            'asignado_a', ip.asignado_a
                         ) ORDER BY ip.id
                     ) FILTER (WHERE ip.id IS NOT NULL),
                     '[]'::json
@@ -691,7 +698,8 @@ const getCronogramaEntregas = async (req, res) => {
                             'id', ip.id,
                             'descripcion_prenda', ip.descripcion_prenda,
                             'tipo_trabajo', ip.tipo_trabajo,
-                            'estado_item', ip.estado_item
+                            'estado_item', ip.estado_item,
+                            'asignado_a', ip.asignado_a
                         ) ORDER BY ip.id
                     ) FILTER (WHERE ip.id IS NOT NULL),
                     '[]'::json
