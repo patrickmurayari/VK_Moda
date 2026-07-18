@@ -719,6 +719,27 @@ const getCronogramaEntregas = async (req, res) => {
     }
 };
 
+// ── GET /api/admin/pedidos/carga-trabajo - Prendas agrupadas por fecha de entrega (solo pedidos Recibido) ──
+const getCargaTrabajo = async (req, res) => {
+    try {
+        const result = await db.query(`
+            SELECT
+                p.fecha_entrega_prometida::date AS fecha,
+                COUNT(ip.id)::int AS cantidad_prendas
+            FROM pedidos p
+            JOIN items_pedido ip ON ip.pedido_id = p.id
+            WHERE LOWER(p.estado_global) = 'recibido'
+              AND p.fecha_entrega_prometida IS NOT NULL
+            GROUP BY p.fecha_entrega_prometida::date
+            ORDER BY fecha
+        `);
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Error al obtener carga de trabajo:', err);
+        res.status(500).json({ error: 'Error al obtener carga de trabajo' });
+    }
+};
+
 module.exports = {
     getPedidos,
     getPedidoById,
@@ -736,5 +757,6 @@ module.exports = {
     getCronogramaEntregas,
     getPedidosFinalizados,
     getPedidosEntregados,
-    entregarPedido
+    entregarPedido,
+    getCargaTrabajo
 };

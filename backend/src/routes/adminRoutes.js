@@ -39,6 +39,7 @@ router.get('/pedidos', pedidosController.getPedidos);
 router.get('/pedidos/cronograma', pedidosController.getCronogramaEntregas);
 router.get('/pedidos/finalizados', pedidosController.getPedidosFinalizados);
 router.get('/pedidos/entregados', pedidosController.getPedidosEntregados);
+router.get('/pedidos/carga-trabajo', pedidosController.getCargaTrabajo);
 router.get('/pedidos/:id', pedidosController.getPedidoById);
 router.post('/pedidos', validators.validatePedido, pedidosController.createPedido);
 router.put('/pedidos/:id', validators.validatePedidoUpdate, pedidosController.updatePedido);
