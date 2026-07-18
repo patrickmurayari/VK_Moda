@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { supabase } from '@/lib/supabase';
-import { buscarClientes, createCliente, createPedido } from '@/services/api';
+import { buscarClientes, createCliente, createPedido, getCargaTrabajo } from '@/services/api';
 
 const MEDIDAS_FIELDS = [
     { key: 'busto', label: 'Busto' },
@@ -31,7 +31,7 @@ const emptyItem = () => ({
 
 export default function OrderWizard() {
     const navigate = useNavigate();
-    const [step, setStep] = useState(1); // 1: Cliente, 2: Items, 3: Confirm
+    const [step, setStep] = useState(1); // 1: Pedido y Prendas, 2: Confirmar
     const [saving, setSaving] = useState(false);
     const [clientes, setClientes] = useState([]);
     const [clienteSearch, setClienteSearch] = useState('');
@@ -50,6 +50,12 @@ export default function OrderWizard() {
     const [seniaPagada, setSeniaPagada] = useState('');
     const [observaciones, setObservaciones] = useState('');
     const [items, setItems] = useState([emptyItem()]);
+
+    // Errores fase 1
+    const [clienteError, setClienteError] = useState(false);
+    const [itemsListError, setItemsListError] = useState('');
+    const [itemErrors, setItemErrors] = useState([{ desc: false, precio: false }]);
+    const [nuevoClienteErrors, setNuevoClienteErrors] = useState({ nombre: false, telefono: false });
 
     // Buscar clientes
     useEffect(() => {
@@ -76,6 +82,7 @@ export default function OrderWizard() {
         setClienteNombre(`${c.apellido}, ${c.nombre}`);
         setClienteSearch('');
         setClientes([]);
+        setClienteError(false);
     };
 
     const clearCliente = () => {
@@ -85,8 +92,9 @@ export default function OrderWizard() {
 
     const handleCrearCliente = async () => {
         const { nombre, telefono } = nuevoCliente;
-        if (!nombre.trim() || !telefono.trim()) {
-            toast.error('Nombre y teléfono son obligatorios');
+        const errs = { nombre: !nombre.trim(), telefono: !telefono.trim() };
+        if (errs.nombre || errs.telefono) {
+            setNuevoClienteErrors(errs);
             return;
         }
         setCreatingCliente(true);
@@ -106,6 +114,8 @@ export default function OrderWizard() {
             setClientes([]);
             setShowNuevoCliente(false);
             setNuevoCliente({ nombre: '', apellido: '', telefono: '', email: '' });
+            setNuevoClienteErrors({ nombre: false, telefono: false });
+            setClienteError(false);
             toast.success(`Cliente ${data.nombre} ${data.apellido} registrado`);
         } catch (err) {
             toast.error(err.message || 'Error al registrar cliente');
@@ -118,11 +128,21 @@ export default function OrderWizard() {
     const updateItem = (index, field, value) => {
         const updated = [...items];
         updated[index] = { ...updated[index], [field]: value };
-        // Limpiar medidas si se cambia tipo_trabajo fuera de confeccion
         if (field === 'tipo_trabajo' && value !== 'confeccion') {
             updated[index] = { ...updated[index], medidas_json: {} };
         }
         setItems(updated);
+        if (field === 'descripcion_prenda' || field === 'precio_item') {
+            const errs = [...itemErrors];
+            if (errs[index]) {
+                errs[index] = {
+                    desc: field === 'descripcion_prenda' ? false : errs[index].desc,
+                    precio: field === 'precio_item' ? false : errs[index].precio,
+                };
+                setItemErrors(errs);
+            }
+            setItemsListError('');
+        }
     };
 
     const updateMedida = (index, key, value) => {
@@ -134,20 +154,39 @@ export default function OrderWizard() {
         setItems(updated);
     };
 
-    const addItem = () => setItems([...items, emptyItem()]);
+    const addItem = () => {
+        setItems([...items, emptyItem()]);
+        setItemErrors([...itemErrors, { desc: false, precio: false }]);
+    };
     const removeItem = (index) => {
         if (items.length <= 1) return toast.error('El pedido necesita al menos una prenda');
         setItems(items.filter((_, i) => i !== index));
+        setItemErrors(itemErrors.filter((_, i) => i !== index));
     };
 
     const total = items.reduce((sum, item) => sum + (parseFloat(item.precio_item) || 0), 0);
 
-    const canProceedStep1 = clienteId;
-    const canProceedStep2 = items.every((item) => item.descripcion_prenda.trim() && parseFloat(item.precio_item) > 0);
+    const handleNextStep1 = () => {
+        let hasError = false;
+        if (!clienteId) { setClienteError(true); hasError = true; }
+        const newItemErrors = items.map((item) => ({
+            desc: !item.descripcion_prenda.trim(),
+            precio: !(parseFloat(item.precio_item) > 0),
+        }));
+        const hasItemFieldErrors = newItemErrors.some((e) => e.desc || e.precio);
+        if (hasItemFieldErrors) { setItemErrors(newItemErrors); setItemsListError(''); hasError = true; }
+        else if (items.every((item) => !item.descripcion_prenda.trim() && !parseFloat(item.precio_item))) {
+            setItemsListError('Debes agregar al menos una prenda.'); hasError = true;
+        }
+        if (!hasError) {
+            setItemErrors(items.map(() => ({ desc: false, precio: false })));
+            setStep(2);
+        }
+    };
 
     const handleSubmit = async () => {
-        if (!canProceedStep2) {
-            toast.error('Complete todas las prendas con descripción y precio');
+        if (!fechaEntrega) {
+            setFechaError(true);
             return;
         }
         setSaving(true);
@@ -182,6 +221,41 @@ export default function OrderWizard() {
         }
     };
 
+    const [fechaError, setFechaError] = useState(false);
+    const [cargaTrabajo, setCargaTrabajo] = useState([]);
+    const [loadingCarga, setLoadingCarga] = useState(false);
+
+    useEffect(() => {
+        if (step !== 2) return;
+        const fetchCarga = async () => {
+            setLoadingCarga(true);
+            try {
+                const { data: { session } } = await supabase.auth.getSession();
+                const data = await getCargaTrabajo(session.access_token);
+                setCargaTrabajo(data);
+            } catch { /* ignore */ }
+            setLoadingCarga(false);
+        };
+        fetchCarga();
+    }, [step]);
+
+    const proximosDias = (() => {
+        const dias = [];
+        const d = new Date();
+        d.setHours(12, 0, 0, 0);
+        d.setDate(d.getDate() + 1);
+        while (dias.length < 8) {
+            if (d.getDay() !== 0 && d.getDay() !== 6) {
+                const y = d.getFullYear();
+                const m = String(d.getMonth() + 1).padStart(2, '0');
+                const day = String(d.getDate()).padStart(2, '0');
+                dias.push(`${y}-${m}-${day}`);
+            }
+            d.setDate(d.getDate() + 1);
+        }
+        return dias;
+    })();
+
     const formatCurrency = (val) => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(val || 0);
 
     return (
@@ -199,9 +273,8 @@ export default function OrderWizard() {
             {/* Step Indicator */}
             <div className="flex items-center gap-2">
                 {[
-                    { n: 1, label: 'Cliente' },
-                    { n: 2, label: 'Prendas' },
-                    { n: 3, label: 'Confirmar' },
+                    { n: 1, label: 'Pedido y Prendas' },
+                    { n: 2, label: 'Confirmar' },
                 ].map((s, i) => (
                     <div key={s.n} className="flex items-center gap-2 flex-1">
                         <button
@@ -215,15 +288,16 @@ export default function OrderWizard() {
                         <span className={`text-xs sm:text-sm hidden sm:inline ${step >= s.n ? 'text-stone-800 font-medium' : 'text-stone-400'}`}>
                             {s.label}
                         </span>
-                        {i < 2 && <div className={`flex-1 h-0.5 ${step > s.n ? 'bg-stone-600' : 'bg-stone-200'}`}></div>}
+                        {i < 1 && <div className={`flex-1 h-0.5 ${step > s.n ? 'bg-stone-600' : 'bg-stone-200'}`}></div>}
                     </div>
                 ))}
             </div>
 
-            {/* STEP 1: Cliente */}
+            {/* FASE 1: Cliente + Prendas */}
             {step === 1 && (
-                <div className="bg-white rounded-xl p-3 sm:p-6 shadow-sm border border-stone-200 space-y-4 overflow-hidden">
-                    <h3 className="font-heading text-stone-800">Seleccionar Cliente</h3>
+                <div className="space-y-4">
+                <div className="bg-white rounded-xl p-3 sm:p-6 shadow-sm border border-stone-200 space-y-4">
+                    <h3 className="font-heading text-stone-800">Cliente <span className="text-red-500">*</span></h3>
 
                     {clienteId ? (
                         <div className="flex items-center justify-between bg-stone-50 border border-stone-200 rounded-lg p-3">
@@ -249,8 +323,8 @@ export default function OrderWizard() {
                                     type="text"
                                     placeholder="Buscar por nombre, apellido o teléfono..."
                                     value={clienteSearch}
-                                    onChange={(e) => { setClienteSearch(e.target.value); setShowNuevoCliente(false); }}
-                                    className="w-full pl-10 pr-4 py-3 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 focus:border-stone-400 outline-none"
+                                    onChange={(e) => { setClienteSearch(e.target.value); setShowNuevoCliente(false); setClienteError(false); }}
+                                    className={`w-full pl-10 pr-4 py-3 border rounded-lg text-sm focus:ring-2 outline-none ${clienteError ? 'border-red-400 focus:ring-red-300' : 'border-stone-300 focus:ring-stone-400 focus:border-stone-400'}`}
                                 />
                                 {searching && (
                                     <div className="absolute right-3 top-1/2 -translate-y-1/2">
@@ -259,7 +333,7 @@ export default function OrderWizard() {
                                 )}
                                 {/* Dropdown resultados */}
                                 {clientes.length > 0 && (
-                                    <div className="absolute z-10 w-full mt-1 bg-white border border-stone-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                                    <div className="absolute z-50 w-full mt-1 bg-white border border-stone-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
                                         {clientes.map((c) => (
                                             <button
                                                 key={c.id}
@@ -318,9 +392,10 @@ export default function OrderWizard() {
                                                 type="text"
                                                 placeholder="Nombre"
                                                 value={nuevoCliente.nombre}
-                                                onChange={(e) => setNuevoCliente({ ...nuevoCliente, nombre: e.target.value })}
-                                                className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 outline-none bg-white"
+                                                onChange={(e) => { setNuevoCliente({ ...nuevoCliente, nombre: e.target.value }); setNuevoClienteErrors(prev => ({ ...prev, nombre: false })); }}
+                                                className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:ring-2 outline-none bg-white ${nuevoClienteErrors.nombre ? 'border-red-400 focus:ring-red-300' : 'border-stone-300 focus:ring-stone-400'}`}
                                             />
+                                            {nuevoClienteErrors.nombre && <p className="text-xs text-red-500 mt-0.5">El nombre es obligatorio.</p>}
                                         </div>
                                         <div>
                                             <label className="block text-xs text-stone-500 mb-1">Apellido</label>
@@ -338,9 +413,10 @@ export default function OrderWizard() {
                                                 type="tel"
                                                 placeholder="11-1234-5678"
                                                 value={nuevoCliente.telefono}
-                                                onChange={(e) => setNuevoCliente({ ...nuevoCliente, telefono: e.target.value })}
-                                                className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 outline-none bg-white"
+                                                onChange={(e) => { setNuevoCliente({ ...nuevoCliente, telefono: e.target.value }); setNuevoClienteErrors(prev => ({ ...prev, telefono: false })); }}
+                                                className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:ring-2 outline-none bg-white ${nuevoClienteErrors.telefono ? 'border-red-400 focus:ring-red-300' : 'border-stone-300 focus:ring-stone-400'}`}
                                             />
+                                            {nuevoClienteErrors.telefono && <p className="text-xs text-red-500 mt-0.5">El teléfono es obligatorio.</p>}
                                         </div>
                                         <div>
                                             <label className="block text-xs text-stone-500 mb-1">Email</label>
@@ -355,7 +431,7 @@ export default function OrderWizard() {
                                     </div>
                                     <button
                                         onClick={handleCrearCliente}
-                                        disabled={creatingCliente || !nuevoCliente.nombre.trim() || !nuevoCliente.telefono.trim()}
+                                        disabled={creatingCliente}
                                         className="w-full py-3 bg-stone-800 text-white rounded-lg font-medium hover:bg-stone-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2 active:scale-[0.98]"
                                     >
                                         {creatingCliente ? (
@@ -377,68 +453,18 @@ export default function OrderWizard() {
                         </div>
                     )}
 
-                    {/* Datos del pedido */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                        <div>
-                            <label className="block text-xs text-stone-500 mb-1">Fecha de entrega</label>
-                            <input
-                                type="date"
-                                value={fechaEntrega}
-                                onChange={(e) => setFechaEntrega(e.target.value)}
-                                min={new Date().toISOString().split('T')[0]}
-                                className="w-full box-border px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 outline-none"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-xs text-stone-500 mb-1">Método de pago</label>
-                            <select
-                                value={metodoPago}
-                                onChange={(e) => setMetodoPago(e.target.value)}
-                                className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-stone-400 outline-none"
-                            >
-                                <option value="">Seleccionar</option>
-                                <option value="efectivo">Efectivo</option>
-                                <option value="transferencia">Transferencia</option>
-                                <option value="tarjeta">Tarjeta</option>
-                                <option value="mixto">Mixto</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label className="block text-xs text-stone-500 mb-1">Seña pagada</label>
-                            <input
-                                type="number"
-                                placeholder="0"
-                                value={seniaPagada}
-                                onChange={(e) => setSeniaPagada(e.target.value)}
-                                className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 outline-none"
-                            />
-                        </div>
-                    </div>
-
-                    <div>
-                        <label className="block text-xs text-stone-500 mb-1">Observaciones</label>
-                        <textarea
-                            value={observaciones}
-                            onChange={(e) => setObservaciones(e.target.value)}
-                            rows={2}
-                            className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 outline-none resize-none"
-                        />
-                    </div>
-
-                    <button
-                        onClick={() => canProceedStep1 ? setStep(2) : toast.error('Seleccione un cliente')}
-                        disabled={!canProceedStep1}
-                        className="w-full py-3 bg-stone-800 text-white rounded-lg font-medium hover:bg-stone-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                    >
-                        Siguiente: Agregar Prendas
-                    </button>
+                    {clienteError && !clienteId && (
+                        <p className="text-xs text-red-500">El cliente es obligatorio.</p>
+                    )}
                 </div>
-            )}
 
-            {/* STEP 2: Items */}
-            {step === 2 && (
-                <div className="space-y-4">
-                    {items.map((item, idx) => (
+                {/* Prendas */}
+                <div className="space-y-3">
+                    <h3 className="font-heading text-stone-800 px-1">Prendas</h3>
+                    {itemsListError && <p className="text-xs text-red-500 px-1">{itemsListError}</p>}
+                    {items.map((item, idx) => {
+                        const err = itemErrors[idx] || { desc: false, precio: false };
+                        return (
                         <div key={idx} className="bg-white rounded-xl p-4 sm:p-5 shadow-sm border border-stone-200">
                             <div className="flex items-center justify-between mb-3">
                                 <h4 className="font-heading text-stone-800 text-sm">Prenda {idx + 1}</h4>
@@ -455,8 +481,9 @@ export default function OrderWizard() {
                                         placeholder="Ej: Vestido largo de seda"
                                         value={item.descripcion_prenda}
                                         onChange={(e) => updateItem(idx, 'descripcion_prenda', e.target.value)}
-                                        className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 outline-none"
+                                        className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:ring-2 outline-none ${err.desc ? 'border-red-400 focus:ring-red-300' : 'border-stone-300 focus:ring-stone-400'}`}
                                     />
+                                    {err.desc && <p className="text-xs text-red-500 mt-0.5">La descripción es obligatoria.</p>}
                                 </div>
                                 <div>
                                     <label className="block text-xs text-stone-500 mb-1">Tipo de trabajo</label>
@@ -479,8 +506,9 @@ export default function OrderWizard() {
                                         placeholder="0"
                                         value={item.precio_item}
                                         onChange={(e) => updateItem(idx, 'precio_item', e.target.value)}
-                                        className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                        className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:ring-2 outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${err.precio ? 'border-red-400 focus:ring-red-300' : 'border-stone-300 focus:ring-stone-400'}`}
                                     />
+                                    {err.precio && <p className="text-xs text-red-500 mt-0.5">El precio es obligatorio.</p>}
                                 </div>
                                 <div className="flex items-center gap-4">
                                     <label className="flex items-center gap-2 cursor-pointer">
@@ -529,7 +557,8 @@ export default function OrderWizard() {
                                 </div>
                             )}
                         </div>
-                    ))}
+                        );
+                    })}
 
                     <button
                         onClick={addItem}
@@ -538,61 +567,120 @@ export default function OrderWizard() {
                         + Agregar otra prenda
                     </button>
 
-                    {/* Total */}
                     <div className="bg-white rounded-xl p-4 shadow-sm border border-stone-200 flex items-center justify-between">
                         <span className="text-stone-600 font-medium">Total del pedido</span>
                         <span className="text-xl font-bold text-stone-800">{formatCurrency(total)}</span>
                     </div>
 
-                    <div className="flex gap-3">
-                        <button
-                            onClick={() => setStep(1)}
-                            className="flex-1 py-3 border border-stone-300 rounded-lg text-stone-700 font-medium hover:bg-stone-50 transition-colors"
-                        >
-                            Atrás
-                        </button>
-                        <button
-                            onClick={() => canProceedStep2 ? setStep(3) : toast.error('Complete descripción y precio en todas las prendas')}
-                            disabled={!canProceedStep2}
-                            className="flex-1 py-3 bg-stone-800 text-white rounded-lg font-medium hover:bg-stone-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                        >
-                            Siguiente: Confirmar
-                        </button>
-                    </div>
+                    <button
+                        onClick={handleNextStep1}
+                        className="w-full py-3 bg-stone-800 text-white rounded-lg font-medium hover:bg-stone-700 transition-colors"
+                    >
+                        Siguiente: Confirmar
+                    </button>
+                </div>
                 </div>
             )}
 
-            {/* STEP 3: Confirm */}
-            {step === 3 && (
+            {/* FASE 2: Confirmar */}
+            {step === 2 && (
                 <div className="space-y-4">
                     <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-stone-200 space-y-4">
                         <h3 className="font-heading text-stone-800">Resumen del Pedido</h3>
 
-                        <div className="grid grid-cols-2 gap-3 text-sm">
-                            <div>
-                                <p className="text-stone-500">Cliente</p>
-                                <p className="font-medium text-stone-800">{clienteNombre}</p>
-                            </div>
-                            <div>
-                                <p className="text-stone-500">Entrega</p>
-                                <p className="font-medium text-stone-800">{fechaEntrega || 'Sin fecha'}</p>
-                            </div>
-                            <div>
-                                <p className="text-stone-500">Pago</p>
-                                <p className="font-medium text-stone-800">{metodoPago || '—'}</p>
-                            </div>
-                            <div>
-                                <p className="text-stone-500">Seña</p>
-                                <p className="font-medium text-stone-600">{formatCurrency(parseFloat(seniaPagada) || 0)}</p>
+                        {/* Cliente (solo lectura) */}
+                        <div className="bg-stone-50 rounded-lg px-4 py-3">
+                            <p className="text-xs text-stone-500">Cliente</p>
+                            <p className="text-sm font-medium text-stone-800 mt-0.5">{clienteNombre}</p>
+                        </div>
+
+                        {/* Fecha de entrega + disponibilidad */}
+                        <div>
+                            <label className="block text-xs text-stone-500 mb-1">Fecha de entrega <span className="text-red-500">*</span></label>
+                            <input
+                                type="date"
+                                value={fechaEntrega}
+                                onChange={(e) => { setFechaEntrega(e.target.value); setFechaError(false); }}
+                                min={new Date().toISOString().split('T')[0]}
+                                className={`w-full box-border px-3 py-2.5 border rounded-lg text-sm focus:ring-2 outline-none ${fechaError ? 'border-red-400 focus:ring-red-300' : 'border-stone-300 focus:ring-stone-400'}`}
+                            />
+                            {fechaError && (
+                                <p className="text-xs text-red-500 mt-1">La fecha de entrega es obligatoria.</p>
+                            )}
+                            <div className="mt-2.5">
+                                <p className="text-xs font-medium text-stone-500 mb-1.5">Disponibilidad del taller</p>
+                                {loadingCarga ? (
+                                    <div className="flex items-center gap-2 text-xs text-stone-400 py-1">
+                                        <div className="w-3.5 h-3.5 border-2 border-stone-400 border-t-transparent rounded-full animate-spin" />
+                                        Cargando disponibilidad...
+                                    </div>
+                                ) : (
+                                    <div className="space-y-1">
+                                        {proximosDias.map((fecha) => {
+                                            const entrada = cargaTrabajo.find(e => (e.fecha || '').toString().slice(0, 10) === fecha);
+                                            const cantidad = entrada ? parseInt(entrada.cantidad_prendas) : 0;
+                                            const isSelected = fechaEntrega === fecha;
+                                            let color, icon, label;
+                                            if (cantidad === 0) { color = 'bg-green-50 border-green-200 text-green-700'; icon = '🟢'; label = 'Libre'; }
+                                            else if (cantidad <= 3) { color = 'bg-yellow-50 border-yellow-200 text-yellow-700'; icon = '🟡'; label = 'Carga moderada'; }
+                                            else { color = 'bg-red-50 border-red-200 text-red-700'; icon = '🔴'; label = 'Muy ocupado'; }
+                                            return (
+                                                <div
+                                                    key={fecha}
+                                                    onClick={() => { setFechaEntrega(fecha); setFechaError(false); }}
+                                                    className={`flex items-center justify-between px-3 py-1.5 rounded-lg border text-xs cursor-pointer hover:opacity-80 transition-opacity ${color} ${isSelected ? 'ring-2 ring-stone-500' : ''}`}
+                                                >
+                                                    <span className="font-medium">
+                                                        {new Date(fecha + 'T12:00:00').toLocaleDateString('es-AR', { weekday: 'short', day: '2-digit', month: '2-digit' })}
+                                                    </span>
+                                                    <span>{icon} {label} ({cantidad} prenda{cantidad !== 1 ? 's' : ''})</span>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                )}
                             </div>
                         </div>
 
-                        {observaciones && (
-                            <div className="bg-stone-50 rounded-lg p-3">
-                                <p className="text-xs text-stone-500 mb-1">Observaciones</p>
-                                <p className="text-sm text-stone-700">{observaciones}</p>
+                        {/* Método de pago + Seña */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label className="block text-xs text-stone-500 mb-1">Método de pago</label>
+                                <select
+                                    value={metodoPago}
+                                    onChange={(e) => setMetodoPago(e.target.value)}
+                                    className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-stone-400 outline-none"
+                                >
+                                    <option value="">Seleccionar</option>
+                                    <option value="efectivo">Efectivo</option>
+                                    <option value="transferencia">Transferencia</option>
+                                    <option value="tarjeta">Tarjeta</option>
+                                    <option value="mixto">Mixto</option>
+                                </select>
                             </div>
-                        )}
+                            <div>
+                                <label className="block text-xs text-stone-500 mb-1">Seña pagada</label>
+                                <input
+                                    type="number"
+                                    placeholder="0"
+                                    value={seniaPagada}
+                                    onChange={(e) => setSeniaPagada(e.target.value)}
+                                    className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Observaciones */}
+                        <div>
+                            <label className="block text-xs text-stone-500 mb-1">Observaciones generales</label>
+                            <textarea
+                                value={observaciones}
+                                onChange={(e) => setObservaciones(e.target.value)}
+                                rows={3}
+                                placeholder="Notas adicionales sobre el pedido..."
+                                className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 outline-none resize-none"
+                            />
+                        </div>
 
                         <div className="border-t border-stone-200 pt-4">
                             <h4 className="text-sm font-medium text-stone-700 mb-3">Prendas ({items.length})</h4>
@@ -637,7 +725,7 @@ export default function OrderWizard() {
 
                     <div className="flex gap-3">
                         <button
-                            onClick={() => setStep(2)}
+                            onClick={() => setStep(1)}
                             className="flex-1 py-3 border border-stone-300 rounded-lg text-stone-700 font-medium hover:bg-stone-50 transition-colors"
                         >
                             Atrás

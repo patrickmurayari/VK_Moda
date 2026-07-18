@@ -105,6 +105,10 @@ export async function entregarPedido(id, token) {
     return authFetchJSON(adminURL(`/pedidos/${id}/entregar`), token, { method: 'PUT' });
 }
 
+export async function getCargaTrabajo(token) {
+    return authFetchJSON(adminURL('/pedidos/carga-trabajo'), token);
+}
+
 // ── Admin: Items de Pedido ──
 
 export async function updateItem(pedidoId, itemId, data, token) {
