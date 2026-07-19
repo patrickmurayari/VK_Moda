@@ -326,9 +326,10 @@ export default function AdminCronograma() {
                 </div>
 
                 {/* Filtros */}
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                <div className="flex flex-col items-start sm:flex-row sm:items-center gap-3">
                     {/* Filtro de fecha */}
-                    <div className="flex items-center gap-1 bg-stone-100 rounded-lg p-1">
+                    <div className="inline-flex items-center gap-1 bg-white rounded-xl shadow-sm border border-stone-100 p-1.5">
+                        <span className="text-xs text-stone-400 font-medium px-1.5 select-none">Plazo:</span>
                         {[
                             { key: 'hoy', label: 'Para Hoy' },
                             { key: 'semana', label: 'Esta Semana' },
@@ -349,7 +350,8 @@ export default function AdminCronograma() {
                     </div>
 
                     {/* Filtro por responsable */}
-                    <div className="flex items-center gap-1 bg-stone-100 rounded-lg p-1">
+                    <div className="inline-flex items-center gap-1 bg-white rounded-xl shadow-sm border border-stone-100 p-1.5">
+                        <span className="text-xs text-stone-400 font-medium px-1.5 select-none">Asignado:</span>
                         <button
                             onClick={() => setFiltroResponsable('todos')}
                             className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
