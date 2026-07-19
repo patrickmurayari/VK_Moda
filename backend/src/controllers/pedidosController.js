@@ -62,7 +62,7 @@ const getPedidoById = async (req, res) => {
 
 // ── POST /api/admin/pedidos - Crear pedido transaccional ──
 const createPedido = async (req, res) => {
-    const { cliente_id, estado_global, fecha_entrega_prometida, senia_pagada,
+    const { id: customId, cliente_id, estado_global, fecha_entrega_prometida, senia_pagada,
             metodo_pago, observaciones_generales, items } = req.body;
 
     // Validaciones realizadas por middleware validatePedido
@@ -75,19 +75,39 @@ const createPedido = async (req, res) => {
         await client.query('BEGIN');
 
         // 1. Insertar pedido
-        const pedidoRes = await client.query(`
-            INSERT INTO pedidos (cliente_id, estado_global, fecha_entrega_prometida, total_presupuestado, senia_pagada, metodo_pago, observaciones_generales)
-            VALUES ($1, $2, $3, $4, $5, $6, $7)
-            RETURNING *
-        `, [
-            cliente_id,
-            estado_global || 'recibido',
-            fecha_entrega_prometida || null,
-            total_presupuestado,
-            senia_pagada || 0,
-            metodo_pago || null,
-            observaciones_generales || null
-        ]);
+        let pedidoRes;
+        if (customId) {
+            pedidoRes = await client.query(`
+                INSERT INTO pedidos (id, cliente_id, estado_global, fecha_entrega_prometida, total_presupuestado, senia_pagada, metodo_pago, observaciones_generales)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+                RETURNING *
+            `, [
+                parseInt(customId),
+                cliente_id,
+                estado_global || 'recibido',
+                fecha_entrega_prometida || null,
+                total_presupuestado,
+                senia_pagada || 0,
+                metodo_pago || null,
+                observaciones_generales || null
+            ]);
+            // Resincronizar la secuencia para evitar conflictos futuros
+            await client.query(`SELECT setval('pedidos_id_seq', (SELECT MAX(id) FROM pedidos))`);
+        } else {
+            pedidoRes = await client.query(`
+                INSERT INTO pedidos (cliente_id, estado_global, fecha_entrega_prometida, total_presupuestado, senia_pagada, metodo_pago, observaciones_generales)
+                VALUES ($1, $2, $3, $4, $5, $6, $7)
+                RETURNING *
+            `, [
+                cliente_id,
+                estado_global || 'recibido',
+                fecha_entrega_prometida || null,
+                total_presupuestado,
+                senia_pagada || 0,
+                metodo_pago || null,
+                observaciones_generales || null
+            ]);
+        }
 
         const pedido = pedidoRes.rows[0];
 

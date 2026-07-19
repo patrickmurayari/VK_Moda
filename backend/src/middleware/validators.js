@@ -88,9 +88,11 @@ const validatePedido = async (req, res, next) => {
         }
     }
 
-    // Validar fecha de entrega
-    const dateErr = validateDateNotPast(fecha_entrega_prometida, 'La fecha de entrega');
-    if (dateErr) return res.status(400).json(dateErr);
+    // Validar fecha de entrega (se omite en modo migración cuando viene un id manual)
+    if (!req.body.id) {
+        const dateErr = validateDateNotPast(fecha_entrega_prometida, 'La fecha de entrega');
+        if (dateErr) return res.status(400).json(dateErr);
+    }
 
     // Adjuntar total calculado para uso del controlador
     req._total_presupuestado = total_calculado;
