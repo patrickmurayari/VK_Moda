@@ -30,6 +30,8 @@ const emptyItem = () => ({
 });
 
 export default function OrderWizard() {
+    const ES_MODO_MIGRACION = false;
+
     const navigate = useNavigate();
     const [step, setStep] = useState(1); // 1: Pedido y Prendas, 2: Confirmar
     const [saving, setSaving] = useState(false);
@@ -56,6 +58,10 @@ export default function OrderWizard() {
     const [itemsListError, setItemsListError] = useState('');
     const [itemErrors, setItemErrors] = useState([{ desc: false, precio: false }]);
     const [nuevoClienteErrors, setNuevoClienteErrors] = useState({ nombre: false, telefono: false });
+
+    // Modo migración
+    const [idManual, setIdManual] = useState('');
+    const [estadoMigracion, setEstadoMigracion] = useState('recibido');
 
     // Buscar clientes
     useEffect(() => {
@@ -192,7 +198,9 @@ export default function OrderWizard() {
         setSaving(true);
         try {
             const payload = {
+                ...(ES_MODO_MIGRACION && idManual.trim() ? { id: parseInt(idManual) } : {}),
                 cliente_id: parseInt(clienteId),
+                estado_global: ES_MODO_MIGRACION ? estadoMigracion : 'recibido',
                 fecha_entrega_prometida: fechaEntrega || null,
                 metodo_pago: metodoPago || null,
                 senia_pagada: parseFloat(seniaPagada) || 0,
@@ -601,7 +609,6 @@ export default function OrderWizard() {
                                 type="date"
                                 value={fechaEntrega}
                                 onChange={(e) => { setFechaEntrega(e.target.value); setFechaError(false); }}
-                                min={new Date().toISOString().split('T')[0]}
                                 className={`w-full box-border px-3 py-2.5 border rounded-lg text-sm focus:ring-2 outline-none ${fechaError ? 'border-red-400 focus:ring-red-300' : 'border-stone-300 focus:ring-stone-400'}`}
                             />
                             {fechaError && (
@@ -681,6 +688,41 @@ export default function OrderWizard() {
                                 className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 outline-none resize-none"
                             />
                         </div>
+
+                        {ES_MODO_MIGRACION && (
+                            <div className="border border-amber-200 bg-amber-50 rounded-xl p-4 space-y-3">
+                                <div className="flex items-center gap-2">
+                                    <svg className="w-4 h-4 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                                    </svg>
+                                    <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide">Modo Migración</p>
+                                </div>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div>
+                                        <label className="block text-xs text-stone-500 mb-1">N° de Pedido (Manual)</label>
+                                        <input
+                                            type="number"
+                                            placeholder="Dejar vacío para auto"
+                                            value={idManual}
+                                            onChange={(e) => setIdManual(e.target.value)}
+                                            className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs text-stone-500 mb-1">Estado del Pedido</label>
+                                        <select
+                                            value={estadoMigracion}
+                                            onChange={(e) => setEstadoMigracion(e.target.value)}
+                                            className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-stone-400 outline-none"
+                                        >
+                                            <option value="recibido">Recibido (En Taller)</option>
+                                            <option value="terminado">Finalizado (Listo para Retirar)</option>
+                                            <option value="entregado">Entregado (Historial)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
 
                         <div className="border-t border-stone-200 pt-4">
                             <h4 className="text-sm font-medium text-stone-700 mb-3">Prendas ({items.length})</h4>
