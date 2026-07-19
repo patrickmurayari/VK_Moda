@@ -46,9 +46,7 @@ export default function DashboardLayout() {
     const navItems = [
         { to: '/admin', label: 'Dashboard', icon: 'home' },
         { to: '/admin/pedidos', label: 'Pedidos', icon: 'clipboard' },
-        { to: '/admin/cronograma', label: 'Cronograma', icon: 'calendar' },
-        { to: '/admin/finalizados', label: 'Finalizados', icon: 'check-circle' },
-        { to: '/admin/entregados', label: 'Entregados', icon: 'archive' },
+        { to: '/admin/gestion', label: 'Gestión de Pedidos', icon: 'calendar' },
         { to: '/admin/clientes', label: 'Clientes', icon: 'users' },
         { to: '/admin/categorias', label: 'Categorías', icon: 'tag' },
         { to: '/admin/productos', label: 'Productos', icon: 'box' },

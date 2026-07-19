@@ -79,7 +79,7 @@ export default function PedidoDetalle() {
             setPedido(data);
         } catch {
             toast.error('Error al cargar pedido');
-            navigate('/admin/cronograma');
+            navigate('/admin/gestion');
         } finally {
             setLoading(false);
         }
@@ -183,7 +183,7 @@ export default function PedidoDetalle() {
             const { data: { session } } = await supabase.auth.getSession();
             await deletePedidoApi(id, session.access_token);
             toast.success(`Pedido #${id} eliminado`);
-            navigate('/admin/cronograma');
+            navigate('/admin/gestion');
         } catch (err) {
             toast.error(err.message || 'Error al eliminar pedido');
             setDeletingPedido(false);
@@ -198,7 +198,7 @@ export default function PedidoDetalle() {
             const result = await deleteItemApi(id, itemId, session.access_token);
             if (result.pedido_eliminado) {
                 toast.success('Última prenda eliminada — pedido eliminado automáticamente.');
-                navigate('/admin/cronograma');
+                navigate('/admin/gestion');
             } else {
                 toast.success('Prenda eliminada');
                 setConfirmDeleteItemId(null);
@@ -235,7 +235,7 @@ export default function PedidoDetalle() {
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                 <div className="flex items-center gap-3">
-                    <button onClick={() => location.key !== 'default' ? navigate(-1) : navigate('/admin/cronograma')} className="p-2 rounded-lg hover:bg-stone-200 transition-colors shrink-0">
+                    <button onClick={() => location.key !== 'default' ? navigate(-1) : navigate('/admin/gestion')} className="p-2 rounded-lg hover:bg-stone-200 transition-colors shrink-0">
                         <svg className="w-5 h-5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                         </svg>
