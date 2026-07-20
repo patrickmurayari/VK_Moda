@@ -603,13 +603,13 @@ export default function OrderWizard() {
                         </div>
 
                         {/* Fecha de entrega + disponibilidad */}
-                        <div>
+                        <div className="min-w-0">
                             <label className="block text-xs text-stone-500 mb-1">Fecha de entrega <span className="text-red-500">*</span></label>
                             <input
                                 type="date"
                                 value={fechaEntrega}
                                 onChange={(e) => { setFechaEntrega(e.target.value); setFechaError(false); }}
-                                className={`w-full box-border px-3 py-2.5 border rounded-lg text-sm focus:ring-2 outline-none ${fechaError ? 'border-red-400 focus:ring-red-300' : 'border-stone-300 focus:ring-stone-400'}`}
+                                className={`w-full box-border appearance-none bg-white text-stone-900 px-3 py-2.5 border rounded-lg text-sm focus:ring-2 outline-none ${fechaError ? 'border-red-400 focus:ring-red-300' : 'border-stone-300 focus:ring-stone-400'}`}
                             />
                             {fechaError && (
                                 <p className="text-xs text-red-500 mt-1">La fecha de entrega es obligatoria.</p>
