@@ -119,7 +119,7 @@ export default function AdminProductos() {
                         placeholder="Buscar por nombre de producto..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2.5 bg-white border border-neutral-200 rounded-lg text-sm text-stone-800 placeholder:text-stone-400 focus:outline-none focus:border-black transition-colors"
+                        className="w-full pl-10 pr-4 py-2.5 bg-white border border-neutral-200 rounded-lg text-base sm:text-sm text-stone-800 placeholder:text-stone-400 focus:outline-none focus:border-black transition-colors"
                     />
                 </div>
                 <div ref={catRef} className="relative w-full sm:w-56">
@@ -130,7 +130,7 @@ export default function AdminProductos() {
                             value={catQuery}
                             onChange={(e) => { setCatQuery(e.target.value); setSelectedCategory(''); setCatOpen(true); }}
                             onFocus={() => setCatOpen(true)}
-                            className="w-full px-3 py-2.5 pr-8 bg-white border border-neutral-200 rounded-lg text-sm text-stone-800 placeholder:text-stone-400 focus:outline-none focus:border-black transition-colors"
+                            className="w-full px-3 py-2.5 pr-8 bg-white border border-neutral-200 rounded-lg text-base sm:text-sm text-stone-800 placeholder:text-stone-400 focus:outline-none focus:border-black transition-colors"
                         />
                         {selectedCategory ? (
                             <button

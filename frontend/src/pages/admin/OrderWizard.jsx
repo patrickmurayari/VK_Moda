@@ -264,7 +264,7 @@ export default function OrderWizard() {
         return dias;
     })();
 
-    const formatCurrency = (val) => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(val || 0);
+    const formatCurrency = (val) => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(val || 0);
 
     return (
         <div className="space-y-4 sm:space-y-6 w-full px-0 sm:px-0 md:max-w-2xl md:mx-auto">
@@ -332,7 +332,7 @@ export default function OrderWizard() {
                                     placeholder="Buscar por nombre, apellido o teléfono..."
                                     value={clienteSearch}
                                     onChange={(e) => { setClienteSearch(e.target.value); setShowNuevoCliente(false); setClienteError(false); }}
-                                    className={`w-full pl-10 pr-4 py-3 border rounded-lg text-sm focus:ring-2 outline-none ${clienteError ? 'border-red-400 focus:ring-red-300' : 'border-stone-300 focus:ring-stone-400 focus:border-stone-400'}`}
+                                    className={`w-full pl-10 pr-4 py-3 border rounded-lg text-base sm:text-sm focus:ring-2 outline-none ${clienteError ? 'border-red-400 focus:ring-red-300' : 'border-stone-300 focus:ring-stone-400 focus:border-stone-400'}`}
                                 />
                                 {searching && (
                                     <div className="absolute right-3 top-1/2 -translate-y-1/2">
@@ -401,7 +401,7 @@ export default function OrderWizard() {
                                                 placeholder="Nombre"
                                                 value={nuevoCliente.nombre}
                                                 onChange={(e) => { setNuevoCliente({ ...nuevoCliente, nombre: e.target.value }); setNuevoClienteErrors(prev => ({ ...prev, nombre: false })); }}
-                                                className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:ring-2 outline-none bg-white ${nuevoClienteErrors.nombre ? 'border-red-400 focus:ring-red-300' : 'border-stone-300 focus:ring-stone-400'}`}
+                                                className={`w-full px-3 py-2.5 border rounded-lg text-base sm:text-sm focus:ring-2 outline-none bg-white ${nuevoClienteErrors.nombre ? 'border-red-400 focus:ring-red-300' : 'border-stone-300 focus:ring-stone-400'}`}
                                             />
                                             {nuevoClienteErrors.nombre && <p className="text-xs text-red-500 mt-0.5">El nombre es obligatorio.</p>}
                                         </div>
@@ -412,7 +412,7 @@ export default function OrderWizard() {
                                                 placeholder="Apellido"
                                                 value={nuevoCliente.apellido}
                                                 onChange={(e) => setNuevoCliente({ ...nuevoCliente, apellido: e.target.value })}
-                                                className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 outline-none bg-white"
+                                                className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-base sm:text-sm focus:ring-2 focus:ring-stone-400 outline-none bg-white"
                                             />
                                         </div>
                                         <div>
@@ -422,7 +422,7 @@ export default function OrderWizard() {
                                                 placeholder="11-1234-5678"
                                                 value={nuevoCliente.telefono}
                                                 onChange={(e) => { setNuevoCliente({ ...nuevoCliente, telefono: e.target.value }); setNuevoClienteErrors(prev => ({ ...prev, telefono: false })); }}
-                                                className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:ring-2 outline-none bg-white ${nuevoClienteErrors.telefono ? 'border-red-400 focus:ring-red-300' : 'border-stone-300 focus:ring-stone-400'}`}
+                                                className={`w-full px-3 py-2.5 border rounded-lg text-base sm:text-sm focus:ring-2 outline-none bg-white ${nuevoClienteErrors.telefono ? 'border-red-400 focus:ring-red-300' : 'border-stone-300 focus:ring-stone-400'}`}
                                             />
                                             {nuevoClienteErrors.telefono && <p className="text-xs text-red-500 mt-0.5">El teléfono es obligatorio.</p>}
                                         </div>
@@ -433,7 +433,7 @@ export default function OrderWizard() {
                                                 placeholder="correo@ejemplo.com"
                                                 value={nuevoCliente.email}
                                                 onChange={(e) => setNuevoCliente({ ...nuevoCliente, email: e.target.value })}
-                                                className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 outline-none bg-white"
+                                                className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-base sm:text-sm focus:ring-2 focus:ring-stone-400 outline-none bg-white"
                                             />
                                         </div>
                                     </div>
@@ -489,7 +489,7 @@ export default function OrderWizard() {
                                         placeholder="Ej: Vestido largo de seda"
                                         value={item.descripcion_prenda}
                                         onChange={(e) => updateItem(idx, 'descripcion_prenda', e.target.value)}
-                                        className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:ring-2 outline-none ${err.desc ? 'border-red-400 focus:ring-red-300' : 'border-stone-300 focus:ring-stone-400'}`}
+                                        className={`w-full px-3 py-2.5 border rounded-lg text-base sm:text-sm focus:ring-2 outline-none ${err.desc ? 'border-red-400 focus:ring-red-300' : 'border-stone-300 focus:ring-stone-400'}`}
                                     />
                                     {err.desc && <p className="text-xs text-red-500 mt-0.5">La descripción es obligatoria.</p>}
                                 </div>
@@ -498,7 +498,7 @@ export default function OrderWizard() {
                                     <select
                                         value={item.tipo_trabajo}
                                         onChange={(e) => updateItem(idx, 'tipo_trabajo', e.target.value)}
-                                        className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-stone-400 outline-none"
+                                        className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-base sm:text-sm bg-white focus:ring-2 focus:ring-stone-400 outline-none"
                                     >
                                         <option value="" disabled>Seleccionar tipo de trabajo</option>
                                         <option value="confeccion">Confección</option>
@@ -514,7 +514,7 @@ export default function OrderWizard() {
                                         placeholder="0"
                                         value={item.precio_item}
                                         onChange={(e) => updateItem(idx, 'precio_item', e.target.value)}
-                                        className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:ring-2 outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${err.precio ? 'border-red-400 focus:ring-red-300' : 'border-stone-300 focus:ring-stone-400'}`}
+                                        className={`w-full px-3 py-2.5 border rounded-lg text-base sm:text-sm focus:ring-2 outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${err.precio ? 'border-red-400 focus:ring-red-300' : 'border-stone-300 focus:ring-stone-400'}`}
                                     />
                                     {err.precio && <p className="text-xs text-red-500 mt-0.5">El precio es obligatorio.</p>}
                                 </div>
@@ -538,7 +538,7 @@ export default function OrderWizard() {
                                     placeholder="Detalle adicional..."
                                     value={item.notas_especificas}
                                     onChange={(e) => updateItem(idx, 'notas_especificas', e.target.value)}
-                                    className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 outline-none"
+                                    className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-base sm:text-sm focus:ring-2 focus:ring-stone-400 outline-none"
                                 />
                             </div>
 
@@ -557,7 +557,7 @@ export default function OrderWizard() {
                                                     placeholder="cm"
                                                     value={item.medidas_json[m.key] || ''}
                                                     onChange={(e) => updateMedida(idx, m.key, e.target.value)}
-                                                    className="w-full px-2 py-1.5 border border-stone-300 rounded text-sm focus:ring-1 focus:ring-stone-400 outline-none"
+                                                    className="w-full px-2 py-1.5 border border-stone-300 rounded text-base sm:text-sm focus:ring-1 focus:ring-stone-400 outline-none"
                                                 />
                                             </div>
                                         ))}
@@ -609,7 +609,7 @@ export default function OrderWizard() {
                                 type="date"
                                 value={fechaEntrega}
                                 onChange={(e) => { setFechaEntrega(e.target.value); setFechaError(false); }}
-                                className={`w-full box-border appearance-none bg-white text-stone-900 px-3 py-2.5 border rounded-lg text-sm focus:ring-2 outline-none ${fechaError ? 'border-red-400 focus:ring-red-300' : 'border-stone-300 focus:ring-stone-400'}`}
+                                className={`w-full box-border appearance-none bg-white text-stone-900 px-3 py-2.5 border rounded-lg text-base sm:text-sm focus:ring-2 outline-none ${fechaError ? 'border-red-400 focus:ring-red-300' : 'border-stone-300 focus:ring-stone-400'}`}
                             />
                             {fechaError && (
                                 <p className="text-xs text-red-500 mt-1">La fecha de entrega es obligatoria.</p>
@@ -656,7 +656,7 @@ export default function OrderWizard() {
                                 <select
                                     value={metodoPago}
                                     onChange={(e) => setMetodoPago(e.target.value)}
-                                    className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-stone-400 outline-none"
+                                    className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-base sm:text-sm bg-white focus:ring-2 focus:ring-stone-400 outline-none"
                                 >
                                     <option value="">Seleccionar</option>
                                     <option value="efectivo">Efectivo</option>
@@ -672,7 +672,7 @@ export default function OrderWizard() {
                                     placeholder="0"
                                     value={seniaPagada}
                                     onChange={(e) => setSeniaPagada(e.target.value)}
-                                    className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                    className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-base sm:text-sm focus:ring-2 focus:ring-stone-400 outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                 />
                             </div>
                         </div>
@@ -685,7 +685,7 @@ export default function OrderWizard() {
                                 onChange={(e) => setObservaciones(e.target.value)}
                                 rows={3}
                                 placeholder="Notas adicionales sobre el pedido..."
-                                className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 outline-none resize-none"
+                                className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-base sm:text-sm focus:ring-2 focus:ring-stone-400 outline-none resize-none"
                             />
                         </div>
 
@@ -705,7 +705,7 @@ export default function OrderWizard() {
                                             placeholder="Dejar vacío para auto"
                                             value={idManual}
                                             onChange={(e) => setIdManual(e.target.value)}
-                                            className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                            className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-base sm:text-sm focus:ring-2 focus:ring-stone-400 outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                         />
                                     </div>
                                     <div>
@@ -713,7 +713,7 @@ export default function OrderWizard() {
                                         <select
                                             value={estadoMigracion}
                                             onChange={(e) => setEstadoMigracion(e.target.value)}
-                                            className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-stone-400 outline-none"
+                                            className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-base sm:text-sm bg-white focus:ring-2 focus:ring-stone-400 outline-none"
                                         >
                                             <option value="recibido">Recibido (En Taller)</option>
                                             <option value="terminado">Finalizado (Listo para Retirar)</option>

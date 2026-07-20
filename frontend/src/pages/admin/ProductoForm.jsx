@@ -263,7 +263,7 @@ export default function ProductoForm() {
                         value={formData.nombre}
                         onChange={handleChange}
                         disabled={saving}
-                        className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-stone-400 focus:border-transparent transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed ${
+                        className={`w-full px-4 py-3 border rounded-lg text-base sm:text-sm focus:ring-2 focus:ring-stone-400 focus:border-transparent transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed ${
                             errors.nombre ? 'border-red-500' : 'border-stone-300'
                         }`}
                         placeholder="Ej: Vestido rojo de seda"
@@ -289,7 +289,7 @@ export default function ProductoForm() {
                             step="1"
                             min="0"
                             disabled={saving}
-                            className={`w-full pl-8 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-stone-400 focus:border-transparent transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
+                            className={`w-full pl-8 pr-4 py-3 border rounded-lg text-base sm:text-sm focus:ring-2 focus:ring-stone-400 focus:border-transparent transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
                                 errors.precio ? 'border-red-500' : 'border-stone-300'
                             }`}
                             placeholder="0"
@@ -311,7 +311,7 @@ export default function ProductoForm() {
                         value={formData.categoria_id}
                         onChange={handleChange}
                         disabled={saving}
-                        className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-stone-400 focus:border-transparent transition-all outline-none bg-white disabled:opacity-50 disabled:cursor-not-allowed ${
+                        className={`w-full px-4 py-3 border rounded-lg text-base sm:text-sm focus:ring-2 focus:ring-stone-400 focus:border-transparent transition-all outline-none bg-white disabled:opacity-50 disabled:cursor-not-allowed ${
                             errors.categoria_id ? 'border-red-500' : 'border-stone-300'
                         }`}
                     >
@@ -447,7 +447,7 @@ export default function ProductoForm() {
                                             onChange={(e) => handleEtiquetaChange(index, e.target.value)}
                                             disabled={saving}
                                             placeholder="Ángulo / Detalle (Ej: Espalda, Calce, Textura - Opcional)"
-                                            className="flex-1 px-0 py-2 border-b border-neutral-200 focus:border-black rounded-none bg-transparent text-sm focus:outline-none transition-colors disabled:opacity-50"
+                                            className="flex-1 px-0 py-2 border-b border-neutral-200 focus:border-black rounded-none bg-transparent text-base sm:text-sm focus:outline-none transition-colors disabled:opacity-50"
                                         />
                                         <button
                                             type="button"
