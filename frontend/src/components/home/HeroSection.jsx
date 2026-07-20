@@ -18,7 +18,7 @@ function SlideImage({ slide, extraClass = '' }) {
             <img
                 src={slide.image}
                 alt={slide.alt}
-                className="lg:hidden absolute inset-0 w-full h-full object-cover object-top"
+                className="lg:hidden absolute inset-0 w-full h-full object-cover object-center"
                 loading="eager"
                 decoding="async"
             />

@@ -199,6 +199,38 @@ export async function buscarClientes(query, token) {
     return authFetchJSON(adminURL(`/clientes/buscar?q=${encodeURIComponent(query)}`), token);
 }
 
+// ── Admin: Contenido Web (Hero) ──
+
+export async function getHeroContenidoAdmin(token) {
+    return authFetchJSON(adminURL('/contenido/hero'), token);
+}
+
+export async function addHeroSlide(formData, token) {
+    return authFetchJSON(adminURL('/contenido/hero'), token, {
+        method: 'POST',
+        body: formData,
+    });
+}
+
+export async function reorderHeroSlide(id, direccion, token) {
+    return authFetchJSON(adminURL(`/contenido/hero/${id}/orden`), token, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ direccion }),
+    });
+}
+
+export async function deleteHeroSlide(id, token) {
+    return authFetchJSON(adminURL(`/contenido/hero/${id}`), token, { method: 'DELETE' });
+}
+
+export async function updateHeroImagen(id, formData, token) {
+    return authFetchJSON(adminURL(`/contenido/hero/${id}/imagen`), token, {
+        method: 'PUT',
+        body: formData,
+    });
+}
+
 // ── Admin: Categorías ──
 
 export async function getAdminCategorias(token) {
