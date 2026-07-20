@@ -4,12 +4,22 @@ const adminProductosController = require('../controllers/adminProductosControlle
 const categoriasController = require('../controllers/categoriasController');
 const clientesController = require('../controllers/clientesController');
 const pedidosController = require('../controllers/pedidosController');
+const contenidoController = require('../controllers/contenidoController');
 const { authMiddleware } = require('../middleware/auth');
 const validators = require('../middleware/validators');
 const upload = require('../middleware/upload');
 
 // Todas las rutas requieren autenticación
 router.use(authMiddleware);
+
+// Contenido Web — rutas específicas de hero ANTES del wildcard /:seccion
+router.get('/contenido/hero', contenidoController.getHeroSlides);
+router.post('/contenido/hero', upload.fields([{ name: 'imagen_mobile', maxCount: 1 }, { name: 'imagen_desktop', maxCount: 1 }]), contenidoController.addHeroSlide);
+router.put('/contenido/hero/:id/orden', contenidoController.reorderHeroSlide);
+router.put('/contenido/hero/:id/imagen', upload.single('imagen'), contenidoController.updateHeroImagen);
+router.delete('/contenido/hero/:id', contenidoController.deleteHeroSlide);
+// Contenido Web — genérico
+router.get('/contenido/:seccion', contenidoController.getContenidoBySeccion);
 
 // CRUD Categorías
 router.get('/categorias', categoriasController.getCategorias);
