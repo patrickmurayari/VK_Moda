@@ -59,6 +59,10 @@ export async function getContenido(seccion) {
     return fetchJSON(`${API_BASE}/contenido/${seccion}`);
 }
 
+export async function getHomeCategorias() {
+    return fetchJSON(`${API_BASE}/contenido/home-categorias`);
+}
+
 // ── Admin: Pedidos ──
 
 export async function getPedidos(token) {
@@ -199,7 +203,7 @@ export async function buscarClientes(query, token) {
     return authFetchJSON(adminURL(`/clientes/buscar?q=${encodeURIComponent(query)}`), token);
 }
 
-// ── Admin: Contenido Web (Hero) ──
+// ── Admin: Contenido Web ──
 
 export async function getHeroContenidoAdmin(token) {
     return authFetchJSON(adminURL('/contenido/hero'), token);
@@ -226,6 +230,27 @@ export async function deleteHeroSlide(id, token) {
 
 export async function updateHeroImagen(id, formData, token) {
     return authFetchJSON(adminURL(`/contenido/hero/${id}/imagen`), token, {
+        method: 'PUT',
+        body: formData,
+    });
+}
+
+// ── Admin: Contenido Web — Home Categorías ──
+
+export async function getHomeCategoriasSlotsAdmin(token) {
+    return authFetchJSON(adminURL('/contenido/home-categorias'), token);
+}
+
+export async function updateHomeCategoriaSlot(id, slug, token) {
+    return authFetchJSON(adminURL(`/contenido/home-categorias/${id}`), token, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slug }),
+    });
+}
+
+export async function uploadCategoriaImagen(id, formData, token) {
+    return authFetchJSON(adminURL(`/categorias/${id}/imagen`), token, {
         method: 'PUT',
         body: formData,
     });

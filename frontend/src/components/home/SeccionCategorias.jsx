@@ -1,30 +1,25 @@
 import { useEffect, useState } from 'react';
 import CardProducts from "../common/CardCategoria";
-import { getCategorias } from "../../services/api";
-
-// Import estático original (comentado — datos ahora desde API)
-// import { ProductsCategoria } from "../../data/categoriasData";
-
-const ACTIVE_SLUGS = ['buzos-mujer', 'camperas-hombre', 'camisas-mujer', 'sweaters-sin-cierre'];
+import { getHomeCategorias } from "../../services/api";
 
 function SeccionCategorias() {
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        getCategorias()
+        getHomeCategorias()
             .then((data) => {
                 const mapped = data
-                    .filter((cat) => ACTIVE_SLUGS.includes(cat.slug))
-                    .map((cat) => ({
-                        id: cat.id,
-                        id_name: cat.slug,
-                        image: cat.imagen_url,
-                        name: cat.nombre,
+                    .filter((row) => row.categoria_id && row.imagen_url)
+                    .map((row) => ({
+                        id: row.categoria_id,
+                        id_name: row.slug,
+                        image: row.imagen_url,
+                        name: row.nombre,
                     }));
                 setCategories(mapped);
             })
-            .catch((err) => console.error('Error cargando categorías:', err))
+            .catch((err) => console.error('Error cargando categorías home:', err))
             .finally(() => setLoading(false));
     }, []);
 
