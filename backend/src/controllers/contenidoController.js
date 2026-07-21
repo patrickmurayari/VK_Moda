@@ -340,4 +340,113 @@ const updateHomeColeccionSlot = async (req, res) => {
     }
 };
 
-module.exports = { getContenidoBySeccion, getHeroSlides, addHeroSlide, reorderHeroSlide, deleteHeroSlide, updateHeroImagen, getHomeCategorias, updateHomeCategoriaSlot, getHomeColeccion, getHomeColeccionAdmin, updateHomeColeccionSlot };
+// ── Helper: ensure 4 home_editorial slots exist (auto-init with defaults) ────
+
+const EDITORIAL_DEFAULTS = [
+    { orden: 1, titulo: 'Línea Sastrera',    subtitulo: 'Diseño y caída impecable',          descripcion: 'Prendas construidas con precisión artesanal. Cada detalle pensado para una silueta que habla por sí sola.',                                      imagen_url: 'https://vdatngjhpompoemllczo.supabase.co/storage/v1/object/public/ateliervya/fotoAtelier1.webp' },
+    { orden: 2, titulo: 'Colección Casual',  subtitulo: 'Comodidad sin resignar elegancia',  descripcion: 'La versatilidad hecha prenda. Piezas que acompañan desde el amanecer hasta la noche sin perder identidad.',                                      imagen_url: 'https://vdatngjhpompoemllczo.supabase.co/storage/v1/object/public/ateliervya/fotoAtelier2.webp' },
+    { orden: 3, titulo: 'Esencia Urbana',    subtitulo: 'La ciudad como pasarela',            descripcion: 'Confección local con mirada global. Diseños que dialogan con el ritmo contemporáneo.',                                                           imagen_url: 'https://vdatngjhpompoemllczo.supabase.co/storage/v1/object/public/ateliervya/fotoAtelier3.webp' },
+    { orden: 4, titulo: 'Hecho a Medida',    subtitulo: 'Tu cuerpo, tu corte',                descripcion: 'Cada prenda nace de un encargo. Trabajamos contigo para que el resultado sea exactamente lo que imaginaste.',                                    imagen_url: 'https://vdatngjhpompoemllczo.supabase.co/storage/v1/object/public/ateliervya/fotoAtelier4.webp' },
+];
+
+async function ensureHomeEditorialSlots() {
+    for (const item of EDITORIAL_DEFAULTS) {
+        await db.query(`
+            INSERT INTO contenido_web (seccion, posicion, orden, titulo, subtitulo, imagen_url, imagen_desktop_url)
+            SELECT 'home_editorial', 'destacada', $1, $2, $3, $4, $5
+            WHERE NOT EXISTS (
+                SELECT 1 FROM contenido_web
+                WHERE seccion = 'home_editorial' AND posicion = 'destacada' AND orden = $1
+            )`,
+            [item.orden, item.titulo, item.subtitulo, item.imagen_url, item.descripcion]
+        );
+    }
+}
+
+// ── Public: Home Editorial ───────────────────────────────────────────────────
+
+const getHomeEditorial = async (req, res) => {
+    try {
+        const result = await db.query(`
+            SELECT DISTINCT ON (orden)
+                id, orden, titulo, subtitulo, imagen_url,
+                imagen_desktop_url AS descripcion
+            FROM contenido_web
+            WHERE seccion = 'home_editorial' AND posicion = 'destacada'
+            ORDER BY orden ASC, id ASC
+            LIMIT 4
+        `);
+        res.json(result.rows);
+    } catch (err) {
+        console.error('[getHomeEditorial] Error:', err);
+        res.status(500).json({ error: 'Error al obtener editorial' });
+    }
+};
+
+// ── Admin: Home Editorial ────────────────────────────────────────────────────
+
+const getHomeEditorialAdmin = async (req, res) => {
+    try {
+        await ensureHomeEditorialSlots();
+        const result = await db.query(`
+            SELECT DISTINCT ON (orden)
+                id, orden, titulo, subtitulo, imagen_url,
+                imagen_desktop_url AS descripcion
+            FROM contenido_web
+            WHERE seccion = 'home_editorial' AND posicion = 'destacada'
+            ORDER BY orden ASC, id ASC
+            LIMIT 4
+        `);
+        res.json(result.rows);
+    } catch (err) {
+        console.error('[getHomeEditorialAdmin] Error:', err);
+        res.status(500).json({ error: err.message });
+    }
+};
+
+const updateHomeEditorialTextos = async (req, res) => {
+    const { id } = req.params;
+    const { titulo, subtitulo, descripcion } = req.body;
+
+    try {
+        const result = await db.query(
+            `UPDATE contenido_web
+             SET titulo = $1, subtitulo = $2, imagen_desktop_url = $3
+             WHERE id = $4 AND seccion = 'home_editorial'
+             RETURNING id, orden, titulo, subtitulo, imagen_url, imagen_desktop_url AS descripcion`,
+            [titulo?.trim() ?? '', subtitulo?.trim() ?? '', descripcion?.trim() ?? '', id]
+        );
+        if (!result.rows.length) return res.status(404).json({ error: 'Bloque editorial no encontrado' });
+
+        console.log(`[updateHomeEditorialTextos] id=${id}`);
+        res.json({ success: true, bloque: result.rows[0] });
+    } catch (err) {
+        console.error('[updateHomeEditorialTextos] Error:', err);
+        res.status(500).json({ error: err.message });
+    }
+};
+
+const updateHomeEditorialImagen = async (req, res) => {
+    const { id } = req.params;
+    if (!req.file) return res.status(400).json({ error: 'Se requiere una imagen' });
+
+    try {
+        const publicUrl = await uploadHeroImage(req.file);
+        const result = await db.query(
+            `UPDATE contenido_web
+             SET imagen_url = $1
+             WHERE id = $2 AND seccion = 'home_editorial'
+             RETURNING id, imagen_url`,
+            [publicUrl, id]
+        );
+        if (!result.rows.length) return res.status(404).json({ error: 'Bloque editorial no encontrado' });
+
+        console.log(`[updateHomeEditorialImagen] id=${id}`);
+        res.json({ success: true, imagen_url: publicUrl });
+    } catch (err) {
+        console.error('[updateHomeEditorialImagen] Error:', err);
+        res.status(500).json({ error: err.message });
+    }
+};
+
+module.exports = { getContenidoBySeccion, getHeroSlides, addHeroSlide, reorderHeroSlide, deleteHeroSlide, updateHeroImagen, getHomeCategorias, updateHomeCategoriaSlot, getHomeColeccion, getHomeColeccionAdmin, updateHomeColeccionSlot, getHomeEditorial, getHomeEditorialAdmin, updateHomeEditorialTextos, updateHomeEditorialImagen };

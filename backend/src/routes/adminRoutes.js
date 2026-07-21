@@ -24,6 +24,10 @@ router.put('/contenido/home-categorias/:id', contenidoController.updateHomeCateg
 // Contenido Web — home colección (8 slots)
 router.get('/contenido/home-coleccion', contenidoController.getHomeColeccionAdmin);
 router.put('/contenido/home-coleccion/:id', contenidoController.updateHomeColeccionSlot);
+// Contenido Web — home editorial (4 bloques)
+router.get('/contenido/home-editorial', contenidoController.getHomeEditorialAdmin);
+router.put('/contenido/home-editorial/:id', contenidoController.updateHomeEditorialTextos);
+router.put('/contenido/home-editorial/:id/imagen', upload.single('imagen'), contenidoController.updateHomeEditorialImagen);
 // Contenido Web — genérico
 router.get('/contenido/:seccion', contenidoController.getContenidoBySeccion);
 
