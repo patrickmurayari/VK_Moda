@@ -32,6 +32,7 @@ export default function ProductDetail() {
     const [error, setError] = useState(null);
     const [selectedImage, setSelectedImage] = useState(null);
     const [talleSeleccionado, setTalleSeleccionado] = useState(null);
+    const [errorTalle, setErrorTalle] = useState(false);
     const { agregarAlCarrito, setDrawerOpen } = useCart();
 
     useEffect(() => {
@@ -82,6 +83,11 @@ export default function ProductDetail() {
     }
 
     const handleAgregarAlCarrito = () => {
+        if (talles.length > 0 && !talles.includes('Único') && !talleSeleccionado) {
+            setErrorTalle(true);
+            return;
+        }
+        setErrorTalle(false);
         agregarAlCarrito(producto, talleSeleccionado);
         setDrawerOpen(true);
     };
@@ -192,7 +198,7 @@ export default function ProductDetail() {
                             <p className="font-body text-[10px] tracking-[0.2em] uppercase text-neutral-400 mb-3">
                                 Talle
                             </p>
-                            <div className="flex flex-wrap gap-2">
+                            <div className={`flex flex-wrap gap-2 rounded p-1 -m-1 transition-all ${errorTalle ? 'ring-1 ring-red-400' : ''}`}>
                                 {hileraTalles.map(talle => {
                                     const disponible = talles.includes(talle);
                                     const seleccionado = talleSeleccionado === talle;
@@ -200,7 +206,7 @@ export default function ProductDetail() {
                                         <button
                                             key={talle}
                                             disabled={!disponible}
-                                            onClick={() => setTalleSeleccionado(seleccionado ? null : talle)}
+                                            onClick={() => { setTalleSeleccionado(seleccionado ? null : talle); setErrorTalle(false); }}
                                             className={`px-4 py-2 text-xs font-body tracking-wide border transition-all ${
                                                 !disponible
                                                     ? 'opacity-40 bg-neutral-50 text-neutral-300 border-neutral-100 line-through cursor-not-allowed'
@@ -214,18 +220,18 @@ export default function ProductDetail() {
                                     );
                                 })}
                             </div>
+                            {errorTalle && (
+                                <p className="text-red-500 text-xs font-medium mt-2 animate-pulse">
+                                    Por favor, seleccioná un talle para continuar.
+                                </p>
+                            )}
                         </div>
                     )}
 
                     {/* Agregar al Carrito CTA */}
                     <button
                         onClick={handleAgregarAlCarrito}
-                        disabled={talles.length > 0 && !talles.includes('Único') && !talleSeleccionado}
-                        className={`inline-flex items-center justify-center gap-3 w-full sm:w-auto px-8 py-3.5 font-body text-xs uppercase tracking-widest transition-colors ${
-                            (talles.length > 0 && !talles.includes('Único') && !talleSeleccionado)
-                                ? 'bg-neutral-200 text-neutral-400 cursor-not-allowed'
-                                : 'bg-black text-white hover:bg-neutral-800'
-                        }`}
+                        className="inline-flex items-center justify-center gap-3 w-full sm:w-auto px-8 py-3.5 font-body text-xs uppercase tracking-widest transition-colors bg-black text-white hover:bg-neutral-800"
                     >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
