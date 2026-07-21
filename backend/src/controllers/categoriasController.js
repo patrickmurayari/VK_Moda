@@ -1,4 +1,8 @@
 const db = require('../config/db');
+const supabaseAdmin = require('../config/supabaseAdmin');
+const { processProductImage } = require('../utils/imageProcessor');
+
+const CAT_BUCKET = 'productos';
 
 const getCategorias = async (req, res) => {
     try {
@@ -285,4 +289,34 @@ const deleteCategoria = async (req, res) => {
     }
 };
 
-module.exports = { getCategorias, getCategoryTree, getCategoryContext, getCategoriasSelectOptions, createCategoria, updateCategoria, deleteCategoria };
+const uploadCategoriaImagen = async (req, res) => {
+    const { id } = req.params;
+    if (!req.file) return res.status(400).json({ error: 'Se requiere una imagen' });
+
+    try {
+        const processed = await processProductImage(req.file.buffer, req.file.mimetype, req.file.originalname);
+        const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.webp`;
+        const storagePath = `categorias/${fileName}`;
+
+        const { error } = await supabaseAdmin.storage
+            .from(CAT_BUCKET)
+            .upload(storagePath, processed, { contentType: 'image/webp', upsert: false });
+        if (error) throw error;
+
+        const { data: { publicUrl } } = supabaseAdmin.storage.from(CAT_BUCKET).getPublicUrl(storagePath);
+
+        const result = await db.query(
+            'UPDATE categorias SET imagen_url = $1 WHERE id = $2 RETURNING id, nombre, slug, imagen_url',
+            [publicUrl, id]
+        );
+        if (!result.rows.length) return res.status(404).json({ error: 'Categoría no encontrada' });
+
+        console.log(`[uploadCategoriaImagen] cat id=${id} → ${publicUrl}`);
+        res.json({ success: true, url: publicUrl, categoria: result.rows[0] });
+    } catch (err) {
+        console.error('[uploadCategoriaImagen] Error:', err);
+        res.status(500).json({ error: err.message });
+    }
+};
+
+module.exports = { getCategorias, getCategoryTree, getCategoryContext, getCategoriasSelectOptions, createCategoria, updateCategoria, deleteCategoria, uploadCategoriaImagen };

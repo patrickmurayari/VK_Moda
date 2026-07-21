@@ -158,4 +158,63 @@ const updateHeroImagen = async (req, res) => {
     }
 };
 
-module.exports = { getContenidoBySeccion, getHeroSlides, addHeroSlide, reorderHeroSlide, deleteHeroSlide, updateHeroImagen };
+// ── Admin + Public: Home Categorías (4 slots fijos) ─────────────────────────
+
+const getHomeCategorias = async (req, res) => {
+    try {
+        const result = await db.query(`
+            SELECT
+                cw.id,
+                cw.orden,
+                cw.titulo          AS slug,
+                c.id               AS categoria_id,
+                c.nombre,
+                c.imagen_url,
+                c.slug             AS categoria_slug
+            FROM contenido_web cw
+            LEFT JOIN categorias c ON c.slug = cw.titulo
+            WHERE cw.seccion = 'home_categorias' AND cw.posicion = 'destacada'
+            ORDER BY cw.orden ASC
+            LIMIT 4
+        `);
+        res.json(result.rows);
+    } catch (err) {
+        console.error('[getHomeCategorias] Error:', err);
+        res.status(500).json({ error: 'Error al obtener categorías de la home' });
+    }
+};
+
+const updateHomeCategoriaSlot = async (req, res) => {
+    const { id } = req.params;
+    const { slug } = req.body;
+
+    if (!slug || typeof slug !== 'string' || !slug.trim()) {
+        return res.status(400).json({ error: 'Se requiere el slug de la categoría' });
+    }
+
+    try {
+        const catResult = await db.query(
+            'SELECT id, nombre, imagen_url FROM categorias WHERE slug = $1',
+            [slug.trim()]
+        );
+        if (!catResult.rows.length) {
+            return res.status(404).json({ error: `No existe una categoría con slug "${slug}"` });
+        }
+
+        const result = await db.query(
+            "UPDATE contenido_web SET titulo = $1 WHERE id = $2 AND seccion = 'home_categorias' RETURNING *",
+            [slug.trim(), id]
+        );
+        if (!result.rows.length) {
+            return res.status(404).json({ error: 'Slot no encontrado' });
+        }
+
+        console.log(`[updateHomeCategoriaSlot] slot id=${id} → ${slug}`);
+        res.json({ success: true, slot: result.rows[0], categoria: catResult.rows[0] });
+    } catch (err) {
+        console.error('[updateHomeCategoriaSlot] Error:', err);
+        res.status(500).json({ error: err.message });
+    }
+};
+
+module.exports = { getContenidoBySeccion, getHeroSlides, addHeroSlide, reorderHeroSlide, deleteHeroSlide, updateHeroImagen, getHomeCategorias, updateHomeCategoriaSlot };

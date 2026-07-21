@@ -18,9 +18,14 @@ router.post('/contenido/hero', upload.fields([{ name: 'imagen_mobile', maxCount:
 router.put('/contenido/hero/:id/orden', contenidoController.reorderHeroSlide);
 router.put('/contenido/hero/:id/imagen', upload.single('imagen'), contenidoController.updateHeroImagen);
 router.delete('/contenido/hero/:id', contenidoController.deleteHeroSlide);
+// Contenido Web — home categorías (4 slots)
+router.get('/contenido/home-categorias', contenidoController.getHomeCategorias);
+router.put('/contenido/home-categorias/:id', contenidoController.updateHomeCategoriaSlot);
 // Contenido Web — genérico
 router.get('/contenido/:seccion', contenidoController.getContenidoBySeccion);
 
+// Imagen de categoría (upload y process)
+router.put('/categorias/:id/imagen', upload.single('imagen'), categoriasController.uploadCategoriaImagen);
 // CRUD Categorías
 router.get('/categorias', categoriasController.getCategorias);
 router.post('/categorias', categoriasController.createCategoria);
