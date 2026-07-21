@@ -5,6 +5,8 @@ import { supabase } from '@/lib/supabase';
 import { getProductos, deleteProducto } from '@/services/api';
 import { formatPrecio } from '@/utils/format';
 
+const ITEMS_PER_PAGE = 10;
+
 // Componente de esqueleto de carga adaptado a mobile
 function ProductSkeleton() {
     return (
@@ -27,10 +29,15 @@ export default function AdminProductos() {
     const [catQuery, setCatQuery] = useState('');
     const [catOpen, setCatOpen] = useState(false);
     const catRef = useRef(null);
+    const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
         fetchProductos();
     }, []);
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm, selectedCategory]);
 
     useEffect(() => {
         const handler = (e) => {
@@ -70,6 +77,12 @@ export default function AdminProductos() {
         const coincideCategoria = selectedCategory === '' || producto.categoria_nombre === selectedCategory;
         return coincideNombre && coincideCategoria;
     });
+
+    const totalPages = Math.ceil(productosFiltrados.length / ITEMS_PER_PAGE);
+    const productosPagina = productosFiltrados.slice(
+        (currentPage - 1) * ITEMS_PER_PAGE,
+        currentPage * ITEMS_PER_PAGE
+    );
 
     const handleDelete = async (id) => {
         if (!window.confirm('¿Estás seguro de eliminar este producto?')) return;
@@ -214,7 +227,7 @@ export default function AdminProductos() {
                                     </td>
                                 </tr>
                             ) : (
-                                productosFiltrados.map((producto) => (
+                                productosPagina.map((producto) => (
                                     <tr key={producto.id} className="hover:bg-stone-50 transition-colors">
                                         <td className="px-4 py-3 align-middle">
                                             <div className="flex items-center gap-3">
@@ -282,6 +295,69 @@ export default function AdminProductos() {
                     </table>
                 </div>
             </div>
+
+            {/* Pagination bar */}
+            {!loading && productosFiltrados.length > ITEMS_PER_PAGE && (
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-1">
+                    <p className="text-xs text-stone-500 shrink-0">
+                        Mostrando{' '}
+                        <span className="font-medium text-stone-700">
+                            {(currentPage - 1) * ITEMS_PER_PAGE + 1}–{Math.min(currentPage * ITEMS_PER_PAGE, productosFiltrados.length)}
+                        </span>{' '}de{' '}
+                        <span className="font-medium text-stone-700">{productosFiltrados.length}</span>{' '}productos
+                    </p>
+                    <div className="flex items-center gap-1">
+                        <button
+                            onClick={() => setCurrentPage(p => p - 1)}
+                            disabled={currentPage === 1}
+                            className="px-3 py-1.5 text-xs rounded-lg border border-stone-200 text-stone-600 hover:bg-stone-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                        >
+                            Anterior
+                        </button>
+                        {(() => {
+                            const pages = [];
+                            const delta = 2;
+                            const range = [];
+                            for (let i = Math.max(1, currentPage - delta); i <= Math.min(totalPages, currentPage + delta); i++) {
+                                range.push(i);
+                            }
+                            if (range[0] > 1) {
+                                pages.push(1);
+                                if (range[0] > 2) pages.push('...');
+                            }
+                            range.forEach(p => pages.push(p));
+                            if (range[range.length - 1] < totalPages) {
+                                if (range[range.length - 1] < totalPages - 1) pages.push('...');
+                                pages.push(totalPages);
+                            }
+                            return pages.map((p, i) =>
+                                p === '...' ? (
+                                    <span key={`ellipsis-${i}`} className="px-2 text-xs text-stone-400">…</span>
+                                ) : (
+                                    <button
+                                        key={p}
+                                        onClick={() => setCurrentPage(p)}
+                                        className={`min-w-[2rem] px-2 py-1.5 text-xs rounded-lg border transition-colors ${
+                                            currentPage === p
+                                                ? 'bg-stone-800 text-white border-stone-800'
+                                                : 'border-stone-200 text-stone-600 hover:bg-stone-50'
+                                        }`}
+                                    >
+                                        {p}
+                                    </button>
+                                )
+                            );
+                        })()}
+                        <button
+                            onClick={() => setCurrentPage(p => p + 1)}
+                            disabled={currentPage === totalPages}
+                            className="px-3 py-1.5 text-xs rounded-lg border border-stone-200 text-stone-600 hover:bg-stone-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                        >
+                            Siguiente
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
 
         {/* Image preview modal */}
