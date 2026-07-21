@@ -1,39 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-
-const LOOKBOOK_ITEMS = [
-    {
-        id: 1,
-        urlImagen: 'https://vdatngjhpompoemllczo.supabase.co/storage/v1/object/public/ateliervya/fotoAtelier1.webp',
-        titulo: 'Línea Sastrera',
-        subtitulo: 'Diseño y caída impecable',
-        texto: 'Prendas construidas con precisión artesanal. Cada detalle pensado para una silueta que habla por sí sola.',
-        reverse: false,
-    },
-    {
-        id: 2,
-        urlImagen: 'https://vdatngjhpompoemllczo.supabase.co/storage/v1/object/public/ateliervya/fotoAtelier2.webp',
-        titulo: 'Colección Casual',
-        subtitulo: 'Comodidad sin resignar elegancia',
-        texto: 'La versatilidad hecha prenda. Piezas que acompañan desde el amanecer hasta la noche sin perder identidad.',
-        reverse: true,
-    },
-    {
-        id: 3,
-        urlImagen: 'https://vdatngjhpompoemllczo.supabase.co/storage/v1/object/public/ateliervya/fotoAtelier3.webp',
-        titulo: 'Esencia Urbana',
-        subtitulo: 'La ciudad como pasarela',
-        texto: 'Confección local con mirada global. Diseños que dialogan con el ritmo contemporáneo.',
-        reverse: false,
-    },
-    {
-        id: 4,
-        urlImagen: 'https://vdatngjhpompoemllczo.supabase.co/storage/v1/object/public/ateliervya/fotoAtelier4.webp',
-        titulo: 'Hecho a Medida',
-        subtitulo: 'Tu cuerpo, tu corte',
-        texto: 'Cada prenda nace de un encargo. Trabajamos contigo para que el resultado sea exactamente lo que imaginaste.',
-        reverse: true,
-    },
-];
+import { getHomeEditorial } from '../../services/api';
 
 function LookbookRow({ item }) {
     const rowRef = useRef(null);
@@ -67,7 +33,7 @@ function LookbookRow({ item }) {
             {/* Image */}
             <div className={`w-full h-[70vh] md:h-screen overflow-hidden bg-neutral-100 ${item.reverse ? 'md:order-last' : ''}`}>
                 <img
-                    src={item.urlImagen}
+                    src={item.imagen_url}
                     alt={item.titulo}
                     loading="lazy"
                     className="w-full h-full object-cover transform hover:scale-[1.02] transition-transform duration-1000 ease-out"
@@ -79,25 +45,43 @@ function LookbookRow({ item }) {
                 <p className="font-body text-[10px] tracking-[0.3em] uppercase text-neutral-400">
                     V&A Diseño y Moda
                 </p>
-                <h3 className="font-display text-3xl md:text-4xl tracking-[0.15em] uppercase text-black leading-tight">
-                    {item.titulo}
-                </h3>
-                <p className="font-body text-sm tracking-[0.08em] text-neutral-500 leading-relaxed">
-                    {item.subtitulo}
-                </p>
-                <div className="h-px w-12 bg-neutral-300" />
-                <p className="font-body text-sm text-neutral-600 leading-relaxed max-w-sm">
-                    {item.texto}
-                </p>
+                {item.titulo && (
+                    <h3 className="font-display text-3xl md:text-4xl tracking-[0.15em] uppercase text-black leading-tight">
+                        {item.titulo}
+                    </h3>
+                )}
+                {item.subtitulo && (
+                    <p className="font-body text-sm tracking-[0.08em] text-neutral-500 leading-relaxed">
+                        {item.subtitulo}
+                    </p>
+                )}
+                {(item.subtitulo || item.titulo) && item.descripcion && (
+                    <div className="h-px w-12 bg-neutral-300" />
+                )}
+                {item.descripcion && (
+                    <p className="font-body text-sm text-neutral-600 leading-relaxed max-w-sm">
+                        {item.descripcion}
+                    </p>
+                )}
             </div>
         </div>
     );
 }
 
 export default function EditorialLookbook() {
+    const [items, setItems] = useState([]);
+
+    useEffect(() => {
+        getHomeEditorial()
+            .then(data => setItems(data.map((row, i) => ({ ...row, reverse: i % 2 !== 0 }))))
+            .catch(err => console.error('Error cargando editorial:', err));
+    }, []);
+
+    if (items.length === 0) return null;
+
     return (
         <section className="w-full">
-            {LOOKBOOK_ITEMS.map((item) => (
+            {items.map((item) => (
                 <LookbookRow key={item.id} item={item} />
             ))}
         </section>

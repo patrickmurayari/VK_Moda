@@ -67,6 +67,10 @@ export async function getHomeColeccion() {
     return fetchJSON(`${API_BASE}/contenido/home-coleccion`);
 }
 
+export async function getHomeEditorial() {
+    return fetchJSON(`${API_BASE}/contenido/home-editorial`);
+}
+
 // ── Admin: Pedidos ──
 
 export async function getPedidos(token) {
@@ -271,6 +275,27 @@ export async function updateHomeColeccionSlot(id, producto_id, token) {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ producto_id }),
+    });
+}
+
+// ── Admin: Contenido Web — Home Editorial ──
+
+export async function getHomeEditorialAdmin(token) {
+    return authFetchJSON(adminURL('/contenido/home-editorial'), token);
+}
+
+export async function updateHomeEditorialTextos(id, data, token) {
+    return authFetchJSON(adminURL(`/contenido/home-editorial/${id}`), token, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+    });
+}
+
+export async function updateHomeEditorialImagen(id, formData, token) {
+    return authFetchJSON(adminURL(`/contenido/home-editorial/${id}/imagen`), token, {
+        method: 'PUT',
+        body: formData,
     });
 }
 
