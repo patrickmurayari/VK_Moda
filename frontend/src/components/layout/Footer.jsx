@@ -145,7 +145,7 @@ function Footer() {
                   className="inline-flex items-center gap-2 px-3 py-2 border border-neutral-600 rounded-lg text-xs text-neutral-200 hover:border-white hover:text-white transition-colors duration-300"
                 >
                   <FiMapPin className="w-3 h-3" strokeWidth={1.5} />
-                  Ver en Google Maps
+                  Ver en Google Mapss
                 </a>
               </div>
               {/* Desktop: iframe embebido */}
