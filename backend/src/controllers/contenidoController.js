@@ -217,4 +217,127 @@ const updateHomeCategoriaSlot = async (req, res) => {
     }
 };
 
-module.exports = { getContenidoBySeccion, getHeroSlides, addHeroSlide, reorderHeroSlide, deleteHeroSlide, updateHeroImagen, getHomeCategorias, updateHomeCategoriaSlot };
+// ── Helper: ensure 8 home_coleccion slots exist (auto-init) ─────────────────
+
+async function ensureHomeColeccionSlots() {
+    const countResult = await db.query(
+        "SELECT COUNT(*) AS cnt FROM contenido_web WHERE seccion = 'home_coleccion' AND posicion = 'destacada'"
+    );
+    const count = parseInt(countResult.rows[0].cnt, 10);
+    if (count >= 8) return;
+
+    const existing = await db.query(
+        "SELECT orden FROM contenido_web WHERE seccion = 'home_coleccion' AND posicion = 'destacada' ORDER BY orden ASC"
+    );
+    const usedOrdenes = new Set(existing.rows.map(r => r.orden));
+    const missing = [];
+    for (let i = 1; i <= 8; i++) {
+        if (!usedOrdenes.has(i)) missing.push(i);
+    }
+
+    const productos = await db.query(
+        'SELECT id FROM productos ORDER BY id DESC LIMIT $1',
+        [missing.length]
+    );
+
+    for (let i = 0; i < missing.length; i++) {
+        const productoId = productos.rows[i]?.id;
+        await db.query(`
+            INSERT INTO contenido_web (seccion, posicion, titulo, orden, imagen_url)
+            SELECT 'home_coleccion', 'destacada', $1, $2, ''
+            WHERE NOT EXISTS (
+                SELECT 1 FROM contenido_web
+                WHERE seccion = 'home_coleccion' AND posicion = 'destacada' AND orden = $2
+            )`,
+            [productoId ? String(productoId) : null, missing[i]]
+        );
+    }
+    console.log(`[ensureHomeColeccionSlots] Inicializados ${missing.length} slot(s) faltantes`);
+}
+
+// ── Public: Home Colección (8 productos configurados) ────────────────────────
+
+const getHomeColeccion = async (req, res) => {
+    try {
+        const result = await db.query(`
+            SELECT DISTINCT ON (cw.orden)
+                cw.id    AS slot_id,
+                cw.orden,
+                p.id,
+                p.nombre,
+                p.imagen_url,
+                p.precio
+            FROM contenido_web cw
+            LEFT JOIN productos p ON p.id::text = cw.titulo
+            WHERE cw.seccion = 'home_coleccion' AND cw.posicion = 'destacada'
+              AND p.id IS NOT NULL
+            ORDER BY cw.orden ASC, cw.id ASC
+            LIMIT 8
+        `);
+        res.json(result.rows);
+    } catch (err) {
+        console.error('[getHomeColeccion] Error:', err);
+        res.status(500).json({ error: 'Error al obtener colección de la home' });
+    }
+};
+
+// ── Admin: Home Colección ────────────────────────────────────────────────────
+
+const getHomeColeccionAdmin = async (req, res) => {
+    try {
+        await ensureHomeColeccionSlots();
+        const result = await db.query(`
+            SELECT DISTINCT ON (cw.orden)
+                cw.id          AS id,
+                cw.orden,
+                cw.titulo      AS producto_id,
+                p.nombre,
+                p.imagen_url,
+                p.precio
+            FROM contenido_web cw
+            LEFT JOIN productos p ON p.id::text = cw.titulo
+            WHERE cw.seccion = 'home_coleccion' AND cw.posicion = 'destacada'
+            ORDER BY cw.orden ASC, cw.id ASC
+            LIMIT 8
+        `);
+        res.json(result.rows);
+    } catch (err) {
+        console.error('[getHomeColeccionAdmin] Error:', err);
+        res.status(500).json({ error: err.message });
+    }
+};
+
+const updateHomeColeccionSlot = async (req, res) => {
+    const { id } = req.params;
+    const { producto_id } = req.body;
+
+    if (!producto_id) {
+        return res.status(400).json({ error: 'Se requiere producto_id' });
+    }
+
+    try {
+        const prodResult = await db.query(
+            'SELECT id, nombre, imagen_url, precio FROM productos WHERE id = $1',
+            [producto_id]
+        );
+        if (!prodResult.rows.length) {
+            return res.status(404).json({ error: 'Producto no encontrado' });
+        }
+
+        const result = await db.query(
+            "UPDATE contenido_web SET titulo = $1 WHERE id = $2 AND seccion = 'home_coleccion' RETURNING *",
+            [String(producto_id), id]
+        );
+        if (!result.rows.length) {
+            return res.status(404).json({ error: 'Slot no encontrado' });
+        }
+
+        console.log(`[updateHomeColeccionSlot] slot id=${id} → producto ${producto_id}`);
+        res.json({ success: true, slot: result.rows[0], producto: prodResult.rows[0] });
+    } catch (err) {
+        console.error('[updateHomeColeccionSlot] Error:', err);
+        res.status(500).json({ error: err.message });
+    }
+};
+
+module.exports = { getContenidoBySeccion, getHeroSlides, addHeroSlide, reorderHeroSlide, deleteHeroSlide, updateHeroImagen, getHomeCategorias, updateHomeCategoriaSlot, getHomeColeccion, getHomeColeccionAdmin, updateHomeColeccionSlot };

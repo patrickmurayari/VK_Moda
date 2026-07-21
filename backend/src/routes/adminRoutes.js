@@ -21,6 +21,9 @@ router.delete('/contenido/hero/:id', contenidoController.deleteHeroSlide);
 // Contenido Web — home categorías (4 slots)
 router.get('/contenido/home-categorias', contenidoController.getHomeCategorias);
 router.put('/contenido/home-categorias/:id', contenidoController.updateHomeCategoriaSlot);
+// Contenido Web — home colección (8 slots)
+router.get('/contenido/home-coleccion', contenidoController.getHomeColeccionAdmin);
+router.put('/contenido/home-coleccion/:id', contenidoController.updateHomeColeccionSlot);
 // Contenido Web — genérico
 router.get('/contenido/:seccion', contenidoController.getContenidoBySeccion);
 
