@@ -63,6 +63,10 @@ export async function getHomeCategorias() {
     return fetchJSON(`${API_BASE}/contenido/home-categorias`);
 }
 
+export async function getHomeColeccion() {
+    return fetchJSON(`${API_BASE}/contenido/home-coleccion`);
+}
+
 // ── Admin: Pedidos ──
 
 export async function getPedidos(token) {
@@ -253,6 +257,20 @@ export async function uploadCategoriaImagen(id, formData, token) {
     return authFetchJSON(adminURL(`/categorias/${id}/imagen`), token, {
         method: 'PUT',
         body: formData,
+    });
+}
+
+// ── Admin: Contenido Web — Home Colección ──
+
+export async function getHomeColeccionAdmin(token) {
+    return authFetchJSON(adminURL('/contenido/home-coleccion'), token);
+}
+
+export async function updateHomeColeccionSlot(id, producto_id, token) {
+    return authFetchJSON(adminURL(`/contenido/home-coleccion/${id}`), token, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ producto_id }),
     });
 }
 

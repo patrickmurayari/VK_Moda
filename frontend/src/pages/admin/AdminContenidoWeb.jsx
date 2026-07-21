@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import HeroTab from './HeroTab';
 import CategoriasTab from './CategoriasTab';
+import ColeccionTab from './ColeccionTab';
 
 const TABS = [
     { key: 'hero',       label: 'Banners Hero' },
     { key: 'categorias', label: 'Categorías Portada' },
+    { key: 'coleccion',  label: 'Colección Portada' },
 ];
 
 export default function AdminContenidoWeb() {
@@ -19,7 +21,7 @@ export default function AdminContenidoWeb() {
             </div>
 
             {/* Tab bar */}
-            <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-row bg-white rounded-xl shadow-sm border border-stone-200 p-1">
+            <div className="grid grid-cols-3 gap-2 sm:flex sm:flex-row bg-white rounded-xl shadow-sm border border-stone-200 p-1">
                 {TABS.map(tab => (
                     <button
                         key={tab.key}
@@ -38,6 +40,7 @@ export default function AdminContenidoWeb() {
             {/* Tab content */}
             {tabActiva === 'hero'       && <HeroTab />}
             {tabActiva === 'categorias' && <CategoriasTab />}
+            {tabActiva === 'coleccion'  && <ColeccionTab />}
         </div>
     );
 }

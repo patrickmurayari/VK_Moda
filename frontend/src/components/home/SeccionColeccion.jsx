@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getProductosDestacados } from '../../services/api';
+import { getHomeColeccion } from '../../services/api';
 import { formatPrecio } from '../../utils/format';
 
 function SeccionColeccion() {
@@ -8,9 +8,9 @@ function SeccionColeccion() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        getProductosDestacados(4)
+        getHomeColeccion()
             .then(setProductos)
-            .catch((err) => console.error('Error cargando productos destacados:', err))
+            .catch((err) => console.error('Error cargando colección:', err))
             .finally(() => setLoading(false));
     }, []);
 
@@ -26,8 +26,8 @@ function SeccionColeccion() {
             {/* Grilla edge-to-edge */}
             {!loading && productos.length > 0 && (
                 <div className="w-full grid grid-cols-2 lg:grid-cols-4 gap-[1px] bg-neutral-200">
-                    {productos.slice(0, 4).map((producto) => (
-                        <Link key={producto.id} to={`/producto/${producto.id}`} className="group bg-white">
+                    {productos.map((producto) => (
+                        <Link key={producto.slot_id} to={`/producto/${producto.id}`} className="group bg-white">
                             <div className="aspect-[3/4] overflow-hidden bg-white p-2 md:p-4">
                                 <img
                                     src={producto.imagen_url}
