@@ -33,7 +33,7 @@ function Footer() {
 
       {/* Navigation Grid */}
       <div className="px-6 md:px-12 py-14 md:py-16">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 md:gap-6">
           {/* Column: Navegación */}
           <div>
             <h4 className="font-body font-medium text-[11px] tracking-[0.15em] uppercase text-neutral-400">
@@ -121,6 +121,44 @@ function Footer() {
             </h4>
             <div className="mt-5">
               <SocialIcons variant="minimal" size="sm" />
+            </div>
+          </div>
+
+          {/* Column: Ubicación */}
+          <div className="col-span-2 md:col-span-1">
+            <h4 className="font-body font-medium text-[11px] tracking-[0.15em] uppercase text-neutral-400">
+              Ubicación
+            </h4>
+            <div className="mt-5">
+              {/* Mobile: dirección + botón */}
+              <div className="md:hidden space-y-3">
+                <div className="flex items-start gap-2">
+                  <FiMapPin className="mt-0.5 shrink-0 text-neutral-200" strokeWidth={1} />
+                  <p className="font-body font-light text-xs text-neutral-300 leading-relaxed">
+                    Av. Bartolomé Mitre 363, B1633 Fatima, Provincia de Buenos Aires
+                  </p>
+                </div>
+                <a
+                  href="https://maps.app.goo.gl/BpXNoiH7agkrXHmz6"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-3 py-2 border border-neutral-600 rounded-lg text-xs text-neutral-200 hover:border-white hover:text-white transition-colors duration-300"
+                >
+                  <FiMapPin className="w-3 h-3" strokeWidth={1.5} />
+                  Ver en Google Maps
+                </a>
+              </div>
+              {/* Desktop: iframe embebido */}
+              <div className="hidden md:block">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1036.3662160340302!2d-58.98326103955324!3d-34.445616385459964!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bc830071a4eb65%3A0x6abb3b406ef6f180!2sV%26A%20DISE%C3%91O%20Y%20MODA!5e0!3m2!1ses-419!2sar!4v1784607083142!5m2!1ses-419!2sar"
+                  className="w-full h-40 rounded-xl border-0 shadow-md"
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Ubicación V&A Diseño y Moda"
+                />
+              </div>
             </div>
           </div>
         </div>
