@@ -1,4 +1,5 @@
-import { FiMail, FiPhone, FiMapPin, FiArrowRight } from 'react-icons/fi';
+import { FiMail, FiPhone, FiMapPin } from 'react-icons/fi';
+import { FaWhatsapp } from 'react-icons/fa';
 import { Link as RouterLink } from 'react-router-dom';
 import SocialIcons from '../common/SocialIcons';
 
@@ -7,28 +8,23 @@ function Footer() {
 
   return (
     <footer className="bg-[#0A0A0A]">
-      {/* Newsletter */}
+      {/* WhatsApp CTA */}
       <div className="border-b border-neutral-800 px-6 md:px-12 py-16 md:py-20 text-center">
-        <h3 className="font-display text-4xl tracking-[0.2em] uppercase text-white">
-          Suscríbase a las novedades de V&A
+        <h3 className="font-display text-3xl md:text-4xl tracking-[0.15em] uppercase text-white leading-tight max-w-xl mx-auto">
+          ¿Atención Personalizada o Ventas Mayoristas?
         </h3>
-        <p className="mt-3 font-body font-light text-xl text-neutral-400 max-w-md mx-auto">
-          Reciba anticipaciones exclusivas, colecciones y novedades del atelier directamente en su correo.
+        <p className="mt-4 font-body font-light text-base text-neutral-400 max-w-md mx-auto leading-relaxed">
+          Escribínos directamente por WhatsApp y te asesoramos al instante.
         </p>
-        <div className="mt-8 flex items-center justify-center max-w-md mx-auto">
-          <input
-            type="email"
-            placeholder="Correo electrónico"
-            className="w-full bg-transparent border-b border-neutral-700 focus:border-white outline-none font-body text-sm text-white placeholder:text-neutral-600 pb-2 transition-colors duration-300"
-          />
-          <button
-            type="button"
-            className="ml-4 text-white transition-colors"
-            aria-label="Suscribir"
-          >
-            <FiArrowRight className="w-4 h-4" strokeWidth={1} />
-          </button>
-        </div>
+        <a
+          href={`https://wa.me/541126073801?text=${encodeURIComponent('Hola! Quisiera realizar una consulta sobre sus prendas / ventas mayoristas.')}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-8 inline-flex items-center justify-center gap-3 px-7 py-3.5 bg-[#25D366] hover:bg-[#1cb954] text-white font-body text-sm tracking-wide rounded-full transition-colors duration-300 shadow-lg"
+        >
+          <FaWhatsapp className="w-5 h-5" />
+          Escribínos por WhatsApp
+        </a>
       </div>
 
       {/* Navigation Grid */}

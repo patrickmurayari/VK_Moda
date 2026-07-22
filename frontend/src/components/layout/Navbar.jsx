@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link as RouterLink, useLocation } from "react-router-dom";
 import { Search, Menu, X, ShoppingBag } from 'lucide-react';
 import MobileMenu from './MobileMenu';
+import SearchModal from './SearchModal';
 import { useCart } from '../../context/CartContext';
 
 const scrollTo = (id) => {
@@ -113,23 +114,12 @@ function Navbar() {
                     </div>
                 </div>
 
-                {/* Search Bar */}
-                {searchOpen && !menuOpen && (
-                    <div className="absolute top-full left-0 right-0 bg-white/95 backdrop-blur-md border-b-[0.5px] border-black/10">
-                        <div className="px-6 md:px-12 py-4">
-                            <div className="max-w-2xl mx-auto relative">
-                                <input
-                                    type="text"
-                                    placeholder="Buscar..."
-                                    className="w-full px-4 py-3 pr-12 border-b-[0.5px] border-black/15 bg-transparent focus:outline-none focus:border-black/40 font-body text-sm tracking-wide placeholder:text-black/30"
-                                    autoFocus
-                                />
-                                <Search className="absolute right-4 top-1/2 -translate-y-1/2 text-black/30 w-4 h-4" strokeWidth={1} />
-                            </div>
-                        </div>
-                    </div>
-                )}
             </nav>
+
+            {/* Search Modal */}
+            {searchOpen && !menuOpen && (
+                <SearchModal onClose={() => setSearchOpen(false)} />
+            )}
 
             {/* Mobile Menu Overlay */}
             <MobileMenu isOpen={menuOpen} onClose={closeMenu} />

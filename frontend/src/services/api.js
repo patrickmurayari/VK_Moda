@@ -52,6 +52,10 @@ export async function getProductoByIdPublic(id) {
     return fetchJSON(`${API_BASE}/productos/id/${id}`);
 }
 
+export async function buscarProductos(q) {
+    return fetchJSON(`${API_BASE}/productos/buscar?q=${encodeURIComponent(q)}`);
+}
+
 // ── Públicas: Contenido web por sección ──
 // Secciones válidas: hero, coleccion, editorial, inspiracion, quienes_somos
 
