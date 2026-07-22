@@ -82,4 +82,25 @@ const getProductoByIdPublic = async (req, res) => {
     }
 };
 
-module.exports = { getProductosByCategoria, getProductosDestacados, getProductoByIdPublic };
+const buscarProductosPublico = async (req, res) => {
+    const { q = '' } = req.query;
+    const term = q.trim();
+    try {
+        if (!term) return res.json([]);
+        const result = await db.query(`
+            SELECT p.id, p.nombre, p.precio, p.imagen_url, c.nombre AS categoria_nombre
+            FROM productos p
+            LEFT JOIN categorias c ON p.categoria_id = c.id
+            WHERE p.esta_activo = true
+              AND (p.nombre ILIKE $1 OR c.nombre ILIKE $1)
+            ORDER BY p.id DESC
+            LIMIT 6
+        `, [`%${term}%`]);
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Error buscando productos:', err);
+        res.status(500).json({ error: 'Error al buscar productos' });
+    }
+};
+
+module.exports = { getProductosByCategoria, getProductosDestacados, getProductoByIdPublic, buscarProductosPublico };
