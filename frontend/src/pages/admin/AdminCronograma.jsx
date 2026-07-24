@@ -176,10 +176,10 @@ function PedidoCard({ p, updatingItem, asignandoItemId, updatingAsignacion, setA
                                     <button
                                         onClick={() => setAsignandoItemId(item.id)}
                                         title={asignado ? `Asignado: ${asignado.nombre}` : 'Asignar responsable'}
-                                        className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold border transition-colors ${
+                                        className={`w-8 h-8 rounded-full flex items-center justify-center text-base font-bold border-2 transition-all shadow-xs ${
                                             asignado
                                                 ? `${asignado.color} hover:opacity-80`
-                                                : 'bg-stone-50 border-stone-200 text-stone-300 hover:border-stone-400 hover:text-stone-500'
+                                                : 'bg-white border-stone-800 text-stone-900 hover:bg-stone-100'
                                         }`}
                                     >
                                         {asignado ? asignado.iniciales : '+'}
