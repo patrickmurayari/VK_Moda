@@ -63,6 +63,11 @@ export default function OrderWizard() {
     const [idManual, setIdManual] = useState('');
     const [estadoMigracion, setEstadoMigracion] = useState('recibido');
 
+    // Scroll al inicio al cambiar de paso
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, [step]);
+
     // Buscar clientes
     useEffect(() => {
         if (clienteSearch.trim().length < 2) {
