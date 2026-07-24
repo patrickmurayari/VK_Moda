@@ -102,13 +102,13 @@ export default function PedidoDetalle() {
     const handleStartEdit = () => {
         setEditData({
             fecha_entrega_prometida: pedido.fecha_entrega_prometida?.split('T')[0] ?? '',
-            senia_pagada: pedido.senia_pagada ?? '',
+            senia_pagada: pedido.senia_pagada ? Math.round(Number(pedido.senia_pagada)) : 0,
             observaciones_generales: pedido.observaciones_generales ?? '',
             items: (pedido.items || []).map((item) => ({
                 id: item.id,
                 descripcion_prenda: item.descripcion_prenda,
                 tipo_trabajo: item.tipo_trabajo ?? '',
-                precio_item: item.precio_item ?? '',
+                precio_item: item.precio_item ? Math.round(Number(item.precio_item)) : 0,
                 medidas_json: parseMedidas(item.medidas_json),
                 asignado_a: item.asignado_a ?? null,
             })),
@@ -348,6 +348,8 @@ export default function PedidoDetalle() {
                             <label className="block text-xs text-stone-500 mb-1">Seña pagada ($)</label>
                             <input
                                 type="number"
+                                step="1"
+                                min="0"
                                 value={editData.senia_pagada}
                                 onChange={(e) => setEditData((p) => ({ ...p, senia_pagada: e.target.value }))}
                                 className="w-full px-3 py-2 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-stone-400 outline-none"
@@ -484,6 +486,8 @@ export default function PedidoDetalle() {
                                         <label className="block text-xs text-stone-500 mb-1">Precio ($)</label>
                                         <input
                                             type="number"
+                                            step="1"
+                                            min="0"
                                             value={item.precio_item}
                                             onChange={(e) => updateEditItem(idx, 'precio_item', e.target.value)}
                                             className="w-full px-3 py-2 border border-stone-300 rounded-lg text-sm focus:ring-1 focus:ring-stone-400 outline-none"
