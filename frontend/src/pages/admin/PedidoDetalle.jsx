@@ -217,8 +217,8 @@ export default function PedidoDetalle() {
     };
 
     const formatCurrency = (v) => {
-        if (!v) return '$0';
-        return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(v);
+        if (v === null || v === undefined) return '$ 0';
+        return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(Math.round(Number(v)));
     };
 
     if (loading) return (

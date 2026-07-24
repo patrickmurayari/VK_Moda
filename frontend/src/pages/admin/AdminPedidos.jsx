@@ -56,8 +56,8 @@ export default function AdminPedidos() {
     };
 
     const formatCurrency = (val) => {
-        if (!val) return '$0';
-        return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(val);
+        if (val === null || val === undefined) return '$ 0';
+        return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(Math.round(Number(val)));
     };
 
     if (loading) {
