@@ -51,7 +51,8 @@ export default function AdminPedidos() {
 
     const formatDate = (dateStr) => {
         if (!dateStr) return '—';
-        return new Date(dateStr).toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        const [yyyy, mm, dd] = dateStr.split('T')[0].split('-');
+        return `${dd}/${mm}/${yyyy}`;
     };
 
     const formatCurrency = (val) => {
