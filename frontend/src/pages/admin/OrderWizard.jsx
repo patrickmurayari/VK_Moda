@@ -63,9 +63,13 @@ export default function OrderWizard() {
     const [idManual, setIdManual] = useState('');
     const [estadoMigracion, setEstadoMigracion] = useState('recibido');
 
-    // Scroll al inicio al cambiar de paso
+    // Reset instantáneo de scroll al cambiar de paso
     useEffect(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo(0, 0);
+        const mainContent = document.querySelector('main') || document.getElementById('admin-content');
+        if (mainContent) {
+            mainContent.scrollTop = 0;
+        }
     }, [step]);
 
     // Buscar clientes
