@@ -38,7 +38,6 @@ function CategoriaSlotCard({ slot, allCategorias, onUpdated }) {
     const handleSelectCat = async (cat) => {
         setShowSelector(false);
         setQuery('');
-        if (!cat.imagen_url) { setPendingCat(cat); return; }
         setSaving(true);
         try {
             const { data: { session } } = await supabase.auth.getSession();
@@ -107,7 +106,6 @@ function CategoriaSlotCard({ slot, allCategorias, onUpdated }) {
                                             <p className="text-[11px] text-stone-800 truncate">{cat.nombre}</p>
                                             {cat.padre_nombre && <p className="text-[10px] text-stone-400 truncate">{cat.padre_nombre}</p>}
                                         </div>
-                                        {!cat.imagen_url && <span className="shrink-0 text-[9px] text-amber-600 bg-amber-50 px-1 py-0.5 rounded font-medium">Sin foto</span>}
                                     </button>
                                 ))
                             }
