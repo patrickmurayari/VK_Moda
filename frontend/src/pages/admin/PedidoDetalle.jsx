@@ -212,7 +212,8 @@ export default function PedidoDetalle() {
 
     const formatDate = (d) => {
         if (!d) return '—';
-        return new Date(d).toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        const [yyyy, mm, dd] = d.split('T')[0].split('-');
+        return `${dd}/${mm}/${yyyy}`;
     };
 
     const formatCurrency = (v) => {
@@ -539,7 +540,13 @@ export default function PedidoDetalle() {
                                 <div>
                                     <p className="text-sm text-stone-800">{s.descripcion_prenda || `Ítem #${s.item_id}`}</p>
                                     <p className="text-xs text-stone-500">
-                                        {new Date(s.fecha_planificada).toLocaleString('es-AR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                                        {(() => {
+                                            if (!s.fecha_planificada) return '—';
+                                            const [datePart, timePart] = s.fecha_planificada.split('T');
+                                            const [yyyy, mm, dd] = datePart.split('-');
+                                            const time = timePart ? timePart.substring(0, 5) : '';
+                                            return `${dd}/${mm}/${yyyy}${time ? ` ${time}` : ''}`;
+                                        })()}
                                     </p>
                                     {s.notas_resultado && <p className="text-xs text-stone-600 mt-1">{s.notas_resultado}</p>}
                                 </div>

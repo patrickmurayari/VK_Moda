@@ -30,7 +30,7 @@ const emptyItem = () => ({
 });
 
 export default function OrderWizard() {
-    const ES_MODO_MIGRACION = false;
+    const ES_MODO_MIGRACION = true;
 
     const navigate = useNavigate();
     const [step, setStep] = useState(1); // 1: Pedido y Prendas, 2: Confirmar
