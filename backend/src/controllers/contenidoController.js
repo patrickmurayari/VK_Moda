@@ -169,7 +169,10 @@ const getHomeCategorias = async (req, res) => {
                 cw.titulo          AS slug,
                 c.id               AS categoria_id,
                 c.nombre,
-                c.imagen_url,
+                COALESCE(
+                    c.imagen_url,
+                    (SELECT p.imagen_url FROM productos p WHERE p.categoria_id = c.id AND p.imagen_url IS NOT NULL AND p.esta_activo = true ORDER BY p.id ASC LIMIT 1)
+                ) AS imagen_url,
                 c.slug             AS categoria_slug
             FROM contenido_web cw
             LEFT JOIN categorias c ON c.slug = cw.titulo

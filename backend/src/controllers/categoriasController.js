@@ -7,7 +7,12 @@ const CAT_BUCKET = 'productos';
 const getCategorias = async (req, res) => {
     try {
         const result = await db.query(
-            `SELECT c.id, c.slug, c.nombre, c.imagen_url, c.parent_id, c.orden_visual,
+            `SELECT c.id, c.slug, c.nombre,
+                    COALESCE(
+                        c.imagen_url,
+                        (SELECT p.imagen_url FROM productos p WHERE p.categoria_id = c.id AND p.imagen_url IS NOT NULL AND p.esta_activo = true ORDER BY p.id ASC LIMIT 1)
+                    ) AS imagen_url,
+                    c.parent_id, c.orden_visual,
                     p.nombre AS padre_nombre
              FROM categorias c
              LEFT JOIN categorias p ON c.parent_id = p.id
