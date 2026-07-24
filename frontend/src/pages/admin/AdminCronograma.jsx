@@ -338,10 +338,10 @@ export default function AdminCronograma() {
                             <button
                                 key={f.key}
                                 onClick={() => setFiltro(f.key)}
-                                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                                     filtro === f.key
-                                        ? 'bg-white text-stone-800 shadow-sm'
-                                        : 'text-stone-500 hover:text-stone-700'
+                                        ? 'bg-stone-900 text-white shadow-sm'
+                                        : 'bg-transparent text-stone-600 hover:text-stone-900 hover:bg-stone-100/70'
                                 }`}
                             >
                                 {f.label}
@@ -354,10 +354,10 @@ export default function AdminCronograma() {
                         <span className="text-xs text-stone-400 font-medium px-1.5 select-none">Asignado:</span>
                         <button
                             onClick={() => setFiltroResponsable('todos')}
-                            className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                                 filtroResponsable === 'todos'
-                                    ? 'bg-white text-stone-800 shadow-sm'
-                                    : 'text-stone-500 hover:text-stone-700'
+                                    ? 'bg-stone-900 text-white shadow-sm'
+                                    : 'bg-transparent text-stone-600 hover:text-stone-900 hover:bg-stone-100/70'
                             }`}
                         >
                             Todos
@@ -366,13 +366,17 @@ export default function AdminCronograma() {
                             <button
                                 key={u.id}
                                 onClick={() => setFiltroResponsable(filtroResponsable === u.id ? 'todos' : u.id)}
-                                className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-semibold transition-colors border ${
+                                className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-colors border ${
                                     filtroResponsable === u.id
-                                        ? `${u.color} shadow-sm`
-                                        : 'text-stone-500 border-transparent hover:text-stone-700'
+                                        ? 'bg-stone-900 text-white border-stone-900 shadow-sm'
+                                        : 'bg-transparent text-stone-600 border-transparent hover:text-stone-900 hover:bg-stone-100/70'
                                 }`}
                             >
-                                <span className={`w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold border ${u.color}`}>
+                                <span className={`w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold border ${
+                                    filtroResponsable === u.id
+                                        ? 'bg-white text-stone-900 border-white'
+                                        : u.color
+                                }`}>
                                     {u.iniciales.charAt(0)}
                                 </span>
                                 {u.nombre.split(' ')[0]}
