@@ -634,7 +634,7 @@ export default function OrderWizard() {
                                     <div className="space-y-1">
                                         {proximosDias.map((fecha) => {
                                             const entrada = cargaTrabajo.find(e => (e.fecha || '').toString().slice(0, 10) === fecha);
-                                            const cantidad = entrada ? parseInt(entrada.cantidad_prendas) : 0;
+                                            const cantidad = entrada ? parseInt(entrada.cantidad_pedidos) : 0;
                                             const isSelected = fechaEntrega === fecha;
                                             let color, icon, label;
                                             if (cantidad === 0) { color = 'bg-green-50 border-green-200 text-green-700'; icon = '🟢'; label = 'Libre'; }
@@ -649,7 +649,7 @@ export default function OrderWizard() {
                                                     <span className="font-medium">
                                                         {new Date(fecha + 'T12:00:00').toLocaleDateString('es-AR', { weekday: 'short', day: '2-digit', month: '2-digit' })}
                                                     </span>
-                                                    <span>{icon} {label} ({cantidad} prenda{cantidad !== 1 ? 's' : ''})</span>
+                                                    <span>{icon} {label} ({cantidad} pedido{cantidad !== 1 ? 's' : ''})</span>
                                                 </div>
                                             );
                                         })}
