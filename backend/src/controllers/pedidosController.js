@@ -739,15 +739,14 @@ const getCronogramaEntregas = async (req, res) => {
     }
 };
 
-// ── GET /api/admin/pedidos/carga-trabajo - Prendas agrupadas por fecha de entrega (solo pedidos Recibido) ──
+// ── GET /api/admin/pedidos/carga-trabajo - Pedidos agrupados por fecha de entrega (solo pedidos Recibido) ──
 const getCargaTrabajo = async (req, res) => {
     try {
         const result = await db.query(`
             SELECT
                 p.fecha_entrega_prometida::date AS fecha,
-                COUNT(ip.id)::int AS cantidad_prendas
+                COUNT(DISTINCT p.id)::int AS cantidad_pedidos
             FROM pedidos p
-            JOIN items_pedido ip ON ip.pedido_id = p.id
             WHERE LOWER(p.estado_global) = 'recibido'
               AND p.fecha_entrega_prometida IS NOT NULL
             GROUP BY p.fecha_entrega_prometida::date
