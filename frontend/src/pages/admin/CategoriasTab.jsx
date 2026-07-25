@@ -29,7 +29,12 @@ function CategoriaSlotCard({ slot, allCategorias, onUpdated }) {
     const [uploadFile, setUploadFile] = useState(null);
     const [uploadingImg, setUploadingImg] = useState(false);
 
-    const filtered = allCategorias.filter(c =>
+    const categoriasElegibles = allCategorias.filter(cat => {
+        const imagenFinal = cat.imagen_url;
+        return imagenFinal && imagenFinal.trim() !== '' && !imagenFinal.includes('placeholder');
+    });
+
+    const filtered = categoriasElegibles.filter(c =>
         !query.trim() ||
         c.nombre.toLowerCase().includes(query.toLowerCase()) ||
         c.slug.toLowerCase().includes(query.toLowerCase())
